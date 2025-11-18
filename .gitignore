@@ -1,0 +1,8 @@
+/.idea
+/.vscode
+@core/.env
+.env
+node_modules/
+@core/node_modules/
+vendor/
+@core/vendor/

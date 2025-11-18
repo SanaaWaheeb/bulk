@@ -1,0 +1,1 @@
+<?php /**PATH /home/u177601598/domains/bulk.com.sa/public_html/@core/resources/views/mail/ss.blade.php ENDPATH**/ ?>
