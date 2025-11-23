@@ -53,7 +53,7 @@
                                                 <i class="fas fa-phone me-2 text-primary"></i>
                                                 {{__('Phone')}}
                                             </span>
-                                            <span class="detail-value text-dark">0{{$donation_logs->user->phone}}</span>
+                                            <span class="detail-value text-dark">0{{$donation_logs->user->username}}</span>
                                         </div>
                                         
                                         <div class="detail-item d-flex justify-content-between align-items-center py-3 border-bottom">

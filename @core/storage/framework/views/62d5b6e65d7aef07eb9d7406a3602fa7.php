@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <!--<div class="breadcrumb-inner" style="padding: 100px 0 20px 0 !important;">-->
-                <style>
+                <!-- <style>
                     .breadcrumb-inner {
                         padding: 120px 0 25px 0 !important; /* للويب */
                     }
@@ -22,7 +22,7 @@
                             text-align: center;
                         }
                     }
-                </style>
+                </style> -->
 
                 <div class="breadcrumb-inner">
                     <h1 class="page-title"><?php echo $__env->yieldContent('page-title'); ?></h1>

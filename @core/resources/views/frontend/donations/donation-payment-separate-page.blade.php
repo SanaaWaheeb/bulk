@@ -149,20 +149,17 @@
             </span>
         </div>
         <input type="text" name="phone" class="form-control"
-       value="{{ auth()->user()->phone ?? '' }}" required style="height: 38px;">
+       value="{{ auth()->user()->username  ?? '' }}" required style="height: 38px;">
     </div>
 </div>
 
                         
                         
-                        <!--<div class="form-group">-->
-                        <!--    <input type="email" name="email" placeholder="{{__('Email')}}"-->
-                        <!--           @if(auth()->check()) value="{{auth()->user()->email}}" @endif class="form-control">-->
-                        <!--</div>-->
-                        <!-- <div class="form-group">-->
-                        <!--    <input type="text" name="phone" placeholder="{{__('Phone')}}"-->
-                        <!--           @if(auth()->check()) value="{{auth()->user()->phone}}" @endif class="form-control">-->
-                        <!--</div>-->
+                        {{-- <div class="form-group">
+                            <input type="email" name="email" placeholder="{{__('Email')}}"
+                                   @if(auth()->check()) value="{{auth()->user()->email}}" @endif class="form-control">
+                        </div> --}}
+                        
                         <div class="form-group">
                             <input type="text" name="city" placeholder="{{__('City')}}"
                                    @if(auth()->check()) value="{{auth()->user()->city}}" @endif class="form-control">

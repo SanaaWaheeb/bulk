@@ -1,0 +1,4 @@
+[2025-11-18 09:54:58] local.ERROR: Maximum execution time of 120 seconds exceeded {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Maximum execution time of 120 seconds exceeded at C:\\xampp\\htdocs\\bulk\\@core\\storage\\framework\\views\\4c28ea9bc6fe0acf35ef1cc43a3e3f7a.php:2)
+[stacktrace]
+#0 {main}
+"} 

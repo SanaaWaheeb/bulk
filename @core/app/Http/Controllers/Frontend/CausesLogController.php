@@ -42,14 +42,14 @@ class CausesLogController extends Controller
     'city' => $requring_validation.'|string|max:191',
     'district' => $requring_validation.'|string|max:191',
     'address' => $requring_validation.'|string|max:191',
-    'email' => $requring_validation.'|email|max:191',
+    // 'email' => $requring_validation.'|email|max:191',
     'cause_id' => $requring_validation.'|string',
     'amount' => $gift_amount_validation_condition.'|string',
     'anonymous' => 'nullable|string',
     'selected_payment_gateway' => 'required|string',
 ], [
     'name.required' => 'حقل الاسم مطلوب',
-    'email.required' => 'حقل البريد الإلكتروني مطلوب',
+    // 'email.required' => 'حقل البريد الإلكتروني مطلوب',
     'amount.required' => 'حقل المبلغ مطلوب',
     'district.required' => 'حقل الحي مطلوب',
     'city.required' => 'حقل المدينة مطلوب',
@@ -128,7 +128,7 @@ class CausesLogController extends Controller
             }
 
             $name = $request->name;
-            $email = $request->email;
+            // $email = $request->email;
             $cause_id = $request->cause_id;
             $gift_id = $request->gift_id;
             $cid = $request->cid;
@@ -149,7 +149,7 @@ class CausesLogController extends Controller
                 $data_unset_old_fields['captcha_token'],
                 $data_unset_old_fields['amount'],
                 $data_unset_old_fields['name'],
-                $data_unset_old_fields['email'],
+                // $data_unset_old_fields['email'],
                 $data_unset_old_fields['admin_tip'],
                 $data_unset_old_fields['selected_payment_gateway'],
                 $data_unset_old_fields['manual_payment_attachment'],
@@ -168,7 +168,7 @@ class CausesLogController extends Controller
           //Custom Fields Code
             $payment_log_id = CauseLogs::create([
                 'recuring_token' => $log_exists->recuring_token ?? ($payment_type == 'monthly' ? Str::random(20) : null),
-                'email' => $log_exists->email ?? $email ?? '',
+                // 'email' => $log_exists->email ?? $email ?? '',
                 'name' => $log_exists->name ?? $name ?? '',
                 'phone'=>$request->phone,
                  'address' => 
@@ -779,7 +779,7 @@ if ($cause) {
                 'track' => $donation_payment_details->track,
                 'cancel_url' => route(self::CANCEL_ROUTE, $donation_payment_details->id),
                 'success_url' => route(self::SUCCESS_ROUTE, random_int(333333, 999999) . $donation_payment_details->id . random_int(333333, 999999)),
-                'email' => $donation_payment_details->email, // user email
+                // 'email' => $donation_payment_details->email, // user email
                 'name' => $donation_payment_details->name, // user name
                 'payment_type' => $payment_type, // which kind of payment your are receiving
                 'ipn_url' => $ipn_route

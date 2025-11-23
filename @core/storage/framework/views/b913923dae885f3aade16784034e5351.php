@@ -6,26 +6,12 @@
         <div class="row">
             <div class="col-lg-12">
                 <!--<div class="breadcrumb-inner" style="padding: 100px 0 20px 0 !important;">-->
-                <style>
-                    .breadcrumb-inner {
-                        padding: 120px 0 25px 0 !important; /* للويب */
-                    }
-                    @media (min-width: 768px) and (max-width: 1024px) {
-                        .breadcrumb-inner {
-                             padding: 90px 0 25px 0 !important;/* للايباد والتابلت */
-                        }
-                    }
                 
-                    @media(max-width: 768px) {
-                        .breadcrumb-inner {
-                            padding: 140px 0 40px 0 !important; /* للجوال */
-                            text-align: center;
-                        }
-                    }
-                </style>
 
                 <div class="breadcrumb-inner">
+                    
                     <h1 class="page-title"><?php echo $__env->yieldContent('page-title'); ?></h1>
+                    
                     <ul class="page-list">
                         <li><a href="<?php echo e(url('/')); ?>"><?php echo e(__('Home')); ?></a></li>
                         <?php if(request()->is(get_static_option('blog_page_slug').'/*') || request()->is(get_static_option('blog_page_slug').'-category'.'/*')): ?>
@@ -41,7 +27,7 @@
                         <?php elseif(request()->is(get_static_option('donation_page_slug').'/*')): ?>
                             <li><a href="<?php echo e(url('/').'/'.get_static_option('donation_page_slug')); ?>"><?php echo e(get_static_option('donation_page_name')); ?></a></li>
                         <?php endif; ?>
-                        <li><?php echo $__env->yieldContent('page-title'); ?></li>
+                        
                     </ul>
                 </div>
             </div>

@@ -11,10 +11,16 @@
                 <label for="name">{{__('Name')}}</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{$user_details->name}}">
             </div>
-            <!--<div class="form-group">-->
-            <!--    <label for="email">{{__('Email')}}</label>-->
-            <!--    <input type="text" class="form-control" id="email" name="email" value="{{$user_details->email}}">-->
-            <!--</div>-->
+            <div class="form-group">
+                <label for="username">{{__('Phone Number')}}</label>
+                <input type="text" class="form-control" id="username" name="username" 
+                       value="{{ $user_details->username ?? old('username') }}" 
+                       placeholder="{{__('Enter your phone number')}}">
+            </div>
+            {{-- <div class="form-group">
+                <label for="email">{{__('Email')}}</label>
+                <input type="text" class="form-control" id="email" name="email" value="{{$user_details->email}}">
+            </div> --}}
 
             <div class="form-group">
                 <label for="country">{{__('Country')}}</label>

@@ -129,7 +129,7 @@ class UserDashboardController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:191',
             //'email' => 'required|email|max:191|unique:users,id,'.$request->user_id,
-            'phone' => 'nullable|string|max:191',
+            'username' => 'nullable|string|max:191',
             'state' => 'nullable|string|max:191',
             'city' => 'nullable|string|max:191',
             'zipcode' => 'nullable|string|max:191',
@@ -146,7 +146,7 @@ class UserDashboardController extends Controller
                 'name' => $request->name,
                 //'email' => $request->email,
                 'image' => $request->image,
-                'phone' => $request->phone,
+                'username' => $request->username,
                 'state' => $request->state,
                 'city' => $request->city,
                 'zipcode' => $request->zipcode,
