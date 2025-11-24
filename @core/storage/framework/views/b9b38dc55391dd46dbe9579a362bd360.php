@@ -116,11 +116,16 @@
                                         <!--</form>-->
                                     <!--<?php endif; ?>-->
                                     
-                                    <form action="<?php echo e(route('user.dashboard.donation.order.cancel')); ?>" method="post">
+                                    <form id="cancelForm" action="<?php echo e(route('user.dashboard.donation.order.cancel')); ?>" method="post">
                                         <?php echo csrf_field(); ?>
                                         <input type="hidden" name="order_id" value="<?php echo e($data->id); ?>">
-                                        <button type="submit" class="small-btn btn-danger margin-top-10" onclick="return confirm('<?php echo e(__('Are you sure you want to cancel this order?')); ?>')"><?php echo e(__('Cancel')); ?></button>
+                                        
+                                        <button type="button" class="small-btn btn-danger margin-top-10 cancel-btn">
+                                            <?php echo e(__('Cancel')); ?>
+
+                                        </button>
                                     </form>
+                                    
                                     
                                
                                    
@@ -133,6 +138,25 @@
                             </td>
                         </tr>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <script>
+                        document.querySelector('.cancel-btn').addEventListener('click', function () {
+                        
+                            Swal.fire({
+                                title: 'هل أنت متأكد؟',
+                                text: "هل تريد إلغاء هذا الطلب؟",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'نعم، قم بالإلغاء',
+                                cancelButtonText: 'لا، رجوع',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById('cancelForm').submit();
+                                }
+                            });
+                        
+                        });
+                        </script>
+                        
                     </tbody>
                 </table>
             </div>

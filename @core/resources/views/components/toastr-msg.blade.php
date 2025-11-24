@@ -1,4 +1,4 @@
-
+{{-- 
 @if(Session::has('success'))
 <script>
   Swal.fire({
@@ -35,4 +35,4 @@
         stack: 6
     });
 </script>
-@endif
+@endif --}}

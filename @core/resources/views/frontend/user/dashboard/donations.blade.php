@@ -116,11 +116,15 @@
                                         <!--</form>-->
                                     <!--@endif-->
                                     
-                                    <form action="{{route('user.dashboard.donation.order.cancel')}}" method="post">
+                                    <form id="cancelForm" action="{{route('user.dashboard.donation.order.cancel')}}" method="post">
                                         @csrf
                                         <input type="hidden" name="order_id" value="{{$data->id}}">
-                                        <button type="submit" class="small-btn btn-danger margin-top-10" onclick="return confirm('{{__('Are you sure you want to cancel this order?')}}')">{{__('Cancel')}}</button>
+                                        
+                                        <button type="button" class="small-btn btn-danger margin-top-10 cancel-btn">
+                                            {{__('Cancel')}}
+                                        </button>
                                     </form>
+                                    
                                     
                                
                                    
@@ -133,6 +137,25 @@
                             </td>
                         </tr>
                     @endforeach
+                    <script>
+                        document.querySelector('.cancel-btn').addEventListener('click', function () {
+                        
+                            Swal.fire({
+                                title: 'هل أنت متأكد؟',
+                                text: "هل تريد إلغاء هذا الطلب؟",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'نعم، قم بالإلغاء',
+                                cancelButtonText: 'لا، رجوع',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById('cancelForm').submit();
+                                }
+                            });
+                        
+                        });
+                        </script>
+                        
                     </tbody>
                 </table>
             </div>

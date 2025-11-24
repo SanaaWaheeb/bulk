@@ -25,7 +25,7 @@ use App\WithdrawGateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+// use Illuminate\Support\Facades\Mail; 
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Intervention\Image\Facades\Image;
@@ -72,15 +72,14 @@ class UserDashboardController extends Controller
             $user_details = User::find($user_details->id);
             $message_body = __('Here is your verification code') . ' <span class="verify-code">' . $user_details->email_verify_token . '</span>';
             
-            try{
-                 Mail::to($user_details->email)->send(new BasicMail([
-                    'subject' => __('Verify your email address'),
-                    'message' => $message_body
-                ]));
-                
-            }catch(\Exception $e){
-                
-            }
+            // معلق إرسال البريد الإلكتروني
+            // try{
+            //      Mail::to($user_details->email)->send(new BasicMail([
+            //         'subject' => __('Verify your email address'),
+            //         'message' => $message_body
+            //     ]));
+            // }catch(\Exception $e){
+            // }
         }
         return view('frontend.user.email-verify');
     }
@@ -93,14 +92,14 @@ class UserDashboardController extends Controller
         }
         $message_body = __('Here is your verification code') . ' <span class="verify-code">' . $user_details->email_verify_token . '</span>';
         
-        try{
-           Mail::to($user_details->email)->send(new BasicMail([
-                'subject' => __('Verify your email address'),
-                'message' => $message_body
-            ]));
-        }catch(\Exception $e){
-            return redirect()->route('user.email.verify')->with(['msg' => $e->getMessage(), 'type' => 'danger']);
-        }
+         // try{
+        //    Mail::to($user_details->email)->send(new BasicMail([
+        //         'subject' => __('Verify your email address'),
+        //         'message' => $message_body
+        //     ]));
+        // }catch(\Exception $e){
+        //     return redirect()->route('user.email.verify')->with(['msg' => $e->getMessage(), 'type' => 'danger']);
+        // }
         
         return redirect()->route('user.email.verify')->with(['msg' => __('Resend Verify Email Success'), 'type' => 'success']);
     }
@@ -194,30 +193,29 @@ class UserDashboardController extends Controller
         $event_payment_log = EventPaymentLogs::where(['attendance_id' => $request->order_id])->first();
         $admin_mail = !empty(get_static_option('event_attendance_receiver_mail')) ? get_static_option('event_attendance_receiver_mail') : get_static_option('site_global_email');
         //send mail to admin
-        $data['subject'] = __('one of your event booking order has been cancelled');
-        $data['message'] = __('hello') . '<br>';
-        $data['message'] .= __('your event attendance id') . ' #' . $order_details->id . ' ';
-        $data['message'] .= __('has been cancelled by the user.');
+        // $data['subject'] = __('one of your event booking order has been cancelled');
+        // $data['message'] = __('hello') . '<br>';
+        // $data['message'] .= __('your event attendance id') . ' #' . $order_details->id . ' ';
+        // $data['message'] .= __('has been cancelled by the user.');
         
-        try{
-            Mail::to($admin_mail)->send(new BasicMail($data));
-        }catch(\Exception $e){
-            return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
-        }
-        
+        // try{
+        //     Mail::to($admin_mail)->send(new BasicMail($data));
+        // }catch(\Exception $e){
+        //     return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
+        // }
         if (!empty($event_payment_log)) {
             //send mail to customer
-            $data['subject'] = __('your event booking has benn cancelled');
-            $data['message'] = __('hello') . $event_payment_log->name . '<br>';
-            $data['message'] .= __('your event attendance id') . ' #' . $order_details->id . ' ';
-            $data['message'] .= __('booking status has been changed to cancel.');
+            // معلق إرسال البريد الإلكتروني للعميل
+            // $data['subject'] = __('your event booking has benn cancelled');
+            // $data['message'] = __('hello') . $event_payment_log->name . '<br>';
+            // $data['message'] .= __('your event attendance id') . ' #' . $order_details->id . ' ';
+            // $data['message'] .= __('booking status has been changed to cancel.');
             
-            //send mail while order status change
-            try{
-                Mail::to($event_payment_log->email)->send(new BasicMail($data));
-            }catch(\Exception $e){
-                return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
-            }
+            // try{
+            //     Mail::to($event_payment_log->email)->send(new BasicMail($data));
+            // }catch(\Exception $e){
+            //     return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
+            // }
         }
         
         return redirect()->back()->with(['msg' => __('Order Cancel'), 'type' => 'warning']);
@@ -236,30 +234,28 @@ class UserDashboardController extends Controller
         $admin_mail = !empty($donation_notify_mail) ? $donation_notify_mail : get_static_option('site_global_email');
         
         // إرسال بريد إلى المدير
-        $data['subject'] = __('تم إلغاء أحد طلباتك');
-        $data['message'] = __('مرحباً') . '<br>';
-        $data['message'] .= __('معرّف سجل الطلب الخاص بك') . ' #' . $order_details->id . ' ';
-        $data['message'] .= __('تم إلغاؤه من قبل المستخدم.');
+        // $data['subject'] = __('تم إلغاء أحد طلباتك');
+        // $data['message'] = __('مرحباً') . '<br>';
+        // $data['message'] .= __('معرّف سجل الطلب الخاص بك') . ' #' . $order_details->id . ' ';
+        // $data['message'] .= __('تم إلغاؤه من قبل المستخدم.');
         
-        try {
-            Mail::to($admin_mail)->send(new BasicMail($data));
-        } catch (\Exception $e) {
-            return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
-        }
+        // try {
+        //     Mail::to($admin_mail)->send(new BasicMail($data));
+        // } catch (\Exception $e) {
+        //     return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
+        // }
         
-        // إرسال بريد إلى العميل
-        $data['subject'] = __('تم إلغاء طلبك');
-        $data['message'] = __('مرحباً ') . $order_details->name . '<br>';
-        $data['message'] .= __('معرّف سجل الطلب الخاص بك') . ' #' . $order_details->id . ' ';
-        $data['message'] .= __('تم تغيير الحالة إلى "ملغى".');
+        // معلق إرسال بريد إلى العميل
+        // $data['subject'] = __('تم إلغاء طلبك');
+        // $data['message'] = __('مرحباً ') . $order_details->name . '<br>';
+        // $data['message'] .= __('معرّف سجل الطلب الخاص بك') . ' #' . $order_details->id . ' ';
+        // $data['message'] .= __('تم تغيير الحالة إلى "ملغى".');
 
-        
-        //send mail while order status change
-        try{
-             Mail::to($order_details->email)->send(new BasicMail($data));
-        }catch(\Exception $e){
-            return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
-        }
+        // try{
+        //      Mail::to($order_details->email)->send(new BasicMail($data));
+        // }catch(\Exception $e){
+        //     return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'danger']);
+        // }
        
         return redirect()->back()->with(['msg' => __('donation Cancel'), 'type' => 'warning']);
     }
@@ -448,15 +444,16 @@ class UserDashboardController extends Controller
         
         $admin_mail = get_static_option('site_global_email');
 
-        try{
-            Mail::to($admin_mail)->send(new DonationWithdrawRequest([
-                'subject' => __('You have new donation withdrawal Message'),
-                'user_name' => $user_details->name ?? __('user not found'),
-                'amount' => $request->withdraw_request_amount,
-            ]));
-        }catch(\Exception $e){
-            return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'success']);
-        }
+        // try{
+        //     Mail::to($admin_mail)->send(new DonationWithdrawRequest([
+        //         'subject' => __('You have new donation withdrawal Message'),
+        //         'user_name' => $user_details->name ?? __('user not found'),
+        //         'amount' => $request->withdraw_request_amount,
+        //     ]));
+        // }catch(\Exception $e){
+        //     return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'success']);
+        // }
+        
         
         return redirect()->back()->with(['msg' => __('Your Withdraw Request has been sent'), 'type' => 'success']);
     }
@@ -565,7 +562,7 @@ class UserDashboardController extends Controller
         }
 
         //send mail to user
-        event(new SupportMessage($ticket_info));
+        // event(new SupportMessage($ticket_info));
         return back()->with(FlashMsg::item_update(__('Message send')));
     }
 
@@ -752,17 +749,15 @@ class UserDashboardController extends Controller
 
         $admin_mail = get_static_option('site_global_email');
 
-        try{
-            Mail::to($admin_mail)->send(new DonationWithdrawRequest([
-                'subject' => __('You have new reward redeem Message'),
-                'user_name' => $user_details->name ?? __('user not found'),
-                'amount' => $request->withdraw_request_amount,
-            ]));
-
-        }catch(\Exception $e){
-            return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'success']);
-        }
-
+        // try{
+        //     Mail::to($admin_mail)->send(new DonationWithdrawRequest([
+        //         'subject' => __('You have new reward redeem Message'),
+        //         'user_name' => $user_details->name ?? __('user not found'),
+        //         'amount' => $request->withdraw_request_amount,
+        //     ]));
+        // }catch(\Exception $e){
+        //     return redirect()->back()->with(['msg' => $e->getMessage(), 'type' => 'success']);
+        // }
         return redirect()->back()->with(['msg' => __('Your Redeem Request has been sent'), 'type' => 'success']);
 
     }
