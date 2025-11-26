@@ -124,6 +124,21 @@
                                 </div>
                             </li>
                         {{--Notification--}}
+                        <li class="nav-item dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="languageDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{ __('Change Language') }}
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                                <a href="{{ route('admin.language.switch', 'en') }}" class="dropdown-item d-flex align-items-center">
+                                    <i class="flag-icon flag-icon-us mr-2"></i> English
+                                </a>
+                                <a href="{{ route('admin.language.switch', 'ar') }}" class="dropdown-item d-flex align-items-center">
+                                    <i class="flag-icon flag-icon-sa mr-2"></i> العربية
+                                </a>
+                            </div>
+                        </li>
+                        
+                                                
 
 
                         {{--Switcher--}}

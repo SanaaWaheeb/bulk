@@ -355,24 +355,24 @@
 
                     <li class="main_dropdown @if(request()->is(['admin-home/donations/*','admin-home/donations'])) active @endif ">
                         <a href="javascript:void(0)" aria-expanded="true">
-                            <i class="ti-agenda mr-2"></i> {{__('Donation')}}
+                            <i class="ti-agenda mr-2"></i> {{__('Products')}}
                              <!--<span class="badge">{{__('PC')}}{{$pending_cases_count}}</span>-->
                             <!--<span class="badge">{{__('PW')}}{{$pending_withdraw_count}}</span>-->
                         </a>
                         <ul class="collapse">
                             @can('donation-list')
                                 <li class="{{active_menu('admin-home/donations')}}"><a
-                                            href="{{route('admin.donations.all')}}">{{__('All Causes')}}</a>
+                                            href="{{route('admin.donations.all')}}">{{__('All Products')}}</a>
                                 </li>
                             @endcan
                             @can('donation-create')
                                 <li class="{{active_menu('admin-home/donations/new')}}"><a
-                                            href="{{route('admin.donations.new')}}">{{__('Add New Cause')}}</a>
+                                            href="{{route('admin.donations.new')}}">{{__('Add New Product')}}</a>
                                 </li>
                             @endcan
                             @can('donation-category-list')
                                 <li class="{{active_menu('admin-home/donations/category')}}"><a
-                                            href="{{route('admin.donations.category.all')}}">{{__('Causes Category')}}</a>
+                                            href="{{route('admin.donations.category.all')}}">{{__('Products Category')}}</a>
                                 </li>
                             @endcan
                             <!--@can('donation-pending-cause')-->
@@ -390,7 +390,7 @@
                             <!--@endcan-->
                             @can('donation-payment-list')
                                 <li class="{{active_menu('admin-home/donations/payment-logs')}}"><a
-                                            href="{{route('admin.donations.payment.logs')}}">{{__('Causes Payment Logs')}}</a>
+                                            href="{{route('admin.donations.payment.logs')}}">{{__('Products Orders')}}</a>
                                 </li>
                             @endcan
                             <!--@can('donation-cause-report')-->

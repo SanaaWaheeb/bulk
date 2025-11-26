@@ -1,0 +1,161 @@
+
+<?php $__env->startSection('style'); ?>
+<?php if (isset($component)) { $__componentOriginale3fe6bb2f0f61d925063cbbce78cba4d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginale3fe6bb2f0f61d925063cbbce78cba4d = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.datatable.css','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('datatable.css'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginale3fe6bb2f0f61d925063cbbce78cba4d)): ?>
+<?php $attributes = $__attributesOriginale3fe6bb2f0f61d925063cbbce78cba4d; ?>
+<?php unset($__attributesOriginale3fe6bb2f0f61d925063cbbce78cba4d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale3fe6bb2f0f61d925063cbbce78cba4d)): ?>
+<?php $component = $__componentOriginale3fe6bb2f0f61d925063cbbce78cba4d; ?>
+<?php unset($__componentOriginale3fe6bb2f0f61d925063cbbce78cba4d); ?>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('site-title'); ?>
+    <?php echo e(__('All Donation Logs')); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="col-lg-12 col-ml-12 padding-bottom-30">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-12 mt-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <?php if (isset($component)) { $__componentOriginalae73592a9186217aa45553528a0de34b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalae73592a9186217aa45553528a0de34b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.msg.error','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('msg.error'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalae73592a9186217aa45553528a0de34b)): ?>
+<?php $attributes = $__attributesOriginalae73592a9186217aa45553528a0de34b; ?>
+<?php unset($__attributesOriginalae73592a9186217aa45553528a0de34b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalae73592a9186217aa45553528a0de34b)): ?>
+<?php $component = $__componentOriginalae73592a9186217aa45553528a0de34b; ?>
+<?php unset($__componentOriginalae73592a9186217aa45553528a0de34b); ?>
+<?php endif; ?>
+                                    <?php if (isset($component)) { $__componentOriginal5836ea34a6758bf192c104f6f2992c55 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal5836ea34a6758bf192c104f6f2992c55 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.msg.success','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('msg.success'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal5836ea34a6758bf192c104f6f2992c55)): ?>
+<?php $attributes = $__attributesOriginal5836ea34a6758bf192c104f6f2992c55; ?>
+<?php unset($__attributesOriginal5836ea34a6758bf192c104f6f2992c55); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal5836ea34a6758bf192c104f6f2992c55)): ?>
+<?php $component = $__componentOriginal5836ea34a6758bf192c104f6f2992c55; ?>
+<?php unset($__componentOriginal5836ea34a6758bf192c104f6f2992c55); ?>
+<?php endif; ?>
+                                    <h4 class="header-title"><?php echo e(__('All Donation Logs')); ?></h4>
+                                    <div class="bulk-delete-wrapper">
+                                        <div class="select-box-wrap">
+                                            <select name="bulk_option" id="bulk_option">
+                                                <option value=""><?php echo e(__('Bulk Action')); ?></option>
+                                                <option value="delete"><?php echo e(__('Delete')); ?></option>
+                                            </select>
+                                            <button class="btn btn-primary btn-sm" id="bulk_delete_btn"><?php echo e(__('Apply')); ?></button>
+                                        </div>
+                                    </div>
+                                    <div class="data-tables datatable-primary table-responsive table-wrap">
+                                        <table id="all_user_table" >
+                                            <thead class="text-capitalize">
+                                            <tr>
+                                                <th class="no-sort">
+                                                    <div class="mark-all-checkbox">
+                                                        <input type="checkbox" class="all-checkbox">
+                                                    </div>
+                                                </th>
+                                                <th><?php echo e(__('ID')); ?></th>
+                                                <th><?php echo e(__('Info')); ?></th>
+                                                <th><?php echo e(__('Status')); ?></th>
+                                                <th><?php echo e(__('Action')); ?></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('script'); ?>
+    <?php echo $__env->make('backend.partials.datatable.script-enqueue',['only_js' => true], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <script type="text/javascript">
+        $(function () {
+            <?php if (isset($component)) { $__componentOriginal072e1d65807e15afb767e18aecd4a7e8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal072e1d65807e15afb767e18aecd4a7e8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.bulk-action-js','data' => ['url' => route('admin.donations.payment.bulk.action')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('bulk-action-js'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['url' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('admin.donations.payment.bulk.action'))]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal072e1d65807e15afb767e18aecd4a7e8)): ?>
+<?php $attributes = $__attributesOriginal072e1d65807e15afb767e18aecd4a7e8; ?>
+<?php unset($__attributesOriginal072e1d65807e15afb767e18aecd4a7e8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal072e1d65807e15afb767e18aecd4a7e8)): ?>
+<?php $component = $__componentOriginal072e1d65807e15afb767e18aecd4a7e8; ?>
+<?php unset($__componentOriginal072e1d65807e15afb767e18aecd4a7e8); ?>
+<?php endif; ?>
+
+            $(document).ready(function (){
+                $('.table-wrap > table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "<?php echo e(route('admin.donations.payment.logs')); ?>",
+                    columns: [
+                        {data: 'checkbox', name: '', orderable: false, searchable: false},
+                        {data: 'id', name: 'id'},
+                        {data: 'info', name: '' ,orderable: false, searchable: false},
+                        {data: 'status'},
+                        {data: 'action', name: '', orderable: false, searchable: false},
+                    ]
+                });
+            });
+
+        });
+    </script>
+<?php $__env->stopSection(); ?>
+
+
+<?php echo $__env->make('backend.admin-master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\bulk\@core\resources\views/backend/donations/donation-payment-logs-all.blade.php ENDPATH**/ ?>

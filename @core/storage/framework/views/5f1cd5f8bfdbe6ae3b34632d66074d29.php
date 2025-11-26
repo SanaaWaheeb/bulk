@@ -357,7 +357,7 @@
 
                     <li class="main_dropdown <?php if(request()->is(['admin-home/donations/*','admin-home/donations'])): ?> active <?php endif; ?> ">
                         <a href="javascript:void(0)" aria-expanded="true">
-                            <i class="ti-agenda mr-2"></i> <?php echo e(__('Donation')); ?>
+                            <i class="ti-agenda mr-2"></i> <?php echo e(__('Products')); ?>
 
                              <!--<span class="badge"><?php echo e(__('PC')); ?><?php echo e($pending_cases_count); ?></span>-->
                             <!--<span class="badge"><?php echo e(__('PW')); ?><?php echo e($pending_withdraw_count); ?></span>-->
@@ -365,17 +365,17 @@
                         <ul class="collapse">
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('donation-list')): ?>
                                 <li class="<?php echo e(active_menu('admin-home/donations')); ?>"><a
-                                            href="<?php echo e(route('admin.donations.all')); ?>"><?php echo e(__('All Causes')); ?></a>
+                                            href="<?php echo e(route('admin.donations.all')); ?>"><?php echo e(__('All Products')); ?></a>
                                 </li>
                             <?php endif; ?>
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('donation-create')): ?>
                                 <li class="<?php echo e(active_menu('admin-home/donations/new')); ?>"><a
-                                            href="<?php echo e(route('admin.donations.new')); ?>"><?php echo e(__('Add New Cause')); ?></a>
+                                            href="<?php echo e(route('admin.donations.new')); ?>"><?php echo e(__('Add New Product')); ?></a>
                                 </li>
                             <?php endif; ?>
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('donation-category-list')): ?>
                                 <li class="<?php echo e(active_menu('admin-home/donations/category')); ?>"><a
-                                            href="<?php echo e(route('admin.donations.category.all')); ?>"><?php echo e(__('Causes Category')); ?></a>
+                                            href="<?php echo e(route('admin.donations.category.all')); ?>"><?php echo e(__('Products Category')); ?></a>
                                 </li>
                             <?php endif; ?>
                             <!--<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('donation-pending-cause')): ?>-->
@@ -393,7 +393,7 @@
                             <!--<?php endif; ?>-->
                             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('donation-payment-list')): ?>
                                 <li class="<?php echo e(active_menu('admin-home/donations/payment-logs')); ?>"><a
-                                            href="<?php echo e(route('admin.donations.payment.logs')); ?>"><?php echo e(__('Causes Payment Logs')); ?></a>
+                                            href="<?php echo e(route('admin.donations.payment.logs')); ?>"><?php echo e(__('Products Orders')); ?></a>
                                 </li>
                             <?php endif; ?>
                             <!--<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('donation-cause-report')): ?>-->

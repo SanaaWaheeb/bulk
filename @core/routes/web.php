@@ -6,10 +6,21 @@ use App\CauseUpdate;
 use App\Comment;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+
+// Switch the language between Arabic & English
+Route::get('admin/language/switch/{locale}', function ($locale) {
+    if (! in_array($locale, ['en', 'ar'])) {
+        abort(400);
+    }
+    session(['lang' => $locale]);
+    return redirect()->back();
+})->name('admin.language.switch');
+
 
 // OTP Test routes (keep these as they are)
 Route::get('/otp-test', [OtpController::class, 'showForm'])->name('otp.form');

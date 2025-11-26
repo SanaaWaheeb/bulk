@@ -6,15 +6,15 @@
 @section('content')
 @php
     $statistics = [
-        ['title' => 'Total Admin','value' => $total_admin, 'icon' => 'user'],
-        ['title' => 'Total User','value' => $total_user, 'icon' => 'user'],
+        ['title' => 'Total Admins','value' => $total_admin, 'icon' => 'user'],
+        ['title' => 'Total Users','value' => $total_user, 'icon' => 'user'],
        // ['title' => 'Total Blogs','value' => $all_blogs, 'icon' => 'write'],
         //['title' => 'Total Testimonial','value' => $total_testimonial, 'icon' => 'control-forward'],
       //  ['title' => 'Total Team Member','value' => $total_team_member, 'icon' => 'control-forward'],
         //['title' => 'Total Counterup','value' => $total_counterup, 'icon' => 'control-forward'],
     //    ['title' => 'Total Jobs','value' => $total_jobs, 'icon' => 'package'],
       //  ['title' => 'Total Events','value' => $total_events, 'icon' => 'timer'],
-        ['title' => 'Total Causes','value' => $total_causes, 'icon' => 'agenda'],
+        ['title' => 'Total Products','value' => $total_causes, 'icon' => 'agenda'],
       //  ['title' => 'Total Causes Logs','value' => $total_cause_logs, 'icon' => 'medall'],
         //['title' => 'Total Event Attendence','value' => $total_event_attendance, 'icon' => 'hand-open'],
         ['title' => 'Total Campaign Withdraws','value' => $campaign_withdraw, 'icon' => 'package'],

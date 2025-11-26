@@ -1724,3 +1724,35 @@ body.sidebar_collapsed > .alert.alert-warning{
 .sidebar-menu .logo img {
     max-height: 60px;
 }
+#languageDropdown {
+    background-color: #007bff;
+    margin-top: 5px; 
+    border-radius: 8px;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#languageDropdown:hover {
+    background-color: #0056b3;
+}
+
+/* عناصر القائمة */
+.dropdown-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* مسافة بين العلم والنص */
+.dropdown-menu .dropdown-item i {
+    margin-right: 8px;
+    font-size: 16px;
+}

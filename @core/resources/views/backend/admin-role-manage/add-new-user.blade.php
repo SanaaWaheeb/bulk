@@ -39,7 +39,7 @@
                                 <input type="password" class="form-control"  id="password_confirmation" name="password_confirmation" placeholder="{{__('Password Confirmation')}}">
                             </div>
                             <div class="form-group">
-                                <label for="role">{{'Role'}}</label>
+                                <label for="role">{{__('Role')}}</label>
                                 <select name="role" class="form-control">
                                     <option value="">{{__('Select Role')}}</option>
                                     @foreach($roles as $role)

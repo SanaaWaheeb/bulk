@@ -20,7 +20,7 @@ class SetLang
     {
         if (session()->has('lang')) {
 			 Carbon::setLocale(session()->get('lang'));
-            app()->setLocale(session()->get('lang').'_'.$location);
+             app()->setLocale(session()->get('lang').'_'.$location);
         } else {
             $defaultLang =  Language::where('default',1)->first();
             if (!empty($defaultLang)) {
