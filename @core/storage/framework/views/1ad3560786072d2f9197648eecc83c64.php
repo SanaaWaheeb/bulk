@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <div class="col-6 text-right">
-                            <a class="d-block" href="<?php echo e(route('user.register')); ?>"><?php echo e(__('Create New account?')); ?></a>
+                            <a class="d-block" href="<?php echo e(route('user.register')); ?>"><?php echo e(__('Create New Account?')); ?></a>
 
                         </div>
                         <div class="col-lg-12">

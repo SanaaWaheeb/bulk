@@ -39,7 +39,7 @@
                 <input type="text" class="form-control" id="city" name="city" value="{{$user_details->city}}">
             </div>
             <div class="form-group">
-                <label for="city">{{__('الحي')}}</label>
+                <label for="city">{{__('district')}}</label>
                 <input type="text" class="form-control" id="city" name="district" value="{{$user_details->district}}">
             </div>
             <div class="form-group">

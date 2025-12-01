@@ -214,5 +214,6 @@
     "Delete": "Delete",
     "Deleting": "Deleting",
     "Deleting...": "Deleting...",
-    "Descending": "Descending"
+    "Descending": "Descending",
+    "Phone number must be a valid Saudi number (example: 5XXXXXXXX)":"Phone number must be a valid Saudi number (example: 5XXXXXXXX)"
 }

@@ -2,7 +2,7 @@
 <script>
 Swal.fire({
     icon: 'success',
-    title: 'نجاح!',
+    title: 'success!',
     html: `
         <div style="font-size: 14px; line-height: 1.3;">
             {!! Session::get('success') !!}
@@ -38,7 +38,7 @@ Swal.fire({
 <script>
 Swal.fire({
     icon: 'error',
-    title: 'خطأ!',
+    title: 'error!',
     text: @json(Session::get('error')),
     input: undefined,        // ✅ نفس الفكرة هنا
     showCancelButton: false,

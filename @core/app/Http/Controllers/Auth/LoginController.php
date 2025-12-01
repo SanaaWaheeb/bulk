@@ -124,9 +124,9 @@ class LoginController extends Controller
 
     if (!str_starts_with($rawPhone, '5')) {
         if ($request->expectsJson()) {
-            return response()->json(['message' => 'رقم الجوال يجب أن يبدأ بـ 5'], 422);
+            return response()->json(['message' => __('Phone number must start with digit 5')], 422);
         }
-            return back()->with('error', 'يجب أن يبدأ رقم الجوال بالرقم 5.')->withInput();
+            return back()->with('error', 'Phone number must start with digit 5')->withInput();
     }
 
     $user = \App\User::where('username', $rawPhone)->first();
@@ -157,8 +157,8 @@ class LoginController extends Controller
         return response()->json(['message' => 'تم إرسال الرمز بنجاح', 'phone' => $fullPhone]);
     }
 
-return back()
-    ->with('success', 'تم إرسال رمز التحقق إلى ' . $fullPhone)
+    return back()
+    ->with('success', __('Verification code has been sent to') . ' ' . $fullPhone)
     ->with('otp_sent', true);
 }
 

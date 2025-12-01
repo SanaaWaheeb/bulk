@@ -12,6 +12,19 @@ use App\Http\Controllers\OtpController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
+// روت الترجمة للزوار (Home)
+Route::get('lang/{locale}', function ($locale) {
+    if (!in_array($locale, ['en', 'ar'])) {
+        abort(400);
+    }
+    
+    // حفظ اللغة في السيشون
+    session(['lang' => $locale]);
+    
+    // إعادة التوجيه للصفحة السابقة
+    return redirect()->back();
+})->name('home.language.switch');
+
 // Switch the language between Arabic & English
 Route::get('admin/language/switch/{locale}', function ($locale) {
     if (! in_array($locale, ['en', 'ar'])) {

@@ -26,6 +26,33 @@
                                     @foreach($all_social_item as $data)
                                         <li><a href="{{$data->url}}"><i class="{{$data->icon}}"></i></a></li>
                                     @endforeach
+
+                                     
+            @if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data)))
+            <li class="dropdown" style="list-style: none; margin-left: 5px;">
+                <button class="btn btn-outline-dark dropdown-toggle "
+                        type="button"
+                        id="languageDropdown"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        style="padding: 5px 12px; font-size: 14px; background-color: white; color: #000 !important; border: 2px solid #000000 !important; transition: all 0.3s ease;"
+                        onmouseover="this.style.backgroundColor='#495057'; this.style.color='white'; this.style.borderColor='#495057';"
+                        onmouseout="this.style.backgroundColor='white'; this.style.color='#000'; this.style.borderColor='#000000';">
+                    {{ __('Change Language') }}
+                </button>
+            
+                <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <a href="{{ route('home.language.switch', 'en') }}" class="dropdown-item" style="color: #000 !important;">
+                        English
+                    </a>
+                    <a href="{{ route('home.language.switch', 'ar') }}" class="dropdown-item" style="color: #000 !important;">
+                        العربية
+                    </a>
+                </div>
+            </li>
+        @endif
+
                                     <x-front-user-login-li/>
 
                                 </ul>

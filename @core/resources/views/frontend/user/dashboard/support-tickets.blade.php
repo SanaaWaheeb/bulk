@@ -47,7 +47,7 @@
 @endsection
 @section('section')
 
-        <a href="{{route('frontend.support.ticket')}}" class="btn btn-info margin-bottom-30">{{('اقتراح منتج جديد')}}</a>
+        <a href="{{route('frontend.support.ticket')}}" class="btn btn-info margin-bottom-30">{{ __('Suggest New Product') }}</a>
         @if(count($all_tickets) > 0)
             <div class="table-responsive">
                 <table class="table table-striped">

@@ -101,6 +101,27 @@
                     </ul>
                 </div>
                 <?php if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data))): ?>
+                <li class="nav-item dropdown" style="list-style: none; margin-left: 15px;">
+                    <button class="btn btn-outline-dark dropdown-toggle"
+                            type="button"
+                            id="languageDropdown"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            style="padding: 5px 12px; font-size: 14px;">
+                        <?php echo e(__('Change Language')); ?>
+
+                    </button>
+                
+                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <a href="<?php echo e(route('home.language.switch', 'en')); ?>" class="dropdown-item">
+                            English
+                        </a>
+                        <a href="<?php echo e(route('home.language.switch', 'ar')); ?>" class="dropdown-item">
+                            العربية
+                        </a>
+                    </div>
+                </li>
                 <div class="nav-right-content">
                     <ul>
                         </li>

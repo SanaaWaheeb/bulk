@@ -67,7 +67,7 @@
                                     <input type="text" name="city" class="form-control" placeholder="<?php echo e(__('City')); ?>">
                                </div>
                                <div class="form-group">
-                                    <input type="text" name="district" class="form-control" placeholder="<?php echo e(__('الحي')); ?>" required>
+                                    <input type="text" name="district" class="form-control" placeholder="<?php echo e(__('district')); ?>" required>
                                 </div>
                                 <!--<?php if(!empty(get_static_option('site_google_captcha_enable'))): ?>-->
                                 <!--    <div class="form-group">-->
@@ -80,18 +80,18 @@
 
                                 <div class="form-group form-check col-12">
                                     <input type="checkbox" class="form-check-input" name="agree_terms" id="Check11" required>
-                                    <label class="form-check-label" for="Check11">
-                                        <?php echo e(__('من خلال إنشاء حساب، فإنك توافق على')); ?>
+                                    <label class="form-check-label" for="Check11" style="margin-right: 16px;">
+                                        <?php echo e(__('By creating an account, you agree to')); ?>
 
-                                        <a href="<?php echo e(route('frontend.dynamic.page',[getSlugByPageId(get_static_option('register_page_terms_of_service_url')), get_static_option('register_page_terms_of_service_url')])); ?>"><?php echo e(__('شروط الخدمة والأحكام')); ?>,</a>
-                                        <?php echo e(__('و')); ?>
+                                        <a href="<?php echo e(route('frontend.dynamic.page',[getSlugByPageId(get_static_option('register_page_terms_of_service_url')), get_static_option('register_page_terms_of_service_url')])); ?>"><?php echo e(__('Terms of Service and Conditions ')); ?>,</a>
+                                        <?php echo e(__('and ')); ?>
 
-                                        <a href="<?php echo e(route('frontend.dynamic.page',[getSlugByPageId(get_static_option('register_page_privacy_policy_url')), get_static_option('register_page_privacy_policy_url')])); ?>"><?php echo e(__('سياسة الخصوصية')); ?></a>
+                                        <a href="<?php echo e(route('frontend.dynamic.page',[getSlugByPageId(get_static_option('register_page_privacy_policy_url')), get_static_option('register_page_privacy_policy_url')])); ?>"><?php echo e(__('privacy policy')); ?></a>
                                     </label>
                                 </div>
 
                                 <div class="form-group btn-wrapper">
-                                    <button type="submit" class="submit-btn boxed-btn reverse-color"><?php echo e(__('إرسال رمز التحقق')); ?></button>
+                                    <button type="submit" class="submit-btn boxed-btn reverse-color"><?php echo e(__('Send verification code')); ?></button>
                                 </div>
                             </form>
                         <?php else: ?>
@@ -109,7 +109,9 @@
 
                         <div class="row mb-4 rmber-area">
                             <div class="col-12 text-center">
-                                <a href="<?php echo e(route('user.login')); ?>"><?php echo e(__('Already Have account?')); ?></a>
+                                <a href="<?php echo e(route('user.login')); ?>" style="color:#000; text-decoration: none;
+                                transition: color 0.3s ease;"; onmouseover="this.style.color='#007bff'" 
+                                onmouseout="this.style.color='#000'"> <?php echo e(__('Already have account?')); ?></a>
                             </div>
                         </div>
                     </div>

@@ -2,7 +2,7 @@
 <script>
 Swal.fire({
     icon: 'success',
-    title: 'نجاح!',
+    title: 'success!',
     html: `
         <div style="font-size: 14px; line-height: 1.3;">
             <?php echo Session::get('success'); ?>
@@ -39,7 +39,7 @@ Swal.fire({
 <script>
 Swal.fire({
     icon: 'error',
-    title: 'خطأ!',
+    title: 'error!',
     text: <?php echo json_encode(Session::get('error'), 15, 512) ?>,
     input: undefined,        // ✅ نفس الفكرة هنا
     showCancelButton: false,

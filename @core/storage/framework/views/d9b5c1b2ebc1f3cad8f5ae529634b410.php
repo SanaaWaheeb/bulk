@@ -55,7 +55,7 @@
                 <input type="text" class="form-control" id="city" name="city" value="<?php echo e($user_details->city); ?>">
             </div>
             <div class="form-group">
-                <label for="city"><?php echo e(__('الحي')); ?></label>
+                <label for="city"><?php echo e(__('district')); ?></label>
                 <input type="text" class="form-control" id="city" name="district" value="<?php echo e($user_details->district); ?>">
             </div>
             <div class="form-group">

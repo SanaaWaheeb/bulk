@@ -75,7 +75,7 @@
 
                             </div>
                             <div class="form-group btn-wrapper">
-                                <button type="submit" id="login_btn" class="submit-btn boxed-btn reverse-color "><?php echo e(__('إرسال رمز التحقق')); ?></button>
+                                <button type="submit" id="login_btn" class="submit-btn boxed-btn reverse-color "><?php echo e(__('Send verification code')); ?></button>
                             </div>
                         </form>
                     <?php else: ?>
@@ -91,9 +91,9 @@
        dir="ltr" readonly required>
 
                             <div class="form-group">
-                                <label><?php echo e(__('اكتب رمز التحقق')); ?></label>
+                                <label><?php echo e(__('Enter verification code')); ?></label>
                                 <input type="text" name="otp_code" class="form-control" 
-                                       placeholder="<?php echo e(__('اكتب رمز التحقق')); ?>" required>
+                                       placeholder="<?php echo e(__('Enter verification code')); ?>" required>
                             </div>
                             <div class="form-group btn-wrapper">
                                 <button type="submit" id="verify_btn" class="submit-btn boxed-btn reverse-color "><?php echo e(__('تحقق من الرمز')); ?></button>
@@ -114,11 +114,13 @@
                         <div class="col-6">
                             <div class="custom-control custom-checkbox mr-sm-2">
                                 <input type="checkbox" name="remember" class="custom-control-input" id="remember">
-                                <label class="custom-control-label" for="remember"><?php echo e(__('تذكرني')); ?></label>
+                                <label class="custom-control-label" for="remember"><?php echo e(__('Remind me')); ?></label>
                             </div>
                         </div>
                         <div class="col-6 text-right">
-                            <a class="d-block" href="<?php echo e(route('user.register')); ?>"><?php echo e(__('Create New account?')); ?></a>
+                            <a class="d-block" href="<?php echo e(route('user.register')); ?>" style="color:#000; text-decoration: none;
+                            transition: color 0.3s ease;"; onmouseover="this.style.color='#007bff'" 
+                            onmouseout="this.style.color='#000'"><?php echo e(__('Create New Account?')); ?></a>
 
                         </div>
                         <div class="col-lg-12">

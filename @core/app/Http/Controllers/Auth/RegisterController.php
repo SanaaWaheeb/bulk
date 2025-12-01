@@ -35,54 +35,68 @@ class RegisterController extends Controller
     }
 
     protected function validator(array $data)
-    {
-        // if Google reCAPTCHA validation is needed
-        $enableGoogleCaptcha = !empty(get_static_option('site_google_captcha_enable'));
-        // validation rules
-        $rules = [
-            'name' => ['required', 'string', 'max:191'],
-            'username' => ['required', 'regex:/^0?5\d{8}$/', 'unique:users,username'],
-            // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'city' => ['required'],
-            'district'=> ['required'],
-            'agree_terms' => ['required'],
-        ];
-        // Add Google reCAPTCHA validation
-        if ($enableGoogleCaptcha) {
-            $rules['g-recaptcha-response'] = 'required';
-        }
-        // custom error messages
-        $messages = [
-        'g-recaptcha-response.required' => __('التحقق من Google reCAPTCHA مطلوب'),
-        'name.required' => __('الاسم مطلوب'),
-        'name.max' => __('يجب ألا يزيد الاسم عن 191 حرفًا'),
-        'username.required' => __('رقم الجوال مطلوب'),
-        'city.required' => __('المدينة مطلوب'),
-        'district.required' => __('الحي مطلوب'),
-        'username.unique' => __('رقم الجوال مستخدم من قبل'),
-        'username.regex' => __('رقم الجوال يجب أن يكون رقمًا سعوديًا صالحًا (مثال: 5XXXXXXXX)'),
-        // 'email.unique' => __('البريد الإلكتروني مستخدم من قبل'),
-        // 'email.required' => __('البريد الإلكتروني مطلوب'),
-        'password.required' => __('كلمة المرور مطلوبة'),
-        'password.confirmed' => __('كلمتا المرور غير متطابقتين'),
-        'agree_terms.required' => __('يجب الموافقة على الشروط والأحكام وسياسات الخصوصية'),
-
-        ];
-        // Create the Validator instance
-        $validator = Validator::make($data, $rules, $messages);
-
-        // Validate the captcha_token conditionally
-        if (!$enableGoogleCaptcha) {
-            $validator->sometimes('captcha_token', function ($attribute, $value) {
-                return !google_captcha_check($value);
-            }, function ($validator) {
-                $validator->errors()->add('captcha_token', __('Google reCAPTCHA verification failed'));
-            });
-        }
-
-        // Return the Validator instance
-        return $validator;
+{
+    $enableGoogleCaptcha = !empty(get_static_option('site_google_captcha_enable'));
+    $locale = app()->getLocale(); // جلب اللغة الحالية
+    
+    $rules = [
+        'name' => ['required', 'string', 'max:191'],
+        'username' => ['required', 'regex:/^0?5\d{8}$/', 'unique:users,username'],
+        'city' => ['required'],
+        'district'=> ['required'],
+        'agree_terms' => ['required'],
+    ];
+    
+    if ($enableGoogleCaptcha) {
+        $rules['g-recaptcha-response'] = 'required';
     }
+    
+    // تحديد الرسائل بناءً على اللغة
+    if ($locale == 'ar') {
+        $messages = [
+            'g-recaptcha-response.required' => 'التحقق من Google reCAPTCHA مطلوب',
+            'name.required' => 'الاسم مطلوب',
+            'name.max' => 'الاسم يجب ألا يتجاوز ١٩١ حرفًا',
+            'username.required' => 'رقم الجوال مطلوب',
+            'city.required' => 'المدينة مطلوبة',
+            'district.required' => 'الحى مطلوب',
+            'username.unique' => 'رقم الجوال مستخدم بالفعل',
+            'username.regex' => 'رقم الجوال يجب أن يكون رقمًا سعوديًا صالحًا (مثال: 5XXXXXXXX)',
+            'password.required' => 'كلمة المرور مطلوبة',
+            'password.confirmed' => 'كلمات المرور غير متطابقة',
+            'agree_terms.required' => 'يجب الموافقة على الشروط والأحكام وسياسة الخصوصية',
+        ];
+    } else {
+        $messages = [
+            'g-recaptcha-response.required' => 'Google reCAPTCHA verification is required',
+            'name.required' => 'Name is required',
+            'name.max' => 'Name must not exceed 191 characters',
+            'username.required' => 'Phone number is required',
+            'city.required' => 'City is required',
+            'district.required' => 'District is required',
+            'username.unique' => 'Phone number is already in use',
+            'username.regex' => 'Phone number must be a valid Saudi number (example: 5XXXXXXXX)',
+            'password.required' => 'Password is required',
+            'password.confirmed' => 'Passwords do not match',
+            'agree_terms.required' => 'You must agree to the Terms and Conditions and Privacy Policy',
+        ];
+    }
+    
+    $validator = Validator::make($data, $rules, $messages);
+    
+    if (!$enableGoogleCaptcha) {
+        $validator->sometimes('captcha_token', function ($attribute, $value) {
+            return !google_captcha_check($value);
+        }, function ($validator) use ($locale) {
+            $errorMsg = ($locale == 'ar') 
+                ? 'فشل التحقق من Google reCAPTCHA' 
+                : 'Google reCAPTCHA verification failed';
+            $validator->errors()->add('captcha_token', $errorMsg);
+        });
+    }
+    
+    return $validator;
+}
     protected function adminValidator(array $data)
     {
         return Validator::make($data, [
@@ -135,13 +149,15 @@ class RegisterController extends Controller
 
 public function sendRegisterOtp(Request $request)
 {
+    dd(__('OTP sent'));
+    dd(app()->getLocale(), session('lang'));
     $validator = $this->validator($request->all());
 
     if ($validator->fails()) {
         if ($request->expectsJson()) {
             return response()->json([
                 'errors' => $validator->errors(),
-                'message' => 'خطأ في التحقق من البيانات'
+                'message' => __('Data validation error')
             ], 422);
         }
         return back()->withErrors($validator)->withInput();
@@ -152,7 +168,7 @@ public function sendRegisterOtp(Request $request)
         $rawPhone = substr($rawPhone, 1);
     }
     if (!str_starts_with($rawPhone, '5')) {
-        $msg = 'يجب أن يبدأ رقم الجوال بالرقم 5';
+        $msg = __('Phone number must start with digit 5');
         if ($request->expectsJson()) {
             return response()->json(['message' => $msg], 422);
         }
@@ -190,17 +206,17 @@ public function sendRegisterOtp(Request $request)
         $twilio->verify->v2->services(env('TWILIO_VERIFY_SERVICE_SID'))
             ->verifications->create($fullPhone, "sms");
     } catch (\Exception $e) {
-        return response()->json(['message' => 'فشل إرسال الرمز: ' . $e->getMessage()], 500);
+        return response()->json(['message' => 'Failed to send code: ' . $e->getMessage()], 500);
     }
 
     if ($request->expectsJson()) {
         return response()->json([
-            'message' => 'تم إرسال رمز التحقق بنجاح',
+            'message' => __('Verification code has been sent successfully'),
             'token' => $token ?? null
         ]);
     }
-
-    return back()->with('success', 'OTP sent')->with('otp_register_sent', true);
+    dd(app()->getLocale());
+    return back()->with('success',  __('OTP sent'))->with('otp_register_sent', true);
 }
 
 
@@ -212,12 +228,12 @@ public function verifyRegisterOtp(Request $request)
     if ($request->expectsJson()) {
         $token = $request->header('X-Register-Token');
         if (!$token) {
-            return response()->json(['message' => 'Token غير موجود'], 400);
+            return response()->json(['message' => __('Token not found')], 400);
         }
 
         $userData = Cache::get("register_data_{$token}");
         if (!$userData) {
-            return response()->json(['message' => 'انتهت الجلسة. حاول مرة أخرى.'], 419);
+            return response()->json(['message' => __('The session has ended. Please try again.')], 419);
         }
 
         $fullPhone = $userData['phone'];
@@ -227,7 +243,7 @@ public function verifyRegisterOtp(Request $request)
         $fullPhone = Session::get('register_phone');
 
         if (!$userData || !$fullPhone) {
-            $msg = 'انتهت الجلسة. حاول مرة أخرى.';
+            $msg = __('The session has ended. Please try again.');
             return redirect()->route('user.register')->with('error', $msg);
         }
     }
@@ -240,7 +256,7 @@ public function verifyRegisterOtp(Request $request)
                 'code' => $request->otp_code
             ]);
     } catch (\Exception $e) {
-        return response()->json(['message' => 'فشل التحقق من الرمز: ' . $e->getMessage()], 500);
+        return response()->json(['message' => __('Verification code check failed: ') . $e->getMessage()], 500);
     }
 
     if ($verification->status === 'approved') {
@@ -262,11 +278,11 @@ public function verifyRegisterOtp(Request $request)
         return $request->expectsJson()
             ? response()->json([
                 
-                'message' => 'تم التسجيل وتسجيل الدخول بنجاح'])
-            : redirect()->route('user.home.edit.profile')->with('success', 'تم التسجيل بنجاح!');
+                'message' => __('Registration and login completed successfully')])
+            : redirect()->route('user.home.edit.profile')->with('success', __('Registration completed successfully!'));
     }
 
-    return response()->json(['message' => 'رمز التحقق غير صالح'], 400);
+    return response()->json(['message' => __('Invalid verification code')], 400);
 }
 
 }

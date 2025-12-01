@@ -57,7 +57,7 @@
 
         {{-- السعر (إن وُجد) - أرقام فقط بدون ريال --}}
         @if(!is_null($priceVal))
-            <div class="price h6 mb-2">السعر: {{ number_format($priceVal, 0, '.', ',') }}</div>
+            <div class="price h6 mb-2">{{ __('Price') }}: {{ number_format($priceVal, 0, '.', ',') }}</div>
         @endif
 
         {{-- وصف مختصر --}}
@@ -76,8 +76,8 @@
             </div>
 
             <div class="d-flex justify-content-between text-muted small mt-2 goal">
-                <span>تم جمعه: <strong>{{ number_format($raisedAmt, 0, '.', ',') }}</strong></span>
-                <span>الهدف: <strong>{{ number_format($goal, 0, '.', ',') }}</strong></span>
+                <span>{{ __('Raised') }}: <strong>{{ number_format($raisedAmt, 0, '.', ',') }}</strong></span>
+                <span>{{ __('Goal') }}: <strong>{{ number_format($goal, 0, '.', ',') }}</strong></span>
                 <span>{{ $progress }}%</span>
             </div>
         </div>
@@ -86,9 +86,9 @@
         @if($deadlineD)
             <div class="text-muted small mb-2">
                 @if($isExpired)
-                    انتهى في: {{ $deadlineD->format('Y-m-d') }}
+                 {{ __('Expired at') }}: {{ $deadlineD->format('Y-m-d') }}
                 @elseif(!is_null($daysLeft))
-                    ينتهي خلال: {{ $daysLeft }} يوم ({{ $deadlineD->format('Y-m-d') }})
+                 {{ __('Ends in') }}: {{ $daysLeft }} {{ __('days') }} ({{ $deadlineD->format('Y-m-d') }})
                 @endif
             </div>
         @endif

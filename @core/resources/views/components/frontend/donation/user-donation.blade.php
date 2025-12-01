@@ -28,15 +28,15 @@
 
                     {{-- فاصل واضح قبل أول عنصر منتهي --}}
                     @if($isExpired && !$dividerShown)
-                        @php $dividerShown = true; @endphp
-                        <div class="col-12">
-                            <hr class="my-4">
-                            <h5 class="mb-1 text-muted">الطلبات المنتهية</h5>
-                            <p class="text-muted small mb-3">
-                                العناصر التالية انتهت مدّتها وقد لا تكون متاحة للطلب.
-                            </p>
-                        </div>
-                    @endif
+    @php $dividerShown = true; @endphp
+    <div class="col-12">
+        <hr class="my-4">
+        <h5 class="mb-1 text-muted">{{__('Completed Orders') }}</h5> 
+        <p class="text-muted small mb-3">
+            {{__('.The following items have expired and may not be available for order') }}
+        </p>
+    </div>
+@endif
 
                     <div class="col-lg-4 col-md-6">
                         <x-frontend.donation.grid

@@ -59,7 +59,7 @@
 
         
         <?php if(!is_null($priceVal)): ?>
-            <div class="price h6 mb-2">السعر: <?php echo e(number_format($priceVal, 0, '.', ',')); ?></div>
+            <div class="price h6 mb-2"><?php echo e(__('Price')); ?>: <?php echo e(number_format($priceVal, 0, '.', ',')); ?></div>
         <?php endif; ?>
 
         
@@ -79,8 +79,8 @@
             </div>
 
             <div class="d-flex justify-content-between text-muted small mt-2 goal">
-                <span>تم جمعه: <strong><?php echo e(number_format($raisedAmt, 0, '.', ',')); ?></strong></span>
-                <span>الهدف: <strong><?php echo e(number_format($goal, 0, '.', ',')); ?></strong></span>
+                <span><?php echo e(__('Raised')); ?>: <strong><?php echo e(number_format($raisedAmt, 0, '.', ',')); ?></strong></span>
+                <span><?php echo e(__('Goal')); ?>: <strong><?php echo e(number_format($goal, 0, '.', ',')); ?></strong></span>
                 <span><?php echo e($progress); ?>%</span>
             </div>
         </div>
@@ -89,10 +89,10 @@
         <?php if($deadlineD): ?>
             <div class="text-muted small mb-2">
                 <?php if($isExpired): ?>
-                    انتهى في: <?php echo e($deadlineD->format('Y-m-d')); ?>
+                 <?php echo e(__('Expired at')); ?>: <?php echo e($deadlineD->format('Y-m-d')); ?>
 
                 <?php elseif(!is_null($daysLeft)): ?>
-                    ينتهي خلال: <?php echo e($daysLeft); ?> يوم (<?php echo e($deadlineD->format('Y-m-d')); ?>)
+                 <?php echo e(__('Ends in')); ?>: <?php echo e($daysLeft); ?> <?php echo e(__('days')); ?> (<?php echo e($deadlineD->format('Y-m-d')); ?>)
                 <?php endif; ?>
             </div>
         <?php endif; ?>

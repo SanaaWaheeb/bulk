@@ -101,6 +101,7 @@
     "Login Success.. Redirecting ..":"Login Success.. Redirecting ..",
     "Login To Leave Comment":"Login To Leave Comment",
     "Login To Your Account":"Login To Your Account",
+    "Suggest New Product":"Suggest New Product",
     "Login With Facebook":"Login With Facebook",
     "Login With Google":"Login With Google",
     "Logout":"Logout",
@@ -214,5 +215,6 @@
     "Your Email":"Your Email",
     "Your Name":"Your Name",
     "Zipcode":"Zipcode",
-    "Welcome back! Login":"Welcome back! Login"
+    "Welcome back! Login":"Welcome back! Login",
+    "Phone number must be a valid Saudi number (example: 5XXXXXXXX)":"Phone number must be a valid Saudi number (example: 5XXXXXXXX)"
  }

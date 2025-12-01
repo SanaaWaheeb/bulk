@@ -26,6 +26,34 @@
                                     <?php $__currentLoopData = $all_social_item; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <li><a href="<?php echo e($data->url); ?>"><i class="<?php echo e($data->icon); ?>"></i></a></li>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                     
+            <?php if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data))): ?>
+            <li class="dropdown" style="list-style: none; margin-left: 5px;">
+                <button class="btn btn-outline-dark dropdown-toggle "
+                        type="button"
+                        id="languageDropdown"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        style="padding: 5px 12px; font-size: 14px; background-color: white; color: #000 !important; border: 2px solid #000000 !important; transition: all 0.3s ease;"
+                        onmouseover="this.style.backgroundColor='#495057'; this.style.color='white'; this.style.borderColor='#495057';"
+                        onmouseout="this.style.backgroundColor='white'; this.style.color='#000'; this.style.borderColor='#000000';">
+                    <?php echo e(__('Change Language')); ?>
+
+                </button>
+            
+                <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <a href="<?php echo e(route('home.language.switch', 'en')); ?>" class="dropdown-item" style="color: #000 !important;">
+                        English
+                    </a>
+                    <a href="<?php echo e(route('home.language.switch', 'ar')); ?>" class="dropdown-item" style="color: #000 !important;">
+                        العربية
+                    </a>
+                </div>
+            </li>
+        <?php endif; ?>
+
                                     <?php if (isset($component)) { $__componentOriginala02c5612010dcb7b66efe3676cfc560d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginala02c5612010dcb7b66efe3676cfc560d = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.front-user-login-li','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
