@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client;
 use Illuminate\Support\Facades\Session;
+use App\Http\Middleware\SetLocale;
 
 class LoginController extends Controller
 {
@@ -108,34 +109,49 @@ class LoginController extends Controller
     /**
      * Send OTP to phone number
      */
-    public function sendLoginOtp(Request $request)
+public function sendLoginOtp(Request $request)
 {
+    // ✅ Validation with translated messages
     $request->validate([
-    'phone' => ['required', 'digits:9']
-], [
-    'phone.required' => 'رقم الجوال مطلوب',
-    'phone.regex' => 'رقم الجوال يجب أن يبدأ بـ 5 ويحتوي على 9 أرقام فقط'
-]);
+        'phone' => ['required', 'digits:9'],
+    ], [
+        'phone.required' => __('validation.phone_required'),
+        'phone.digits'   => __('validation.phone_digits'),
+    ]);
 
+    // Normalize phone (remove non-digits)
     $rawPhone = preg_replace('/\D/', '', $request->phone);
+
+    // Remove leading 0 if exists
     if (str_starts_with($rawPhone, '0')) {
         $rawPhone = substr($rawPhone, 1);
     }
 
+    // ✅ Phone must start with 5
     if (!str_starts_with($rawPhone, '5')) {
+        $msg = __('validation.phone_must_start_5');
+
         if ($request->expectsJson()) {
-            return response()->json(['message' => __('Phone number must start with digit 5')], 422);
+            return response()->json(['message' => $msg], 422);
         }
-            return back()->with('error', 'Phone number must start with digit 5')->withInput();
+
+        return back()->with('error', $msg)->withInput();
     }
 
+    // Find user by username = phone
     $user = \App\User::where('username', $rawPhone)->first();
 
     if (!$user) {
         if ($request->expectsJson()) {
-            return response()->json(['message' => 'أنت غير مسجل. الرجاء إنشاء حساب.'], 404);
+            return response()->json([
+                'message' => __('validation.not_registered')
+            ], 404);
         }
-       return back()->with('error', 'أنت غير مسجل بالرقم '.$request->phone.'، يُرجى إنشاء حساب.');
+
+        return back()->with(
+            'error',
+            __('validation.not_registered_phone', ['phone' => $request->phone])
+        );
     }
 
     $fullPhone = '+966' . $rawPhone;
@@ -143,23 +159,33 @@ class LoginController extends Controller
     try {
         $twilio = new Client(env('TWILIO_SID'), env('TWILIO_TOKEN'));
         $twilio->verify->v2->services(env('TWILIO_VERIFY_SERVICE_SID'))
-            ->verifications->create($fullPhone, "sms");
+            ->verifications->create($fullPhone, 'sms');
     } catch (\Exception $e) {
         if ($request->expectsJson()) {
-            return response()->json(['message' => 'فشل إرسال الرمز: ' . $e->getMessage()], 500);
+            return response()->json([
+                'message' => __('validation.send_code_failed_error', [
+                    'error' => $e->getMessage(),
+                ])
+            ], 500);
         }
-        return back()->with('error', 'فشل في إرسال الرمز.')->withInput();
+
+        return back()
+            ->with('error', __('validation.send_code_failed'))
+            ->withInput();
     }
 
     Session::put('login_phone', $fullPhone);
 
     if ($request->expectsJson()) {
-        return response()->json(['message' => 'تم إرسال الرمز بنجاح', 'phone' => $fullPhone]);
+        return response()->json([
+            'message' => __('validation.code_sent_success'),
+            'phone'   => $fullPhone,
+        ]);
     }
 
     return back()
-    ->with('success', __('Verification code has been sent to') . ' ' . $fullPhone)
-    ->with('otp_sent', true);
+        ->with('success', __('validation.code_sent_to', ['phone' => $fullPhone]))
+        ->with('otp_sent', true);
 }
 
 

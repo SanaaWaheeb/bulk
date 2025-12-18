@@ -1,6 +1,7 @@
 
-<!doctype html>
-<html class="no-js" lang="en">
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}"
+      dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
 
 <head>
     <meta charset="utf-8">
@@ -47,7 +48,7 @@
     </style>
 </head>
 
-<body>
+<body class="{{ app()->getLocale() === 'ar' ? 'rtl-body' : 'ltr-body' }}">
     @yield('content')
 
     <!-- jquery latest version -->

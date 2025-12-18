@@ -10668,3 +10668,39 @@ input[type=radio] {
     position: relative;
     top: -25px;
 }
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu .dropdown-item:active {
+    background-color: #e0e0e0 !important; /* رمادي فاتح */
+    color: #000 !important;               /* خلي النص أسود */
+}
+/* Arabic */
+.rtl-body {
+    direction: rtl;
+    text-align: right;
+}
+.ltr-body {
+    direction: ltr;
+    text-align: left;
+}
+
+/* English */
+.ltr-body {
+    direction: ltr;
+    text-align: left;
+}
+@media (max-width: 991px) {
+    .related-post-area-mobile-bottom {
+        order: 999;
+        margin-top: 40px;
+    }
+    
+    /* Optional: Adjust spacing */
+    .donation-single-content-area .row {
+        flex-direction: column;
+    }
+}
+@media (min-width: 992px) {
+    .related-post-area.moved {
+        position: static !important;
+    }
+}

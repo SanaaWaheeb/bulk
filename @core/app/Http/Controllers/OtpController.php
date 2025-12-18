@@ -33,7 +33,7 @@ class OtpController extends Controller
             ->verifications
             ->create($request->phone, "sms");
 
-        return back()->with('success', 'OTP sent to ' . $request->phone);
+        return back()->with('success', __('OTP sent to :phone', ['phone' => $request->phone]));
     }
 
     public function verifyOtp(Request $request)
@@ -58,10 +58,10 @@ class OtpController extends Controller
                 "code" => $request->otp_code
             ]);
 
-        if ($verification_check->status === "approved") {
-            return back()->with('success', 'OTP Verified Successfully!');
-        } else {
-            return back()->with('error', 'Invalid OTP.');
-        }
+       if ($verification_check->status === "approved") {
+    return back()->with('success', __('OTP Verified Successfully!'));
+} else {
+    return back()->with('error', __('Invalid OTP.'));
+}
     }
 }

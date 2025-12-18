@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('site-title'); ?>
     <?php echo e(__('Category Area')); ?>
 
@@ -36,28 +35,59 @@
             </div>
             <div class="col-lg-12 mt-t">
                 <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title"><?php echo e(__('Category Area')); ?></h4>
-                        <form action="<?php echo e(route('admin.home.five.category.area')); ?>" method="post" enctype="multipart/form-data">
-                            <?php echo csrf_field(); ?>
+    <div class="card-body">
+        <h4 class="header-title"><?php echo e(__('Category Area')); ?></h4>
+        <form action="<?php echo e(route('admin.home.five.category.area')); ?>" method="post" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
 
-                            <div>
-                                <div class="form-group">
-                                    <label><?php echo e(__('Title')); ?></label>
-                                    <input type="text" name="home_page_05_category_area_title" class="form-control"
-                                           value="<?php echo e(get_static_option('home_page_05_category_area_title')); ?>">
-                                </div>
-                                <div class="form-group">
-                                    <label><?php echo e(__('Subtitle')); ?></label>
-                                    <input type="text" name="home_page_05_category_area_subtitle" class="form-control"
-                                           value="<?php echo e(get_static_option('home_page_05_category_area_subtitle')); ?>">
-                                </div>
-
-                                <button id="update" type="submit"
-                                        class="btn btn-primary mt-4 pr-4 pl-4"><?php echo e(__('Update Settings')); ?></button>
-                        </form>
-                    </div>
+            <div>
+                
+                <div class="form-group">
+                    <label><?php echo e(__('Title (Arabic)')); ?></label>
+                    <input type="text"
+                           name="home_page_05_category_area_title"
+                           class="form-control"
+                           value="<?php echo e(get_static_option('home_page_05_category_area_title')); ?>">
                 </div>
+
+                
+                <div class="form-group">
+                    <label><?php echo e(__('Title (English)')); ?></label>
+                    <input type="text"
+                           name="home_page_05_category_area_title_en"
+                           class="form-control"
+                           value="<?php echo e(get_static_option('home_page_05_category_area_title_en')); ?>">
+                </div>
+
+                
+                <div class="form-group">
+                    <label><?php echo e(__('Subtitle (Arabic)')); ?></label>
+                    <input type="text"
+                           name="home_page_05_category_area_subtitle"
+                           class="form-control"
+                           value="<?php echo e(get_static_option('home_page_05_category_area_subtitle')); ?>">
+                </div>
+
+                
+                <div class="form-group">
+                    <label><?php echo e(__('Subtitle (English)')); ?></label>
+                    <input type="text"
+                           name="home_page_05_category_area_subtitle_en"
+                           class="form-control"
+                           value="<?php echo e(get_static_option('home_page_05_category_area_subtitle_en')); ?>">
+                </div>
+
+                <button id="update"
+                        type="submit"
+                        class="btn btn-primary mt-4 pr-4 pl-4">
+                    <?php echo e(__('Update Settings')); ?>
+
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
             </div>
         </div>

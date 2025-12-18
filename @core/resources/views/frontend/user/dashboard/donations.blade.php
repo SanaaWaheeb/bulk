@@ -75,6 +75,7 @@
                             <td>
                                 <div class="order-pricing-details">
                                     @php
+                                        $market_price = optional($data->cause)->market_price;
                                         $unit_price = optional($data->cause)->price;
                                         $quantity = $data->amount;
                                         $total_price = $unit_price * $quantity;

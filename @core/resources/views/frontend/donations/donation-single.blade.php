@@ -12,7 +12,7 @@
         {{$donation->title_ar}}
     @endsection
 
-    @section('page-title',"المنتجات")
+   @section('page-title', __('Products'))
         
 
     @section('page-meta-data')
@@ -305,9 +305,13 @@
                                     @endif
                                 <div class="donation-details" id="donate_box_wrapper">
                                     <div class="amount-details">
-                                        <h3 class="raised">تم شراء عدد  {{($donation->raised ? $donation->raised : 0 )}}
-                                            <span class="goal">من الهدف {{$donation->amount}}</span>
-                                        </h3>
+                                        <h3 class="raised">
+    {{ __('Purchased') }} {{ $donation->raised ? $donation->raised : 0 }}
+    <span class="goal">
+        {{ __('out of a goal of') }} {{ $donation->amount }}
+    </span>
+</h3>
+
                                     </div>
                                     
     <div class="donation-details" id="donate_box_wrapper">
@@ -325,7 +329,7 @@
 
                                         <div class="btn-wrapper margin-top-30">
                                             <a class="boxed-btn reverse-color" href="{{ route('user.login',) }}">
-                                                {{ __('تسجيل الدخول للشراء') }}
+                                                {{ __('Log in to buy') }}
                                             </a>
                                         </div>
                                         @else
@@ -335,7 +339,7 @@
             <p class="alert alert-danger margin-top-30">{{ get_static_option('donation_deadline_text') }}</p>
         @elseif($donation->raised >= $donation->amount)
             <button class="boxed-btn reverse-color" disabled style="cursor: not-allowed; opacity: 0.6;">
-                {{ __('الهدف مكتمل') }}
+                {{ __('Goal completed') }}
             </button>
         @else
             <a class="boxed-btn reverse-color" href="{{ route('frontend.donation.in.separate.page',$donation->id) }}">
@@ -756,6 +760,29 @@
                     });
 
                 })
+               //added
+    $(document).ready(function() {
+        function moveRelatedPosts() {
+            var relatedPosts = $('.related-post-area');
+            var container = $('.donation-single-content-area .container');
+            
+            if ($(window).width() < 992) {
+                // On mobile, move to end of container
+                if (!relatedPosts.hasClass('moved')) {
+                    relatedPosts.addClass('moved').appendTo(container);
+                }
+            } else {
+                // On desktop, move back to original position
+                if (relatedPosts.hasClass('moved')) {
+                    relatedPosts.removeClass('moved').insertBefore($('.sidebar-outer-wrap'));
+                }
+            }
+    }
+    
+    // Run on load and resize
+    moveRelatedPosts();
+    $(window).resize(moveRelatedPosts);
+});
 
             })(jQuery);
         </script>

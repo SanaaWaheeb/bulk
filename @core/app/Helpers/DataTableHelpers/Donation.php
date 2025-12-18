@@ -11,17 +11,17 @@ class Donation
     public static function infoColumn($row)
     {
         $output = '<ul>';
-        $output .= '<li><strong>' . __('عنوان المنتج') . ':</strong> ' . purify_html($row->title) . '</li>';
-        $output .= '<li><strong>' . __('تم النشر في') . ':</strong> ' . date("d - M - Y", strtotime($row->created_at)) . '</li>';
-        $output .= '<li><strong>' . __('صنع من') . ':</strong> ';
+        $output .= '<li><strong>' . __('Product Title') . ':</strong> ' . purify_html($row->title) . '</li>';
+        $output .= '<li><strong>' . __('Published At') . ':</strong> ' . date("d - M - Y", strtotime($row->created_at)) . '</li>';
+        $output .= '<li><strong>' . __('Created By') . ':</strong> ';
         if ($row->created_by === 'user') {
             $output .= optional($row->user)->name ?? __('Anonymous') . ' '. optional($row->user)->username ?? __('username not found');
         } else {
             $output .= optional($row->admin)->name ?? __('Anonymous') .' '. optional($row->admin)->username ?? __('username not found');
         }
         
-       $output .= '<li><strong>' . __('الهدف') . ':</strong> ' . $row->amount . '</li>';
-$output .= '<li><strong>' . __('المشتريات') . ':</strong> ';
+       $output .= '<li><strong>' . __('Goal') . ':</strong> ' . $row->amount . '</li>';
+$output .= '<li><strong>' . __('Purchases') . ':</strong> ';
 $output .= $row->raised ? $row->raised : '';
 $output .= '</li>'; 
 
@@ -57,7 +57,7 @@ $output .= '</li>';
         $transaction_fee = is_null($row->cause_logs) ? 0 : $row->cause_logs->where('cause_id',$row->id)->pluck('transaction_fee')->sum();
        // $output .= '<li><strong>'.__('Transaction Fee').': </strong> '.amount_with_currency_symbol($transaction_fee).'</li>';
 
-        $output .= ' <li class="donation-status"><strong>' . __('الحاله') . ':</strong> ' . __($row->status) . '</li>';
+        $output .= ' <li class="donation-status"><strong>' . __('Status') . ':</strong> ' . __($row->status) . '</li>';
         $output .= '</ul>';
         return $output;
     }
@@ -116,7 +116,7 @@ HTML;
         $output .= '<li><strong>'.__('Name').': </strong> '.purify_html($row->name).'</li>';
         $output .= '<li><strong>'.__('Email').': </strong> '.purify_html($row->email).'</li>';
         $output .= '<li><strong>'.__('Phone').': </strong> '.$row->phone.'</li>';
-        $output .= '<li><strong>'.__('موقع تسليم').': </strong> <br>'.$row->address.'</li>';
+        $output .= '<li><strong>'.__('Delivery Location').': </strong> <br>'.$row->address.'</li>';
         $output .= '<li><strong>'.__('Amount').': </strong> '.$row->amount.'</li>';
         $output .= '<li><strong>'.__('Price').': </strong> '.purify_html(optional($row)->price).' ريال</li>';
         $output .= '<li><strong>'.__('Total Price').': </strong> '.purify_html(optional($row)->totalPrice).' ريال</li>';

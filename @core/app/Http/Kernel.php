@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http;
-
+use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Spatie\Permission\Middlewares\PermissionMiddleware;
 use Spatie\Permission\Middlewares\RoleMiddleware;
@@ -23,7 +23,7 @@ class Kernel extends HttpKernel
 
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\SetLocale::class,
+             
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
@@ -31,12 +31,14 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            SetLocale::class,
         ],
         'api' => [
-            \App\Http\Middleware\SetLocale::class,
+            
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
 //            'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+             SetLocale::class,
         ],
     ];
 

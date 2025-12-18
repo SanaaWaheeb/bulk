@@ -23,21 +23,27 @@ class HeaderSliderController extends Controller
 
         $this->validate($request,[
             'title' => 'nullable|string|max:191',
+            'title_en'      => 'nullable|string|max:191',
             'subtitle' => 'nullable|string|max:191',
+            'subtitle_en'   => 'nullable|string|max:191',
             'btn_01_text' => 'nullable|string|max:191',
             'btn_01_url' => 'nullable|string|max:191',
             'btn_01_status' => 'nullable|string|max:191',
             'description' => 'nullable|string',
+            'description_en'=> 'nullable|string',
             'image' => 'nullable|string|max:191',
         ]);
 
         HeaderSlider::create([
             'title' => $request->title,
+            'title_en'      => $request->title_en,
             'subtitle' => $request->subtitle,
+            'subtitle_en'   => $request->subtitle_en,
             'btn_01_text' => $request->btn_01_text,
             'btn_01_url' => $request->btn_01_url,
             'btn_01_status' => $request->btn_01_status,
             'description' => $request->description,
+            'description_en'=> $request->description_en,
             'image' => $request->image,
         ]);
 
@@ -48,21 +54,27 @@ class HeaderSliderController extends Controller
 
         $this->validate($request,[
             'title' => 'nullable|string|max:191',
+            'title_en'      => 'nullable|string|max:191',
             'subtitle' => 'nullable|string|max:191',
+            'subtitle_en'   => 'nullable|string|max:191',
             'btn_01_text' => 'nullable|string|max:191',
             'btn_01_url' => 'nullable|string|max:191',
             'btn_01_status' => 'nullable|string|max:191',
             'description' => 'nullable|string',
+            'description_en'=> 'nullable|string',
             'image' => 'nullable|string|max:191',
         ]);
 
         HeaderSlider::find($request->id)->update([
             'title' => $request->title,
+            'title_en'      => $request->title_en,
             'subtitle' => $request->subtitle,
+            'subtitle_en'   => $request->subtitle_en,
             'btn_01_text' => $request->btn_01_text,
             'btn_01_url' => $request->btn_01_url,
             'btn_01_status' => $request->btn_01_status,
             'description' => $request->description,
+            'description_en'=> $request->description_en,
             'image' => $request->image,
         ]);
 

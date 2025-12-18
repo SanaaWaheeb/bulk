@@ -51,7 +51,6 @@
     "Change Password": "Change Password",
     "Check Mail for Verification code.": "Check Mail for Verification code.",
     "City": "City",
-    "Close": "Close",
     "Confirm Password": "Confirm Password",
     "Content": "Content",
     "Country": "Country",
@@ -213,5 +212,10 @@
     "You would not be able to revert this item!": "You would not be able to revert this item!",
     "Your Email": "Your Email",
     "Your Name": "Your Name",
-    "Zipcode": "Zipcode"
+    "Zipcode": "Zipcode",
+    "Success!": "Success!",
+    "OK": "OK",
+    "Error!": "Error!",
+    "Close": "Close",
+    "OTP sent":"OTP sent"
 }

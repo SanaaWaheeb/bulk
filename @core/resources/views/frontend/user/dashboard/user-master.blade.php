@@ -53,7 +53,7 @@
 
 
                             <li class="nav-item">
-                                <a class="nav-link @if(request()->routeIs('user.home.support.tickets')) active @endif" href="{{route('user.home.support.tickets')}}" > اقتراح منتج</a>
+                                <a class="nav-link @if(request()->routeIs('user.home.support.tickets')) active @endif" href="{{route('user.home.support.tickets')}}" > {{ __('Suggest Product') }}</a>
                             </li>
 
                             <!--<li class="nav-item">-->

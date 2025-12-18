@@ -55,7 +55,7 @@
     "Confirm Password":"Confirm Password",
     "Content":"Content",
     "Country":"Country",
-    "Create New account?":"Create New account?",
+    "Create New Account?":"Create New account?",
     "Create New Campaign":"Create New Campaign",
     "Created At":"Created At",
     "Dashboard":"Dashboard",
@@ -216,5 +216,22 @@
     "Your Name":"Your Name",
     "Zipcode":"Zipcode",
     "Welcome back! Login":"Welcome back! Login",
-    "Phone number must be a valid Saudi number (example: 5XXXXXXXX)":"Phone number must be a valid Saudi number (example: 5XXXXXXXX)"
+    "Phone number must be a valid Saudi number (example: 5XXXXXXXX)":"Phone number must be a valid Saudi number (example: 5XXXXXXXX)",
+    "No items are currently available": "No items are currently available",
+    "Refresh page":"Refresh page",
+    "Phone number is required.": "Phone number is required.",
+    "Phone number must be exactly 9 digits.": "Phone number must be exactly 9 digits.",
+    "Phone number must start with digit 5.": "Phone number must start with digit 5.",
+    "You are not registered. Please create an account.": "You are not registered. Please create an account.",
+    "You are not registered with number :phone, please create an account.": "You are not registered with number :phone, please create an account.",
+    "Failed to send the verification code.": "Failed to send the verification code.",
+    "Failed to send the code: :error": "Failed to send the code: :error",
+    "Verification code has been sent to :phone": "Verification code has been sent to :phone",
+    "The verification code was sent successfully": "The verification code was sent successfully",
+    "swal.success_title": "Success!",
+    "swal.success_button": "OK",
+    "swal.error_title": "Error!",
+    "swal.error_button": "Close",
+    "OTP sent":"OTP sent"
+
  }

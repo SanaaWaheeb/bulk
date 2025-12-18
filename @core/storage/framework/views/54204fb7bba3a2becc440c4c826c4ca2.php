@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('style'); ?>
     <link rel="stylesheet" href="<?php echo e(asset('assets/backend/css/nestable.css')); ?>">
 <?php $__env->stopSection(); ?>

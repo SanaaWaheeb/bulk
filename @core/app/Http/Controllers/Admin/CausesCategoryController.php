@@ -27,8 +27,10 @@ class CausesCategoryController extends Controller
     public function store_donation_category(Request $request){
         $this->validate($request,[
             'title' => 'required|string',
+            'title_en' => 'nullable|string',
             'image' => 'nullable|string',
             'description' => 'nullable|string',
+            'description_en'=> 'nullable|string',
             'status' => 'required|string'
         ],[
             'title.required' => __('title is required'),
@@ -37,8 +39,10 @@ class CausesCategoryController extends Controller
 
         CauseCategory::create([
             'title' => $request->title,
+            'title_en' => $request->title_en,
             'image' => $request->image,
             'description' => $request->description,
+            'description_en' => $request->description_en,
             'status' => $request->status
         ]);
 
@@ -48,8 +52,10 @@ class CausesCategoryController extends Controller
     public function update_donation_category(Request $request){
         $this->validate($request,[
             'title' => 'required|string',
+            'title_en'      => 'nullable|string',      // English title
             'image' => 'nullable|string',
             'description' => 'nullable|string',
+            'description_en'=> 'nullable|string',      // English description
             'category_id' => 'required',
             'status' => 'required|string'
         ],[
@@ -59,8 +65,10 @@ class CausesCategoryController extends Controller
 
         CauseCategory::findOrFail($request->category_id)->update([
             'title' => $request->title,
+            'title_en'=> $request->title_en,
             'image' => $request->image,
             'description' => $request->description,
+            'description_en' => $request->description_en,
             'status' => $request->status
         ]);
 

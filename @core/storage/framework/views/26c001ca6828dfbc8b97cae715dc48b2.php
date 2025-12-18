@@ -1,6 +1,19 @@
-<!DOCTYPE html>
-<html class="no-js" lang="<?php echo e(get_default_language()); ?>"dir="<?php echo e(get_default_language_direction()); ?>">
+
+    <?php
+    // القيمة الخام من السيستم (مثلاً: ar_frontend أو en_frontend)
+    $rawLocale = app()->getLocale();
+
+    // نحولها لـ ar أو en فقط
+    $locale = \Illuminate\Support\Str::startsWith($rawLocale, 'ar') ? 'ar' : 'en';
+
+    // الاتجاه بناءً على اللغة
+    $dir = $locale === 'ar' ? 'rtl' : 'ltr';
+?>
+
+<!doctype html>
+<html class="no-js" lang="<?php echo e($locale); ?>" dir="<?php echo e($dir); ?>">
 <head>
+
     <?php echo $__env->make('frontend.partials.google-analytics', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     
     <meta charset="UTF-8">

@@ -47,54 +47,77 @@ class HomePageFiveController extends Controller
     }
 
     public function update_feature_area(Request $request)
-    {
+{
+    $this->validate($request, [
+        // عربي (أساسي)
+        'home_page_05_feature_area_title' => 'required|string',
+        'home_page_05_feature_area_subtitle' => 'required|string',
+        'home_page_05_feature_area_donation_button_text' => 'required|string',
 
-        $this->validate($request, [
-            'home_page_05_feature_area_title' => 'required|string',
-            'home_page_05_feature_area_subtitle' => 'required|string',
-            'home_page_05_feature_area_donation_button_text' => 'required|string',
-        ]);
+        // إنجليزي (اختياري)
+        'home_page_05_feature_area_title_en' => 'nullable|string',
+        'home_page_05_feature_area_subtitle_en' => 'nullable|string',
+        'home_page_05_feature_area_donation_button_text_en' => 'nullable|string',
+    ]);
 
-        $field_list = [
-            'home_page_05_feature_area_title',
-            'home_page_05_feature_area_subtitle',
-            'home_page_05_feature_area_donation_button_text'
-        ];
+    $field_list = [
+        // عربي
+        'home_page_05_feature_area_title',
+        'home_page_05_feature_area_subtitle',
+        'home_page_05_feature_area_donation_button_text',
 
-        foreach ($field_list as $item) {
-            if ($request->has($item)) {
-                update_static_option($item, $request->$item);
-            }
+        // إنجليزي
+        'home_page_05_feature_area_title_en',
+        'home_page_05_feature_area_subtitle_en',
+        'home_page_05_feature_area_donation_button_text_en',
+    ];
+
+    foreach ($field_list as $item) {
+        if ($request->has($item)) {
+            update_static_option($item, $request->$item);
         }
-
-        return redirect()->back()->with(FlashMsg::settings_update());
     }
+
+    return redirect()->back()->with(FlashMsg::settings_update());
+}
+
 
     public function category_area()
     {
         return view( self::BASE_PATH.'category-area');
     }
 
-    public function update_category_area(Request $request)
-    {
-        $this->validate($request, [
-            'home_page_05_category_area_title' => 'required|string',
-            'home_page_05_category_area_subtitle' => 'required|string',
-        ]);
+   public function update_category_area(Request $request)
+{
+    $this->validate($request, [
+        // عربي
+        'home_page_05_category_area_title'    => 'required|string',
+        'home_page_05_category_area_subtitle' => 'required|string',
 
-        $field_list = [
-            'home_page_05_category_area_title',
-            'home_page_05_category_area_subtitle',
-        ];
+        // إنجليزي (اختياري)
+        'home_page_05_category_area_title_en'    => 'nullable|string',
+        'home_page_05_category_area_subtitle_en' => 'nullable|string',
+    ]);
 
-        foreach ($field_list as $item) {
-            if ($request->has($item)) {
-                update_static_option($item, $request->$item);
-            }
+    $field_list = [
+        // Arabic
+        'home_page_05_category_area_title',
+        'home_page_05_category_area_subtitle',
+
+        // English
+        'home_page_05_category_area_title_en',
+        'home_page_05_category_area_subtitle_en',
+    ];
+
+    foreach ($field_list as $item) {
+        if ($request->has($item)) {
+            update_static_option($item, $request->$item);
         }
-
-        return redirect()->back()->with(FlashMsg::settings_update());
     }
+
+    return redirect()->back()->with(FlashMsg::settings_update());
+}
+
 
     public function success_story_area()
     {
@@ -130,31 +153,42 @@ class HomePageFiveController extends Controller
         return view( self::BASE_PATH.'recent-causes-area');
     }
 
-    public function update_recent_causes_area(Request $request)
-    {
+   public function update_recent_causes_area(Request $request)
+{
+    $this->validate($request, [
+        'home_page_05_recent_causes_area_title'                => 'required|string',
+        'home_page_05_recent_causes_area_subtitle'             => 'required|string',
+        'home_page_05_recent_causes_area_see_all_button_text'  => 'required|string',
+        'home_page_05_recent_causes_area_item_show'            => 'required|string',
 
-        $this->validate($request, [
-            'home_page_05_recent_causes_area_title' => 'required|string',
-            'home_page_05_recent_causes_area_subtitle' => 'required|string',
-            'home_page_05_recent_causes_area_see_all_button_text' => 'required|string',
-            'home_page_05_recent_causes_area_item_show' => 'required|string',
-        ]);
+        // English – اختياريين
+        'home_page_05_recent_causes_area_title_en'               => 'nullable|string',
+        'home_page_05_recent_causes_area_subtitle_en'            => 'nullable|string',
+        'home_page_05_recent_causes_area_see_all_button_text_en' => 'nullable|string',
+    ]);
 
-        $field_list = [
-            'home_page_05_recent_causes_area_title',
-            'home_page_05_recent_causes_area_subtitle',
-            'home_page_05_recent_causes_area_see_all_button_text',
-            'home_page_05_recent_causes_area_item_show',
-        ];
-        
+    $field_list = [
+        // Arabic
+        'home_page_05_recent_causes_area_title',
+        'home_page_05_recent_causes_area_subtitle',
+        'home_page_05_recent_causes_area_see_all_button_text',
+        'home_page_05_recent_causes_area_item_show',
 
-        foreach ($field_list as $item) {
-            if ($request->has($item)) {
-                update_static_option($item, $request->$item);
-            }
+        // English
+        'home_page_05_recent_causes_area_title_en',
+        'home_page_05_recent_causes_area_subtitle_en',
+        'home_page_05_recent_causes_area_see_all_button_text_en',
+    ];
+
+    foreach ($field_list as $item) {
+        if ($request->has($item)) {
+            update_static_option($item, $request->$item);
         }
-        return redirect()->back()->with(FlashMsg::settings_update());
     }
+
+    return redirect()->back()->with(FlashMsg::settings_update());
+}
+
 
     public function events_area()
     {

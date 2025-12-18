@@ -246,13 +246,13 @@
     "Share": "شارك","Registration completed successfully!":"تم التسجيل بنجاح!",
     "What\\'s Next?": "المزيد",
     "Registration and login completed successfully":"تم التسجيل وتسجيل الدخول بنجاح",
-    "Related Causes": "الطلبات المتعلقة",
+    "Related Causes": "المنتجات ذات الصلة",
     "What's Next?": "المزيد",
     "Go to home": "الذهاب الى الصفحة الرئيسية",
     "Go To Home": "الذهاب الى الصفحة الرئيسية",
     "View My Orders": "عرض جميع الطلبات",
     "Go back to the Product": "العودة الى المنتج",
-    "related_causes": "الطلبات المتعلقة",
+    "related_causes": "المنتجات ذات الصلة",
     "Write Comments..": "اكتب تعليق..",
     "COMMENT": "علق",
     "I agree to the terms and conditions and privacy policy": "أوافق على الشروط والأحكام وسياسة الخصوصية",
@@ -291,6 +291,10 @@
     "The session has ended. Please try again.":"انتهت الجلسة. حاول مرة أخرى.",
     "Verification code check failed: ":"فشل التحقق من رمز التحقق: ",
     "Phone number must be a valid Saudi number (example: 5XXXXXXXX)": "رقم الجوال يجب أن يكون رقمًا سعوديًا صالحًا (مثال: 5XXXXXXXX)",
-    "OTP sent": "تم إرسال رمز التحقق"
+    "OTP sent": "تم إرسال رمز التحقق",
+    "No items are currently available": "لا توجد حملات متاحة حاليا",
+    "Refresh page": "حدّث الصفحة"
+   
+
 
   }

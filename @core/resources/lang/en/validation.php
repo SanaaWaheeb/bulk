@@ -148,4 +148,25 @@ return [
 
     'attributes' => [],
 
+    // Validation
+    'phone_required'        => 'Phone number is required.',
+    'phone_digits'          => 'Phone number must be exactly 9 digits.',
+    'phone_must_start_5'    => 'Phone number must start with digit 5.',
+
+    // User status
+    'not_registered'        => 'You are not registered. Please create an account.',
+    'not_registered_phone'  => 'You are not registered with number :phone, please create an account.',
+
+    // Twilio / sending code
+    'send_code_failed'          => 'Failed to send the verification code.',
+    'send_code_failed_error'    => 'Failed to send the code: :error',
+
+    // Success
+    'code_sent_to'          => 'Verification code has been sent to :phone',
+    'code_sent_success'     => 'The verification code was sent successfully',
+
+    'success_title'  => 'Success!',
+    'success_button' => 'OK',
+    'error_title'    => 'Error!',
+    'error_button'   => 'Close',
 ];

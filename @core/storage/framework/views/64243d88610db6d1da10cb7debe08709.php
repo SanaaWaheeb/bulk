@@ -1,6 +1,7 @@
 
-<!doctype html>
-<html class="no-js" lang="en">
+<!DOCTYPE html>
+<html lang="<?php echo e(app()->getLocale()); ?>"
+      dir="<?php echo e(app()->getLocale() === 'ar' ? 'rtl' : 'ltr'); ?>">
 
 <head>
     <meta charset="utf-8">
@@ -47,7 +48,7 @@
     </style>
 </head>
 
-<body>
+<body class="<?php echo e(app()->getLocale() === 'ar' ? 'rtl-body' : 'ltr-body'); ?>">
     <?php echo $__env->yieldContent('content'); ?>
 
     <!-- jquery latest version -->

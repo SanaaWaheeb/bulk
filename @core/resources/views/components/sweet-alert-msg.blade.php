@@ -1,16 +1,17 @@
-@if(Session::has('success'))
+ 
+ @if(Session::has('success'))
 <script>
 Swal.fire({
     icon: 'success',
-    title: 'success!',
+    title: @json(__('Success!')),
     html: `
         <div style="font-size: 14px; line-height: 1.3;">
             {!! Session::get('success') !!}
         </div>
     `,
-    input: undefined,        // ✅ يلغي أي input/select موروث
+    input: undefined,
     showCancelButton: false,
-    confirmButtonText: "حسناً",
+    confirmButtonText: @json(__('OK')),
     timer: 4000,
     confirmButtonColor: "#6C63FF",
     position: "center",
@@ -25,7 +26,6 @@ Swal.fire({
         htmlContainer: 'small-swal-content'
     },
     didOpen: () => {
-        // ✅ لو فيه أي select/input اتضاف بالغلط احذفه
         const popup = Swal.getPopup();
         popup.querySelectorAll('.swal2-input, .swal2-select, .swal2-textarea')
              .forEach(el => el.remove());
@@ -38,11 +38,11 @@ Swal.fire({
 <script>
 Swal.fire({
     icon: 'error',
-    title: 'error!',
+    title: @json(__('Error!')),
     text: @json(Session::get('error')),
-    input: undefined,        // ✅ نفس الفكرة هنا
+    input: undefined,
     showCancelButton: false,
-    confirmButtonText: "إغلاق",
+    confirmButtonText: @json(__('Close')),
     timer: 4000,
     confirmButtonColor: "#d33",
     position: "center",

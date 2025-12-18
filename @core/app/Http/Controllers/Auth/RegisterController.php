@@ -149,8 +149,8 @@ class RegisterController extends Controller
 
 public function sendRegisterOtp(Request $request)
 {
-    dd(__('OTP sent'));
-    dd(app()->getLocale(), session('lang'));
+    // dd(__('OTP sent'));
+    // dd(app()->getLocale(), session('lang'));
     $validator = $this->validator($request->all());
 
     if ($validator->fails()) {
@@ -215,7 +215,7 @@ public function sendRegisterOtp(Request $request)
             'token' => $token ?? null
         ]);
     }
-    dd(app()->getLocale());
+    // dd(app()->getLocale(), __('OTP sent'));
     return back()->with('success',  __('OTP sent'))->with('otp_register_sent', true);
 }
 

@@ -15,36 +15,71 @@
                 @include('backend/partials/error')
             </div>
             <div class="col-lg-12 mt-t">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title">{{__('Feature Area')}}</h4>
-                        <form action="{{route('admin.home.five.feature.area')}}" method="post" enctype="multipart/form-data">
-                            @csrf
+               <div class="card">
+    <div class="card-body">
+        <h4 class="header-title">{{ __('Feature Area') }}</h4>
+        <form action="{{ route('admin.home.five.feature.area') }}" method="post" enctype="multipart/form-data">
+            @csrf
 
-                            <div>
-                                <div class="form-group">
-                                    <label>{{__('Title')}}</label>
-                                    <input type="text" name="home_page_05_feature_area_title" class="form-control"
-                                           value="{{get_static_option('home_page_05_feature_area_title')}}">
-                                </div>
-                                <div class="form-group">
-                                    <label>{{__('Subtitle')}}</label>
-                                    <input type="text" name="home_page_05_feature_area_subtitle" class="form-control"
-                                           value="{{get_static_option('home_page_05_feature_area_subtitle')}}">
-                                </div>
+            {{-- Title --}}
+            <div class="form-group">
+                <label>{{ __('Title (Arabic)') }}</label>
+                <input type="text"
+                       name="home_page_05_feature_area_title"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_05_feature_area_title') }}">
+            </div>
 
-                                <div class="form-group">
-                                    <label>{{__('Donation Button Text')}}</label>
-                                    <input type="text" name="home_page_05_feature_area_donation_button_text" class="form-control"
-                                           value="{{get_static_option('home_page_05_feature_area_donation_button_text')}}">
-                                </div>
+            <div class="form-group">
+                <label>{{ __('Title (English)') }}</label>
+                <input type="text"
+                       name="home_page_05_feature_area_title_en"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_05_feature_area_title_en') }}">
+            </div>
 
+            {{-- Subtitle --}}
+            <div class="form-group">
+                <label>{{ __('Subtitle (Arabic)') }}</label>
+                <input type="text"
+                       name="home_page_05_feature_area_subtitle"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_05_feature_area_subtitle') }}">
+            </div>
 
-                                <button id="update" type="submit"
-                                        class="btn btn-primary mt-4 pr-4 pl-4">{{__('Update Settings')}}</button>
-                        </form>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label>{{ __('Subtitle (English)') }}</label>
+                <input type="text"
+                       name="home_page_05_feature_area_subtitle_en"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_05_feature_area_subtitle_en') }}">
+            </div>
+
+            {{-- Donation Button Text --}}
+            <div class="form-group">
+                <label>{{ __('Donation Button Text (Arabic)') }}</label>
+                <input type="text"
+                       name="home_page_05_feature_area_donation_button_text"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_05_feature_area_donation_button_text') }}">
+            </div>
+
+            <div class="form-group">
+                <label>{{ __('Donation Button Text (English)') }}</label>
+                <input type="text"
+                       name="home_page_05_feature_area_donation_button_text_en"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_05_feature_area_donation_button_text_en') }}">
+            </div>
+
+            <button id="update" type="submit"
+                    class="btn btn-primary mt-4 pr-4 pl-4">
+                {{ __('Update Settings') }}
+            </button>
+        </form>
+    </div>
+</div>
+
 
             </div>
         </div>

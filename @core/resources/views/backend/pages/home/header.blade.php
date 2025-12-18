@@ -44,27 +44,51 @@
                                                <td>
                                                    {!! render_attachment_preview_for_admin($data->image) !!}
                                                </td>
-                                               <td>{{$data->title}}</td>
-                                               <td>{{$data->description}}</td>
+                                           @php
+                                                $locale   = app()->getLocale(); 
+                                                $isArabic = $locale === 'ar' || \Illuminate\Support\Str::startsWith($locale, 'ar');
+                                            @endphp>
+
+                                            <td>
+                                                @if($isArabic)
+                                                    {{ $data->title ?? '' }}
+                                                @else
+                                                    {{ $data->title_en ?: $data->title ?? '' }}
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                @if($isArabic)
+                                                    {{ $data->description ?? '' }}
+                                                @else
+                                                    {{ $data->description_en ?: $data->description ?? '' }}
+                                                @endif
+                                            </td>
+
+
                                                <td>
                                                    <x-delete-popover :url="route('admin.header.delete',$data->id)"/>
-                                                   <a href="#"
-                                                      data-toggle="modal"
-                                                      data-target="#header_slider_item_edit_modal"
-                                                      class="btn btn-lg btn-primary btn-sm mb-3 mr-1 header_slider_edit_btn"
-                                                      data-id="{{$data->id}}"
-                                                      data-title="{{$data->title}}"
-                                                      data-subtitle="{{$data->subtitle}}"
-                                                      data-imageid="{{$data->image}}"
-                                                      {!! render_img_url_data_attr($data->image,'image') !!}
-                                                      data-lang="{{$data->lang}}"
-                                                      data-description="{{$data->description}}"
-                                                      data-btn_01_status="{{$data->btn_01_status}}"
-                                                      data-btn_01_text="{{$data->btn_01_text}}"
-                                                      data-btn_01_url="{{$data->btn_01_url}}"
-                                                   >
-                                                       <i class="ti-pencil"></i>
-                                                   </a>
+                                                <a href="#"
+                                                    data-toggle="modal"
+                                                    data-target="#header_slider_item_edit_modal"
+                                                    class="btn btn-lg btn-primary btn-sm mb-3 mr-1 header_slider_edit_btn"
+                                                    data-id="{{$data->id}}"
+                                                    data-title="{{$data->title}}"                  {{-- Arabic --}}
+                                                    data-title_en="{{$data->title_en}}"            {{-- English --}}
+                                                    data-subtitle="{{$data->subtitle}}"            {{-- Arabic --}}
+                                                    data-subtitle_en="{{$data->subtitle_en}}"      {{-- English --}}
+                                                    data-imageid="{{$data->image}}"
+                                                    {!! render_img_url_data_attr($data->image,'image') !!}
+                                                    data-lang="{{$data->lang}}"
+                                                    data-description="{{$data->description}}"      {{-- Arabic --}}
+                                                    data-description_en="{{$data->description_en}}"{{-- English --}}
+                                                    data-btn_01_status="{{$data->btn_01_status}}"
+                                                    data-btn_01_text="{{$data->btn_01_text}}"
+                                                    data-btn_01_url="{{$data->btn_01_url}}"
+                                                    >
+                                                        <i class="ti-pencil"></i>
+                                                    </a>
+
                                                </td>
                                            </tr>
                                        @endforeach
@@ -81,18 +105,42 @@
                         <form action="{{route('admin.header')}}" method="post" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="form-group">
-                                <label for="subtitle">{{__('Subtitle')}}</label>
-                                <input type="text" class="form-control"  id="subtitle"  name="subtitle" placeholder="{{__('Subtitle')}}">
+                                                        <div class="form-group">
+                                <label for="subtitle">{{ __('Subtitle (Arabic)') }}</label>
+                                <input type="text" class="form-control" id="subtitle" name="subtitle"
+                                    placeholder="{{ __('Subtitle (Arabic)') }}">
                             </div>
+
                             <div class="form-group">
-                                <label for="title">{{__('Title')}}</label>
-                                <input type="text" class="form-control"  id="title"  name="title" placeholder="{{__('Title')}}">
+                                <label for="subtitle_en">{{ __('Subtitle (English)') }}</label>
+                                <input type="text" class="form-control" id="subtitle_en" name="subtitle_en"
+                                    placeholder="{{ __('Subtitle (English)') }}">
                             </div>
+
                             <div class="form-group">
-                                <label for="description">{{__('Description')}}</label>
-                                <textarea class="form-control max-height-150"  id="description"  name="description" placeholder="{{__('Description')}}" cols="30" rows="10"></textarea>
+                                <label for="title">{{ __('Title (Arabic)') }}</label>
+                                <input type="text" class="form-control" id="title" name="title"
+                                    placeholder="{{ __('Title (Arabic)') }}">
                             </div>
+
+                            <div class="form-group">
+                                <label for="title_en">{{ __('Title (English)') }}</label>
+                                <input type="text" class="form-control" id="title_en" name="title_en"
+                                    placeholder="{{ __('Title (English)') }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">{{ __('Description (Arabic)') }}</label>
+                                <textarea class="form-control max-height-150" id="description" name="description"
+                                        placeholder="{{ __('Description (Arabic)') }}" cols="30" rows="10"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description_en">{{ __('Description (English)') }}</label>
+                                <textarea class="form-control max-height-150" id="description_en" name="description_en"
+                                        placeholder="{{ __('Description (English)') }}" cols="30" rows="10"></textarea>
+                            </div>
+
                             <div class="form-group">
                                 <label for="btn_01_status">{{__('Button Show/Hide')}}</label>
                                 <label class="switch">
@@ -118,7 +166,7 @@
                                 </div>
                                 <small>{{__('recommended image size is 1920x900 pixel')}}</small>
                             </div>
-                            <button id="submit" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">{{__('Add  New Slider')}}</button>
+                            <button id="submit" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">{{__('Add New Slider')}}</button>
                         </form>
                     </div>
                 </div>
@@ -129,58 +177,126 @@
     <div class="modal fade" id="header_slider_item_edit_modal" aria-hidden="true">
         <div class="modal-dialog modal-lg" >
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{__('Edit Header Slider Item')}}</h5>
-                    <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
-                </div>
-                <form action="{{route('admin.header.update')}}" id="header_slider_edit_modal_form"  method="post" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        @csrf
-                        <input type="hidden" name="id" id="header_slider_id" value="">
-                        <div class="form-group">
-                            <label for="edit_subtitle">{{__('Subtitle')}}</label>
-                            <input type="text" class="form-control"  id="edit_subtitle"  name="subtitle" placeholder="{{__('Subtitle')}}">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_title">{{__('Title')}}</label>
-                            <input type="text" class="form-control"  id="edit_title"  name="title" placeholder="{{__('Title')}}">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_description">{{__('Description')}}</label>
-                            <textarea class="form-control max-height-150"  id="edit_description"  name="description" placeholder="{{__('Description')}}" cols="30" rows="10"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_btn_01_status">{{__('Button Show/Hide')}}</label>
-                            <label class="switch">
-                                <input type="checkbox" name="btn_01_status" id="edit_btn_01_status">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_btn_01_text">{{__('Button Text')}}</label>
-                            <input type="text" class="form-control"  id="edit_btn_01_text"  name="btn_01_text" placeholder="{{__('Button Text')}}">
-                        </div>
-                        <div class="form-group">
-                            <label for="edit_btn_01_url">{{__('Button URL')}}</label>
-                            <input type="text" class="form-control"  id="edit_btn_01_url"  name="btn_01_url" placeholder="{{__('Button URL')}}">
-                        </div>
-                        <div class="form-group">
-                            <div class="media-upload-btn-wrapper">
-                                <div class="img-wrap"></div>
-                                <input type="hidden" id="edit_image" name="image" value="">
-                                <button type="button" class="btn btn-info media_upload_form_btn" data-btntitle="Select Slider Background" data-modaltitle="Upload Slider Background" data-imgid="{{auth()->user()->image}}" data-toggle="modal" data-target="#media_upload_modal">
-                                    {{__('Upload Image')}}
-                                </button>
-                            </div>
-                            <small>{{__('recommended image size is 1920x900 pixel')}}</small>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
-                        <button id="update" type="submit" class="btn btn-primary">{{__('Save Changes')}}</button>
-                    </div>
-                </form>
+    <div class="modal-header">
+        <h5 class="modal-title">{{__('Edit Header Slider Item')}}</h5>
+        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+    </div>
+    <form action="{{route('admin.header.update')}}" id="header_slider_edit_modal_form"  method="post" enctype="multipart/form-data">
+        <div class="modal-body">
+            @csrf
+            <input type="hidden" name="id" id="header_slider_id" value="">
+
+            {{-- Subtitle AR --}}
+            <div class="form-group">
+                <label for="edit_subtitle">{{ __('Subtitle (Arabic)') }}</label>
+                <input type="text"
+                       class="form-control"
+                       id="edit_subtitle"
+                       name="subtitle"
+                       placeholder="{{ __('Subtitle (Arabic)') }}">
             </div>
+
+            {{-- Subtitle EN --}}
+            <div class="form-group">
+                <label for="edit_subtitle_en">{{ __('Subtitle (English)') }}</label>
+                <input type="text"
+                       class="form-control"
+                       id="edit_subtitle_en"
+                       name="subtitle_en"
+                       placeholder="{{ __('Subtitle (English)') }}">
+            </div>
+
+            {{-- Title AR --}}
+            <div class="form-group">
+                <label for="edit_title">{{ __('Title (Arabic)') }}</label>
+                <input type="text"
+                       class="form-control"
+                       id="edit_title"
+                       name="title"
+                       placeholder="{{ __('Title (Arabic)') }}">
+            </div>
+
+            {{-- Title EN --}}
+            <div class="form-group">
+                <label for="edit_title_en">{{ __('Title (English)') }}</label>
+                <input type="text"
+                       class="form-control"
+                       id="edit_title_en"
+                       name="title_en"
+                       placeholder="{{ __('Title (English)') }}">
+            </div>
+
+            {{-- Description AR --}}
+            <div class="form-group">
+                <label for="edit_description">{{ __('Description (Arabic)') }}</label>
+                <textarea class="form-control max-height-150"
+                          id="edit_description"
+                          name="description"
+                          placeholder="{{ __('Description (Arabic)') }}"
+                          cols="30"
+                          rows="10"></textarea>
+            </div>
+
+            {{-- Description EN --}}
+            <div class="form-group">
+                <label for="edit_description_en">{{ __('Description (English)') }}</label>
+                <textarea class="form-control max-height-150"
+                          id="edit_description_en"
+                          name="description_en"
+                          placeholder="{{ __('Description (English)') }}"
+                          cols="30"
+                          rows="10"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_btn_01_status">{{__('Button Show/Hide')}}</label>
+                <label class="switch">
+                    <input type="checkbox" name="btn_01_status" id="edit_btn_01_status">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="edit_btn_01_text">{{__('Button Text')}}</label>
+                <input type="text" class="form-control" id="edit_btn_01_text" name="btn_01_text"
+                       placeholder="{{__('Button Text')}}">
+            </div>
+
+            <div class="form-group">
+                <label for="edit_btn_01_url">{{__('Button URL')}}</label>
+                <input type="text" class="form-control" id="edit_btn_01_url" name="btn_01_url"
+                       placeholder="{{__('Button URL')}}">
+            </div>
+
+            <div class="form-group">
+                <div class="media-upload-btn-wrapper">
+                    <div class="img-wrap"></div>
+                    <input type="hidden" id="edit_image" name="image" value="">
+                    <button type="button"
+                            class="btn btn-info media_upload_form_btn"
+                            data-btntitle="Select Slider Background"
+                            data-modaltitle="Upload Slider Background"
+                            data-imgid="{{auth()->user()->image}}"
+                            data-toggle="modal"
+                            data-target="#media_upload_modal">
+                        {{__('Upload Image')}}
+                    </button>
+                </div>
+                <small>{{__('recommended image size is 1920x900 pixel')}}</small>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal">{{__('Close')}}</button>
+            <button id="update"
+                    type="submit"
+                    class="btn btn-primary">{{__('Save Changes')}}</button>
+        </div>
+    </form>
+</div>
+
         </div>
     </div>
     @include('backend.partials.media-upload.media-upload-markup')
@@ -197,34 +313,49 @@
                 <x-btn.submit/>
                 <x-btn.update/>
 
-                $(document).on('click','.header_slider_edit_btn',function(){
-                    var el = $(this);
-                    var id = el.data('id');
-                    var action = el.data('action');
-                    var image = el.data('image');
-                    var imageid = el.data('imageid');
-                    var form = $('#header_slider_edit_modal_form');
+            $(document).on('click','.header_slider_edit_btn',function(){
+    var el    = $(this);
+    var id    = el.data('id');
+    var action = el.data('action');
+    var image  = el.data('image');
+    var imageid = el.data('imageid');
+    var form  = $('#header_slider_edit_modal_form');
 
-                    form.attr('action',action);
-                    form.find('#header_slider_id').val(id);
-                    form.find('#edit_subtitle').val(el.data('subtitle'));
-                    form.find('#edit_title').val(el.data('title'));
-                    form.find('#edit_description').val(el.data('description'));
-                    form.find('#edit_btn_01_text').val(el.data('btn_01_text'));
-                    form.find('#edit_btn_01_url').val(el.data('btn_01_url'));
+    form.attr('action', action);
+    form.find('#header_slider_id').val(id);
 
-                    if(imageid != ''){
-                        form.find('.media-upload-btn-wrapper .img-wrap').html('<div class="attachment-preview"><div class="thumbnail"><div class="centered"><img class="avatar user-thumb" src="'+image+'" > </div></div></div>');
-                        form.find('.media-upload-btn-wrapper input').val(imageid);
-                        form.find('.media-upload-btn-wrapper .media_upload_form_btn').text('Change Image');
-                    }
+    // Subtitle
+    form.find('#edit_subtitle').val(el.data('subtitle'));        // AR
+    form.find('#edit_subtitle_en').val(el.data('subtitle_en'));  // EN
 
-                    if(el.data('btn_01_status') == 'on'){
-                        $('#edit_btn_01_status').prop('checked',true);
-                    }else{
-                        $('#edit_btn_01_status').prop('checked',false);
-                    }
-                });
+    // Title
+    form.find('#edit_title').val(el.data('title'));              // AR
+    form.find('#edit_title_en').val(el.data('title_en'));        // EN
+
+    // Description
+    form.find('#edit_description').val(el.data('description'));      // AR
+    form.find('#edit_description_en').val(el.data('description_en'));// EN
+
+    // Button text & URL
+    form.find('#edit_btn_01_text').val(el.data('btn_01_text'));
+    form.find('#edit_btn_01_url').val(el.data('btn_01_url'));
+
+    // Image
+    if (imageid !== '') {
+        form.find('.media-upload-btn-wrapper .img-wrap')
+            .html('<div class="attachment-preview"><div class="thumbnail"><div class="centered"><img class="avatar user-thumb" src="'+image+'" > </div></div></div>');
+        form.find('.media-upload-btn-wrapper input').val(imageid);
+        form.find('.media-upload-btn-wrapper .media_upload_form_btn').text("{{ __('Change Image') }}");
+    }
+
+    // Button status
+    if (el.data('btn_01_status') === 'on') {
+        $('#edit_btn_01_status').prop('checked', true);
+    } else {
+        $('#edit_btn_01_status').prop('checked', false);
+    }
+});
+
             });
         })(jQuery);
     </script>

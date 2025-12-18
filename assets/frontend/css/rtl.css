@@ -596,9 +596,9 @@
     text-align: right;
 }
 
-.login-form-wrapper .btn-wrapper {
+/* .login-form-wrapper .btn-wrapper {
     text-align: right;
-}
+} */
 
 .user-dashboard-card .icon {
     margin-left: 10px;
@@ -803,7 +803,7 @@
     border-left: 0;
     border-right: 5px solid var(--main-color-one);
     clip-path: polygon(25% 0, 100% 0%, 100% 100%, 0% 100%);
-    padding: 19px 20px 30px 70px;
+    padding: 19px 20px 30px 30px;
     transform: translateX(75px);
 }
 
@@ -1534,4 +1534,21 @@ section.success-area .pagination-wrapper {
 .grecaptcha-badge {
     display: none !important;
     visibility: hidden !important;
+}
+@media (max-width: 991px) {
+    .related-post-area-mobile-bottom {
+        order: 999;
+        margin-top: 40px;
+    }
+    
+    /* Optional: Adjust spacing */
+    .donation-single-content-area .row {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 992px) {
+    .related-post-area.moved {
+        position: static !important;
+    }
 }

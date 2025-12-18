@@ -30,13 +30,23 @@ class FrontendCausesController extends Controller
 {
 
     private const BASE_PATH = 'frontend.donations.';
-    public function donations()
+    public function donations(Request $request)
 {
     $perPage = (int) get_static_option('donor_page_post_items');
     $perPage = $perPage > 0 ? $perPage : 9;
 
-    $all_donations = Cause::query()
-        ->where('status', 'publish')
+    // current category from query ?category=...
+    $currentCategory = $request->input('category', 'all');
+
+    $query = Cause::query()
+        ->where('status', 'publish');
+
+    // apply category filter if not 'all'
+    if ($currentCategory !== 'all') {
+        $query->where('categories_id', $currentCategory);
+    }
+
+    $all_donations = $query
         /* 0) المنتهية بالمدة (expired) تنزل تحت */
         ->orderByRaw("
             CASE 
@@ -64,14 +74,13 @@ class FrontendCausesController extends Controller
         /* 3) الأحدث داخل كل مجموعة */
         ->orderByDesc('id')
         ->paginate($perPage)
-        ->appends(request()->query());
+        ->appends($request->query()); // keep ?category=... on pagination links
 
     return view(self::BASE_PATH . 'donation', [
-        'all_donations' => $all_donations
+        'all_donations'    => $all_donations,
+        'currentCategory'  => $currentCategory,
     ]);
 }
-
-
 
 
     public function donations_single($slug)
@@ -127,7 +136,63 @@ class FrontendCausesController extends Controller
             'type' => request()->get('type') ?? null,
         ]);
     }
-
+public function filterDonations(Request $request)
+{
+    try {
+        \Log::info('Filter donations request received', ['category' => $request->category]);
+        
+        $category = $request->input('category', 'all');
+        
+        // Use the Cause model with proper namespace
+        $query = Cause::query()->where('status', 'publish');
+        
+        // Apply category filter if not 'all'
+        if ($category !== 'all') {
+            $query->where('categories_id', $category);
+        }
+        
+        // Get all results with proper error handling
+        $all_donations = $query->get();
+        
+        \Log::info('Donations found', ['count' => $all_donations->count()]);
+        
+        // Return the donation data as JSON
+        $donations = $all_donations->map(function($donation) {
+            return [
+                'featured' => $donation->featured ?? false,
+                'image' => $donation->image ?? '',
+                'amount' => $donation->amount ?? 0,
+                'price' => $donation->price ?? 0,
+                'raised' => $donation->raised ?? 0,
+                'slug' => $donation->slug ?? '',
+                'title_ar' => $donation->title_ar ?? 'No Title',
+                'excerpt' => $donation->excerpt ?? '',
+                'deadline' => $donation->deadline ?? null,
+                'reward' => $donation->reward ?? '',
+                'categories_id' => $donation->categories_id ?? null,
+                // Add any other fields you need
+            ];
+        });
+        
+        return response()->json([
+            'success' => true,
+            'donations' => $donations,
+            'total' => $donations->count()
+        ]);
+        
+    } catch (\Exception $e) {
+        \Log::error('Filter donations error', [
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'حدث خطأ في الخادم: ' . $e->getMessage()
+        ], 500);
+    }
+}
     public function downloadQrCode($id)
     {
         $donation = Cause::find($id);

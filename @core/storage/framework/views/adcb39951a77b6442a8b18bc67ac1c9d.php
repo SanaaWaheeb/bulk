@@ -1,10 +1,61 @@
-<?php
+<?php $attributes ??= new \Illuminate\View\ComponentAttributeBag; ?>
+<?php foreach($attributes->onlyProps([
+    'featured'      => null,
+    'image'         => null,
+    'amount'        => 0,
+    'raised'        => 0,
+    'price'         => null,
+    'market_price'  => null,
+    'slug'          => '',
+    'title'         => null,
+    'title_ar'      => null,
+    'excerpt'       => null,
+    'deadline'      => null,
+    'reward'        => null,]) as $__key => $__value) {
+    $$__key = $$__key ?? $__value;
+} ?>
+<?php $attributes = $attributes->exceptProps([
+    'featured'      => null,
+    'image'         => null,
+    'amount'        => 0,
+    'raised'        => 0,
+    'price'         => null,
+    'market_price'  => null,
+    'slug'          => '',
+    'title'         => null,
+    'title_ar'      => null,
+    'excerpt'       => null,
+    'deadline'      => null,
+    'reward'        => null,]); ?>
+<?php foreach (array_filter(([
+    'featured'      => null,
+    'image'         => null,
+    'amount'        => 0,
+    'raised'        => 0,
+    'price'         => null,
+    'market_price'  => null,
+    'slug'          => '',
+    'title'         => null,
+    'title_ar'      => null,
+    'excerpt'       => null,
+    'deadline'      => null,
+    'reward'        => null,]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
+    $$__key = $$__key ?? $__value;
+} ?>
+<?php $__defined_vars = get_defined_vars(); ?>
+<?php foreach ($attributes as $__key => $__value) {
+    if (array_key_exists($__key, $__defined_vars)) unset($$__key);
+} ?>
+<?php unset($__defined_vars); ?>
+    '
+    <?php
     // عناوين/قيم افتراضية آمنة
     $title      = $title ?? ($title_ar ?? '');
     $imgId      = $image ?? null;
     $goal       = (float)($amount ?? 0);
     $raisedAmt  = (float)($raised ?? 0);
     $priceVal   = isset($price) ? (float)$price : null;
+    $marketPriceVal = isset($market_price) ? (float)$market_price : null;
 
     // نسبة التقدّم
     $progress   = $goal > 0 ? min(100, round(($raisedAmt / max($goal,1)) * 100)) : 0;
@@ -56,6 +107,12 @@
 
             </a>
         </h3>
+<?php if(!is_null($marketPriceVal)): ?>
+    <div class="price h6 mb-1">
+        <?php echo e(__('Market Price')); ?>: <?php echo e(number_format($marketPriceVal, 0, '.', ',')); ?>
+
+    </div>
+<?php endif; ?>
 
         
         <?php if(!is_null($priceVal)): ?>

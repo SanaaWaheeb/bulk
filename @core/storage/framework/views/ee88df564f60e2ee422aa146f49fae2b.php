@@ -13,7 +13,7 @@
 
     <?php $__env->stopSection(); ?>
 
-    <?php $__env->startSection('page-title',"المنتجات"); ?>
+   <?php $__env->startSection('page-title', __('Products')); ?>
         
 
     <?php $__env->startSection('page-meta-data'); ?>
@@ -355,10 +355,15 @@
                                     <?php endif; ?>
                                 <div class="donation-details" id="donate_box_wrapper">
                                     <div class="amount-details">
-                                        <h3 class="raised">تم شراء عدد  <?php echo e(($donation->raised ? $donation->raised : 0 )); ?>
+                                        <h3 class="raised">
+    <?php echo e(__('Purchased')); ?> <?php echo e($donation->raised ? $donation->raised : 0); ?>
 
-                                            <span class="goal">من الهدف <?php echo e($donation->amount); ?></span>
-                                        </h3>
+    <span class="goal">
+        <?php echo e(__('out of a goal of')); ?> <?php echo e($donation->amount); ?>
+
+    </span>
+</h3>
+
                                     </div>
                                     
     <div class="donation-details" id="donate_box_wrapper">
@@ -376,7 +381,7 @@
 
                                         <div class="btn-wrapper margin-top-30">
                                             <a class="boxed-btn reverse-color" href="<?php echo e(route('user.login',)); ?>">
-                                                <?php echo e(__('تسجيل الدخول للشراء')); ?>
+                                                <?php echo e(__('Log in to buy')); ?>
 
                                             </a>
                                         </div>
@@ -387,7 +392,7 @@
             <p class="alert alert-danger margin-top-30"><?php echo e(get_static_option('donation_deadline_text')); ?></p>
         <?php elseif($donation->raised >= $donation->amount): ?>
             <button class="boxed-btn reverse-color" disabled style="cursor: not-allowed; opacity: 0.6;">
-                <?php echo e(__('الهدف مكتمل')); ?>
+                <?php echo e(__('Goal completed')); ?>
 
             </button>
         <?php else: ?>
@@ -832,6 +837,29 @@
                     });
 
                 })
+               //added
+    $(document).ready(function() {
+        function moveRelatedPosts() {
+            var relatedPosts = $('.related-post-area');
+            var container = $('.donation-single-content-area .container');
+            
+            if ($(window).width() < 992) {
+                // On mobile, move to end of container
+                if (!relatedPosts.hasClass('moved')) {
+                    relatedPosts.addClass('moved').appendTo(container);
+                }
+            } else {
+                // On desktop, move back to original position
+                if (relatedPosts.hasClass('moved')) {
+                    relatedPosts.removeClass('moved').insertBefore($('.sidebar-outer-wrap'));
+                }
+            }
+    }
+    
+    // Run on load and resize
+    moveRelatedPosts();
+    $(window).resize(moveRelatedPosts);
+});
 
             })(jQuery);
         </script>

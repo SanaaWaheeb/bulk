@@ -49,50 +49,110 @@ class CausesController extends Controller
         $this->middleware('permission:donation-payment-delete',['only' => 'delete_donation_payment_logs','donation_payment_logs_bulk_action']);
     }
 
-    public function all_donation(Request $request)
-    {
-        if ($request->ajax()){
-            $data = Cause::select('*')->orderBy('id','desc');
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('checkbox',function ($row){
-                    return General::bulkCheckbox($row->id);
-                })
-                ->addColumn('info',function ($row){
-                    return Donation::infoColumn($row);
-                })
-                ->addColumn('image',function ($row){
-                    return General::image($row->image);
-                })
-                ->addColumn('category',function ($row){
-                    return donation_category_by_id($row->categories_id);
-                })
-                ->addColumn('action', function($row){
-                    $action = '';
-                    $action .= General::viewIcon(route('frontend.donations.single',$row->slug));
-                    $admin = auth()->guard('admin')->user();
-                    if ($admin->can('donation-delete')){
-                        $action .= General::deletePopover(route('admin.donations.delete',$row->id));
-                    }
-                    if ($admin->can('donation-edit')){
-                        $action .= General::editIcon(route('admin.donations.edit',$row->id));
-                        $action .= General::cloneIcon(route('admin.donations.clone'),$row->id);
-                        $action .= General::anchor(route('admin.donations.donors',$row->id),__('Donors'));
-                        $action .= Donation::aboutUpdate($row->id);
-                        $action .= Donation::comments($row->id);
 
-                        if ($row->created_by === 'user' && $row->status === 'pending'){
-                            $action .= Donation::campaignApprove($row->id);
-                        }
-                    }
-                    return $action;
-                })
-                ->rawColumns(['action','checkbox','image','info'])
-                ->make(true);
-        }
-        return view(self::BASE_PATH . 'all-donations');
 
+public function all_donation(Request $request)
+{
+    $locale   = app()->getLocale();
+    $isArabic = Str::startsWith($locale, 'ar');
+
+    if ($request->ajax()) {
+
+        $data = Cause::with('category')
+            ->select('*')
+            ->orderBy('id', 'desc');
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+
+            // Checkbox
+            ->addColumn('checkbox', function ($row) {
+                return General::bulkCheckbox($row->id);
+            })
+
+            // Info
+            ->addColumn('info', function ($row) use ($isArabic) {
+
+                // عنوان التبرع
+                if ($isArabic) {
+                    // عربي: استخدم title_ar لو موجود، وإلا title (القديم اللي فيه العربي)
+                    $row->title = $row->title_ar ?: $row->title;
+                } else {
+                    // إنجليزي: لو عملت في المستقبل title_en، استخدمه
+                    // ولو فاضي استخدم العربي كفولباك
+                    if (isset($row->title_en)) {
+                        $row->title = $row->title_en ?: ($row->title_ar ?: $row->title);
+                    } else {
+                        // لو ماعندكش عمود title_en لسه، خليه زي ما هو
+                        $row->title = $row->title ?: $row->title_ar;
+                    }
+                }
+
+               
+                if (isset($row->excerpt_ar) || isset($row->excerpt_en)) {
+                    if ($isArabic) {
+                        $row->excerpt = $row->excerpt_ar ?: ($row->excerpt_en ?? $row->excerpt ?? '');
+                    } else {
+                        $row->excerpt = $row->excerpt_en ?: ($row->excerpt_ar ?? $row->excerpt ?? '');
+                    }
+                }
+                
+
+                return Donation::infoColumn($row);
+            })
+
+            // ✅ Image
+            ->addColumn('image', function ($row) {
+                return General::image($row->image);
+            })
+
+            // Category 
+            ->addColumn('category', function ($row) use ($isArabic) {
+                $category = $row->category ?: CauseCategory::find($row->categories_id);
+                if (!$category) {
+                    return '';
+                }
+
+
+                if ($isArabic) {
+                    return $category->title ?: ($category->title_en ?? '');
+                } else {
+                    return $category->title_en ?: ($category->title ?? '');
+                }
+            })
+
+            //Actions
+            ->addColumn('action', function ($row) {
+                $action = '';
+                $action .= General::viewIcon(route('frontend.donations.single', $row->slug));
+                $admin = auth()->guard('admin')->user();
+
+                if ($admin->can('donation-delete')) {
+                    $action .= General::deletePopover(route('admin.donations.delete', $row->id));
+                }
+
+                if ($admin->can('donation-edit')) {
+                    $action .= General::editIcon(route('admin.donations.edit', $row->id));
+                    $action .= General::cloneIcon(route('admin.donations.clone'), $row->id);
+                    $action .= General::anchor(route('admin.donations.donors', $row->id), __('Donors'));
+                    $action .= Donation::aboutUpdate($row->id);
+                    $action .= Donation::comments($row->id);
+
+                    if ($row->created_by === 'user' && $row->status === 'pending') {
+                        $action .= Donation::campaignApprove($row->id);
+                    }
+                }
+
+                return $action;
+            })
+
+            ->rawColumns(['action', 'checkbox', 'image', 'info'])
+            ->make(true);
     }
+
+    return view(self::BASE_PATH . 'all-donations');
+}
+
     public function all_pending_donation(Request $request)
     {
         if ($request->ajax()){
@@ -146,8 +206,10 @@ class CausesController extends Controller
         'title' => 'required|string',
         'title_ar' => 'required|string',
         'price' => 'required|integer',
+        'market_price' => 'nullable|numeric',
         'slug' => 'nullable|string',
         'cause_content' => 'required|string',
+        'cause_content_en' => 'nullable|string',  
         'amount' => 'required|string',
         'status' => 'required|string',
         'image' => 'nullable|string',
@@ -158,6 +220,7 @@ class CausesController extends Controller
         'image_gallery' => 'nullable|string',
         'medical_document' => 'nullable|string',
         'excerpt' => 'nullable|string',
+        'excerpt_en'  => 'nullable|string', 
         'gift_status' => 'nullable|string',
         'featured' => 'nullable|string',
         'emmergency' => 'nullable|string',
@@ -169,6 +232,7 @@ class CausesController extends Controller
         'og_meta_description' => 'nullable|string',
         'og_meta_image' => 'nullable|string',
         'specifications' => 'nullable',
+        'specifications_en' => 'nullable|string',  
     ], [
         'title.required' => __('title is required'),
         'title_ar.required' => __('title ar is required'),
@@ -205,13 +269,31 @@ class CausesController extends Controller
             $specifications = [];
         }
     }
+    // المواصفات إنجليزي
+    $specifications_en = [];
+    if ($request->filled('specifications_en')) {
+        try {
+            $specifications_en = json_decode($request->specifications_en, true);
+            if (!is_array($specifications_en)) {
+                $specifications_en = [];
+            }
+            $specifications_en = array_filter($specifications_en, function($spec) {
+                return !empty(trim($spec['name'] ?? '')) || !empty(trim($spec['value'] ?? ''));
+            });
+            $specifications_en = array_values($specifications_en);
+        } catch (\Exception $e) {
+            $specifications_en = [];
+        }
+    }
 
     $cause = Cause::create([
         'title' => $request->title,
         'title_ar' => $request->title_ar,
         'price' => $request->price,
+        'market_price' => $request->market_price, 
         'slug' => $cause_slug,
         'cause_content' => $request->cause_content,
+        'cause_content_en' => $request->cause_content_en,
         'amount' => $request->amount,
         'status' => $request->status,
         'image' => $request->image,
@@ -235,7 +317,8 @@ class CausesController extends Controller
         'og_meta_title' => $request->og_meta_title,
         'og_meta_description' => $request->og_meta_description,
         'og_meta_image' => $request->og_meta_image,
-        'specifications' => $specifications, // 🔥 غير هذا السطر فقط
+        'specifications' => $specifications, 
+        'specifications_en' => $specifications_en,
     ]);
 
     if ($request->has('gifts')) {
@@ -259,8 +342,10 @@ public function update_donation(Request $request)
         'title' => 'required|string',
         'title_ar' => 'required|string',
         'price' => 'required|int',
+        'market_price' => 'nullable|numeric',
         'slug' => 'nullable|string',
         'cause_content' => 'required|string',
+        'cause_content_en' => 'nullable|string',   
         'amount' => 'required|string',
         'status' => 'required|string',
         'image' => 'nullable|string',
@@ -269,6 +354,7 @@ public function update_donation(Request $request)
         'meta_title' => 'nullable|string',
         'deadline' => 'required|string',
         'excerpt' => 'nullable|string',
+        'excerpt_en'  => 'nullable|string',
         'image_gallery' => 'nullable|string',
         'medical_document' => 'nullable|string',
         'featured' => 'nullable|string',
@@ -278,7 +364,8 @@ public function update_donation(Request $request)
         'monthly_donation_status' => 'nullable|string',
         'emmergency_title' => 'nullable|string',
         'categories_id' => 'required|string',
-        'specifications' => 'nullable|string', // إضافة التحقق من المواصفات
+        'specifications' => 'nullable|string', 
+        'specifications_en' => 'nullable|string',
     ],
     [
         'title.required' => __('title is required'),
@@ -327,6 +414,21 @@ public function update_donation(Request $request)
             $specifications = [];
         }
     }
+     $specifications_en = [];
+    if ($request->filled('specifications_en')) {
+        try {
+            $specifications_en = json_decode($request->specifications_en, true);
+            if (!is_array($specifications_en)) {
+                $specifications_en = [];
+            }
+            $specifications_en = array_filter($specifications_en, function($spec) {
+                return !empty(trim($spec['name'] ?? '')) || !empty(trim($spec['value'] ?? ''));
+            });
+            $specifications_en = array_values($specifications_en);
+        } catch (\Exception $e) {
+            $specifications_en = [];
+        }
+    }
 
     Cause::findOrFail($request->donation_id)->update([
         'title' => $request->title,
@@ -334,6 +436,7 @@ public function update_donation(Request $request)
         'price' => $request->price,
         'slug' => $cause_slug,
         'cause_content' => $request->cause_content,
+        'cause_content_en' => $request->cause_content_en,
         'amount' => $request->amount,
         'status' => $request->status,
         'image' => $request->image,
@@ -345,6 +448,7 @@ public function update_donation(Request $request)
         'faq' => serialize($faq_item),
         'meta_title' => $request->meta_title,
         'excerpt' => $request->excerpt,
+        'excerpt_en'  => $request->excerpt_en,
         'categories_id' => $request->categories_id,
         'featured' => $request->featured ?? 0,
         'emmergency' => $request->emmergency ?? 0,
@@ -355,7 +459,9 @@ public function update_donation(Request $request)
         'og_meta_title' => $request->og_meta_title,
         'og_meta_description' => $request->og_meta_description,
         'og_meta_image' => $request->og_meta_image,
-        'specifications' => $specifications, // تخزين كمصفوفة
+        'specifications' => $specifications, 
+        'specifications_en' => $specifications_en,
+         'market_price' => $request->market_price,
     ]);
 
     return redirect()->back()->with(['msg' => __('Cause Updated...'), 'type' => 'success']);

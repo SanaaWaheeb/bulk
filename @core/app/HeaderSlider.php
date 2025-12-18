@@ -9,6 +9,18 @@ class HeaderSlider extends Model
 {
     use HasFactory;
     protected $table = 'header_sliders';
-    protected $fillable = ['title','subtitle','description','btn_01_status','btn_01_text','btn_01_url','image'];
+protected $fillable = [
+    'title',
+    'title_en',          
+    'subtitle',
+    'subtitle_en',       
+    'description',
+    'description_en',    
+    'btn_01_status',
+    'btn_01_text',
+    'btn_01_url',
+    'image',
+];
+
 
 }

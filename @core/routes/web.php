@@ -33,6 +33,15 @@ Route::get('admin/language/switch/{locale}', function ($locale) {
     session(['lang' => $locale]);
     return redirect()->back();
 })->name('admin.language.switch');
+Route::get('/test-langf', function () {
+    return [
+        'session_lang'   => session('lang'),
+        'app_locale'     => app()->getLocale(),
+        'phone_required' => __('validation.phone_required'),
+        'success_title'  => __('validation.success_title'),
+    ];
+});
+
 
 
 // OTP Test routes (keep these as they are)

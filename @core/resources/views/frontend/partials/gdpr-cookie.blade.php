@@ -1,4 +1,4 @@
-@if(!empty(get_static_option('site_gdpr_cookie_enabled')))
+{{-- @if(!empty(get_static_option('site_gdpr_cookie_enabled')))
     <script src="{{asset('assets/frontend/js/jquery.ihavecookies.min.js')}}"></script>
     @php $gdpr_cookie_link = str_replace('{url}',url('/'),get_static_option('site_gdpr_cookie_more_info_link')) @endphp
     <script>
@@ -22,4 +22,4 @@
             });
         });
     </script>
-@endif
+@endif --}}

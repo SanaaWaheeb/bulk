@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ asset('assets/common/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/frontend/css/style.css') }}"><!-- هنا ملفك -->
 @include('frontend.partials.navbar')
 @if(get_static_option('home_page_header_slider_section_status'))
 <div class="global-carousel-init header-slider-one"

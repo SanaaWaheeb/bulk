@@ -16,28 +16,58 @@
             </div>
             <div class="col-lg-12 mt-t">
                 <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title">{{__('Category Area')}}</h4>
-                        <form action="{{route('admin.home.five.category.area')}}" method="post" enctype="multipart/form-data">
-                            @csrf
+    <div class="card-body">
+        <h4 class="header-title">{{ __('Category Area') }}</h4>
+        <form action="{{ route('admin.home.five.category.area') }}" method="post" enctype="multipart/form-data">
+            @csrf
 
-                            <div>
-                                <div class="form-group">
-                                    <label>{{__('Title')}}</label>
-                                    <input type="text" name="home_page_05_category_area_title" class="form-control"
-                                           value="{{get_static_option('home_page_05_category_area_title')}}">
-                                </div>
-                                <div class="form-group">
-                                    <label>{{__('Subtitle')}}</label>
-                                    <input type="text" name="home_page_05_category_area_subtitle" class="form-control"
-                                           value="{{get_static_option('home_page_05_category_area_subtitle')}}">
-                                </div>
-
-                                <button id="update" type="submit"
-                                        class="btn btn-primary mt-4 pr-4 pl-4">{{__('Update Settings')}}</button>
-                        </form>
-                    </div>
+            <div>
+                {{-- Title AR --}}
+                <div class="form-group">
+                    <label>{{ __('Title (Arabic)') }}</label>
+                    <input type="text"
+                           name="home_page_05_category_area_title"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_05_category_area_title') }}">
                 </div>
+
+                {{-- Title EN --}}
+                <div class="form-group">
+                    <label>{{ __('Title (English)') }}</label>
+                    <input type="text"
+                           name="home_page_05_category_area_title_en"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_05_category_area_title_en') }}">
+                </div>
+
+                {{-- Subtitle AR --}}
+                <div class="form-group">
+                    <label>{{ __('Subtitle (Arabic)') }}</label>
+                    <input type="text"
+                           name="home_page_05_category_area_subtitle"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_05_category_area_subtitle') }}">
+                </div>
+
+                {{-- Subtitle EN --}}
+                <div class="form-group">
+                    <label>{{ __('Subtitle (English)') }}</label>
+                    <input type="text"
+                           name="home_page_05_category_area_subtitle_en"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_05_category_area_subtitle_en') }}">
+                </div>
+
+                <button id="update"
+                        type="submit"
+                        class="btn btn-primary mt-4 pr-4 pl-4">
+                    {{ __('Update Settings') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 
             </div>
         </div>

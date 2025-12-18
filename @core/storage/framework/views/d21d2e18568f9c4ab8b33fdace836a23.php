@@ -1,5 +1,17 @@
+
+        <?php
+    // القيمة الخام من السيستم (مثلاً: ar_frontend أو en_frontend)
+    $rawLocale = app()->getLocale();
+
+    // نحولها لـ ar أو en فقط
+    $locale = \Illuminate\Support\Str::startsWith($rawLocale, 'ar') ? 'ar' : 'en';
+
+    // الاتجاه بناءً على اللغة
+    $dir = $locale === 'ar' ? 'rtl' : 'ltr';
+?>
+
 <!doctype html>
-<html class="no-js" lang="<?php echo e(get_default_language()); ?>"  dir="<?php echo e(get_default_language_direction()); ?>">
+<html class="no-js" lang="<?php echo e($locale); ?>" dir="<?php echo e($dir); ?>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">

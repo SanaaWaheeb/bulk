@@ -11,16 +11,17 @@ use App\DonationCategory;
 class Cause extends Model
 {
     protected $table = 'causes';
-    protected $fillable = ['cause_update_id','title','title_ar','price','cause_content','amount','raised','status','slug','image','meta_title',
+    protected $fillable = ['cause_update_id','title','title_ar','price','market_price','cause_content','cause_content_en','amount','raised','status','slug','image','meta_title',
         'image_gallery','meta_tags','meta_description','user_id','admin_id','deadline','faq','created_by','featured','categories_id',
-        'excerpt','og_meta_title','og_meta_description','og_meta_image','medical_document','emmergency','reward','gift_status','monthly_donation_status','specifications'];
+        'excerpt','excerpt_en','og_meta_title','og_meta_description','og_meta_image','medical_document','emmergency','reward','gift_status','monthly_donation_status','specifications','specifications_en'];
         
     protected $cast = [
         'deadline' => 'date'
     ];
-    protected $casts = [
-    'specifications' => 'array',
-];
+  protected $casts = [
+        'specifications'    => 'array',
+        'specifications_en' => 'array',
+    ];
 
     public function user(){
         return $this->belongsTo(User::class,'user_id');

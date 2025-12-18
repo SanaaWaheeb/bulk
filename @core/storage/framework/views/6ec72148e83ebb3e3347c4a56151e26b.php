@@ -28,31 +28,56 @@
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                      
-            <?php if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data))): ?>
-            <li class="dropdown" style="list-style: none; margin-left: 5px;">
-                <button class="btn btn-outline-dark dropdown-toggle "
-                        type="button"
-                        id="languageDropdown"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        style="padding: 5px 12px; font-size: 14px; background-color: white; color: #000 !important; border: 2px solid #000000 !important; transition: all 0.3s ease;"
-                        onmouseover="this.style.backgroundColor='#495057'; this.style.color='white'; this.style.borderColor='#495057';"
-                        onmouseout="this.style.backgroundColor='white'; this.style.color='#000'; this.style.borderColor='#000000';">
-                    <?php echo e(__('Change Language')); ?>
+          <?php
+    // جلب لغة المستخدم الحالية
+    $currentLocale = function_exists('get_user_lang')
+        ? get_user_lang()
+        : (session('lang') ?? app()->getLocale());
 
-                </button>
+    $labels = [
+        'en' => 'English',
+        'ar' => 'العربية',
+    ];
+
+    $currentLabel = $labels[$currentLocale] ?? 'English';
+?>
+
+<?php if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data))): ?>
+    <li class="dropdown" style="list-style: none; margin-left: 5px;">
+        <button class="btn btn-outline-dark dropdown-toggle"
+                type="button"
+                id="languageDropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                style="  padding: 6px 18px;
+                    font-size: 13px;
+                    border-radius: 999px;
+                    background-color:#0e244c;
+                    color: #fff;
+                    border-color: transparent;"
+                onmouseover="this.style.backgroundColor='#495057'; this.style.color='white'; this.style.borderColor='#495057';"
+                onmouseout="this.style.backgroundColor='white'; this.style.color='#000'; this.style.borderColor='#000000';">
             
-                <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                    <a href="<?php echo e(route('home.language.switch', 'en')); ?>" class="dropdown-item" style="color: #000 !important;">
-                        English
-                    </a>
-                    <a href="<?php echo e(route('home.language.switch', 'ar')); ?>" class="dropdown-item" style="color: #000 !important;">
-                        العربية
-                    </a>
-                </div>
-            </li>
-        <?php endif; ?>
+            <?php echo e($currentLabel); ?>
+
+        </button>
+    
+        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+            <a href="<?php echo e(route('home.language.switch', 'en')); ?>"
+               class="dropdown-item <?php if($currentLocale === 'en'): ?> active <?php endif; ?>"
+               style="color: #000 !important;">
+                English
+            </a>
+            <a href="<?php echo e(route('home.language.switch', 'ar')); ?>"
+               class="dropdown-item <?php if($currentLocale === 'ar'): ?> active <?php endif; ?>"
+               style="color: #000 !important;">
+                العربية
+            </a>
+        </div>
+    </li>
+<?php endif; ?>
+
 
                                     <?php if (isset($component)) { $__componentOriginala02c5612010dcb7b66efe3676cfc560d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginala02c5612010dcb7b66efe3676cfc560d = $attributes; } ?>
@@ -169,14 +194,50 @@
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-7 col-md-7 col-sm-9">
                     <div class="header-inner-05 desktop-center">
-                        <?php
-                            $title_arr = explode(" ", $data->title);
-                            $firstWord = $title_arr[0];
-                            array_shift($title_arr);
-                        ?>
-                        <p class="animate-style-02"><?php echo e($data->subtitle ?? ''); ?></p>
-                        <h1 class="title animate-style"><span><?php echo e($firstWord); ?></span> <?php echo e(implode(' ',$title_arr)); ?></h1>
-                    </div>
+    <?php
+       
+
+        $locale   = app()->getLocale();
+        $isArabic = $locale === 'ar' || Str::startsWith($locale, 'ar');
+
+        // العنوان على حسب اللغة مع fallback
+        $title = $isArabic
+            ? ($data->title ?? $data->title_en)          // عربي أولاً، لو فاضي استخدم الإنجليزي
+            : ($data->title_en ?: $data->title);         // إنجليزي أولاً، لو فاضي استخدم العربي
+
+        // الساب تايتل على حسب اللغة مع fallback
+        $subtitle = $isArabic
+            ? ($data->subtitle ?? $data->subtitle_en)
+            : ($data->subtitle_en ?: $data->subtitle);
+
+        $title = trim($title ?? '');
+
+        if ($title !== '') {
+            // تقسيم العنوان لأول كلمة والباقي
+            $title_arr = preg_split('/\s+/', $title);
+            $firstWord = $title_arr[0] ?? '';
+            array_shift($title_arr);
+        } else {
+            $firstWord = '';
+            $title_arr = [];
+        }
+    ?>
+
+    <?php if(!empty($subtitle)): ?>
+        <p class="animate-style-02"><?php echo e($subtitle); ?></p>
+    <?php endif; ?>
+
+    <h1 class="title animate-style">
+        <?php if($firstWord): ?>
+            <span><?php echo e($firstWord); ?></span> <?php echo e(implode(' ', $title_arr)); ?>
+
+        <?php else: ?>
+            <?php echo e($title); ?>
+
+        <?php endif; ?>
+    </h1>
+</div>
+
 
                 </div>
             </div>
@@ -209,7 +270,7 @@
                 </div>
 
 <div class="single-donate margin-bottom-30">
-    <a href="https://bulk.com.sa/support-ticket" class="btn btn-info margin-bottom-30">
+    <a href="https://bulk.com.sa/bulk/support-ticket" class="btn btn-info margin-bottom-30">
         <?php echo filter_static_option_value('home_page_05_rise_area_button_text', $static_field_data); ?>
 
     </a>
@@ -224,136 +285,256 @@
     $classes = ['reverse-color','btn-color-three','btn-dander','btn-color-three'];
 ?>
 <?php if(get_static_option('home_page_feature_area_05_section_status')): ?>
-<section class="featured-area-three padding-top-90 padding-bottom-140">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-sm-11 col-11">
-                <div class="section-title section-title-four b-top desktop-center padding-top-25 margin-bottom-55">
-                    <span><?php echo filter_static_option_value('home_page_05_feature_area_title',$static_field_data); ?></span>
-                    <h2 class="title"><?php echo filter_static_option_value('home_page_05_feature_area_subtitle',$static_field_data); ?> <img src="<?php echo e(asset('assets/frontend/img/section-line-shape.png')); ?>" alt=""> </h2>
+
+    <?php
+     
+
+        // اللغة الحالية
+        $locale   = app()->getLocale();
+        $isArabic = ($locale === 'ar') || Str::startsWith($locale, 'ar');
+
+        // ⬅️ نقرأ القيم مباشرة من الـ DB
+        // العناوين العربية
+        $title_ar     = get_static_option('home_page_05_feature_area_title');
+        $subtitle_ar  = get_static_option('home_page_05_feature_area_subtitle');
+        $btn_text_ar  = get_static_option('home_page_05_feature_area_donation_button_text');
+
+        // العناوين الإنجليزية
+        $title_en     = get_static_option('home_page_05_feature_area_title_en');
+        $subtitle_en  = get_static_option('home_page_05_feature_area_subtitle_en');
+        $btn_text_en  = get_static_option('home_page_05_feature_area_donation_button_text_en');
+
+        // اختيار النص حسب اللغة مع Fallback
+        $featureTitle = $isArabic
+            ? ($title_ar ?: $title_en)
+            : ($title_en ?: $title_ar);
+
+        $featureSubtitle = $isArabic
+            ? ($subtitle_ar ?: $subtitle_en)
+            : ($subtitle_en ?: $subtitle_ar);
+
+        $featureBtnText = $isArabic
+            ? ($btn_text_ar ?: $btn_text_en)
+            : ($btn_text_en ?: $btn_text_ar);
+    ?>
+
+    <section class="featured-area-three padding-top-90 padding-bottom-140">
+        <div class="container">
+
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-sm-11 col-11">
+                    <div class="section-title section-title-four b-top desktop-center padding-top-25 margin-bottom-55">
+                        <span><?php echo e($featureTitle); ?></span>
+                        <h2 class="title">
+                            <?php echo e($featureSubtitle); ?>
+
+                            <img src="<?php echo e(asset('assets/frontend/img/section-line-shape.png')); ?>" alt="">
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="featured-slider">
+                        <?php $__currentLoopData = $feature_cause; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
+                                // عناوين الكيس نفسها حسب اللغة
+                                $caseTitleAr = $data->title_ar ?? $data->title;
+                                $caseTitleEn = $data->title_en ?? $data->title;
+
+                                $caseTitle = $isArabic
+                                    ? ($caseTitleAr ?: $caseTitleEn)
+                                    : ($caseTitleEn ?: $caseTitleAr);
+                            ?>
+
+                            <div class="single-featured-items">
+                                <div class="single-featured-02 single-featured">
+                                    <div class="featured-image">
+                                        <a href="<?php echo e(route('frontend.donations.single', $data->slug)); ?>">
+                                            <?php echo render_image_markup_by_attachment_id($data->image, '', 'grid'); ?>
+
+                                        </a>
+
+                                        <div class="award-flex-position">
+                                            <?php if($data->featured === 'on'): ?>
+                                                <div class="award-new-icon">
+                                                    <i class="las la-award"></i>
+                                                </div>
+                                            <?php endif; ?>
+
+                                            <?php if($data->reward === 'on'): ?>
+                                                <div class="award-new-icon">
+                                                    <i class="las la-gift"></i>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="progress-item">
+                                        <div class="single-progressbar">
+                                            <div class="donation-progress"
+                                                 data-percentage="<?php echo e(get_percentage($data->amount, $data->raised)); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="featured-contents">
+                                        
+                                        <h3 class="title">
+                                            <a href="<?php echo e(route('frontend.donations.single', $data->slug)); ?>">
+                                                <?php echo e($caseTitle); ?>
+
+                                            </a>
+                                        </h3>
+
+                                        <div class="feature-flex">
+                                            <div class="goal">
+                                                <h4 class="raised">
+                                                    <?php echo e(__('Raised')); ?>:
+                                                    <span class="main-color-three">
+                                                        <?php echo e($data->raised ?? 0); ?>
+
+                                                    </span>
+                                                </h4>
+                                            </div>
+
+                                            <div class="goal">
+                                                <h4 class="raised">
+                                                    <?php echo e(__('Goal')); ?>:
+                                                    <span class="danger-color">
+                                                        <?php echo e($data->amount); ?>
+
+                                                    </span>
+                                                </h4>
+                                            </div>
+
+                                            <div class="goal">
+                                                <h4 class="raised">
+                                                    <?php echo e(__('Price')); ?>:
+                                                    <span class="main-color-three">
+                                                        <?php echo e(amount_with_currency_symbol($data->price ?? 0)); ?>
+
+                                                    </span>
+                                                </h4>
+                                            </div>
+
+                                            <div class="btn-wrapper">
+                                                <a href="<?php echo e(route('frontend.donations.single', $data->slug)); ?>"
+                                                   class="boxed-btn btn-rounded <?php echo e($classes[$key % count($classes)] ?? ''); ?>">
+                                                    <?php echo e($featureBtnText); ?>
+
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div> 
+                            </div> 
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div> 
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="featured-slider">
-                    <?php $__currentLoopData = $feature_cause; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="single-featured-items">
+    </section>
+<?php endif; ?>
 
-                        <div class="single-featured-02 single-featured">
-                            <div class="featured-image">
-                                <a href="<?php echo e(route('frontend.donations.single',$data->slug)); ?>">
-                                    <?php echo render_image_markup_by_attachment_id($data->image,'','grid'); ?>
 
-                                </a>
-                                <div class="award-flex-position">
-                                    <?php if($data->featured === 'on'): ?>
-                                        <div class="award-new-icon">
-                                            <i class="las la-award"></i>
+<?php if(get_static_option('home_page_category_area_05_section_status')): ?>
+
+    <?php
+        // تحديد اللغة الحالية (ar, ar_SA, en, en_US, ...)
+        $locale   = app()->getLocale();
+        $isArabic = (strpos($locale, 'ar') === 0); // true لو اللغة بتبدأ بـ ar
+
+        // 🟢 عناوين السيكشن من الإعدادات
+        // عربي من الـ static_field_data (زي ما الثيم عامل أصلاً)
+        $title_ar    = filter_static_option_value('home_page_05_category_area_title', $static_field_data);
+        $subtitle_ar = filter_static_option_value('home_page_05_category_area_subtitle', $static_field_data);
+
+        // إنجليزي من DB مباشرة (عشان المفاتيح الجديدة *_en مش موجودة في $static_field_data)
+        $title_en    = get_static_option('home_page_05_category_area_title_en');
+        $subtitle_en = get_static_option('home_page_05_category_area_subtitle_en');
+
+        // اختيار النص حسب اللغة مع Fallback
+        $sectionTitle = $isArabic
+            ? ($title_ar ?: $title_en)
+            : ($title_en ?: $title_ar);
+
+        $sectionSubtitle = $isArabic
+            ? ($subtitle_ar ?: $subtitle_en)
+            : ($subtitle_en ?: $subtitle_ar);
+    ?>
+
+    <section class="category-area section-bg-3 padding-top-90 padding-bottom-80">
+        <div class="section-shapes">
+            <img src="<?php echo e(asset('assets/frontend/img/bg/top-shapes2.png')); ?>" alt="">
+            <img src="<?php echo e(asset('assets/frontend/img/bg/bottom-shapes2.png')); ?>" alt="">
+        </div>
+        <div class="container">
+
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-sm-11 col-11">
+                    <div class="section-title section-title-four b-top desktop-center padding-top-25 margin-bottom-55">
+                        <span><?php echo e($sectionTitle); ?></span>
+                        <h2 class="title">
+                            <?php echo e($sectionSubtitle); ?>
+
+                            <img src="<?php echo e(asset('assets/frontend/img/section-line-shape.png')); ?>" alt="">
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="category-slider">
+                        <?php $__currentLoopData = $all_donation_category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
+                                // 🟢 عناوين الكاتيجوري من جدول cause_categories
+                                $catTitleAr = $data->title ?? '';
+                                $catTitleEn = $data->title_en ?? '';
+
+                                $catTitle = $isArabic
+                                    ? ($catTitleAr ?: $catTitleEn)
+                                    : ($catTitleEn ?: $catTitleAr);
+
+                                // السلاج مبني على العنوان اللي ظاهر للمستخدم
+                                $slugSource = $catTitle ?: ($data->title ?? $data->title_en ?? 'category');
+                                $slugPart   = \Illuminate\Support\Str::slug($slugSource);
+                            ?>
+
+                            <div class="single-category-items">
+                                <div class="single-category">
+                                    <div class="category-image">
+                                        <?php echo render_image_markup_by_attachment_id($data->image,'thumb'); ?>
+
+                                        <div class="category-shape">
+                                            <img src="<?php echo e(asset('assets/frontend/img/category/shape1.png')); ?>" alt="">
                                         </div>
-                                    <?php endif; ?>
+                                    </div>
+                                    <div class="category-content">
+                                        <h4 class="category-para">
+                                            <a href="<?php echo e(route('frontend.donations.category', ['id' => $data->id, 'any' => $slugPart])); ?>">
+                                                <?php echo e($catTitle); ?>
 
-                                    <?php if($data->reward === 'on'): ?>
-                                        <div class="award-new-icon">
-                                            <i class="las la-gift"></i>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-
-                            <div class="progress-item">
-                                <div class="single-progressbar">
-                                    <div class="donation-progress" data-percentage="<?php echo e(get_percentage($data->amount,$data->raised)); ?>"></div>
-                                </div>
-                            </div>
-                            <div class="featured-contents">
-
-                                <h3 class="title">
-                                    <a href="<?php echo e(route('frontend.donations.single',$data->slug)); ?>"><?php echo e($data->title_ar ?? ''); ?></a>
-                                </h3>
-                               <div class="feature-flex">
-<div class="goal">
-    <h4 class="raised"><?php echo e(__('Raised')); ?>:  
-        <span class="main-color-three">
-            <?php echo e($data->raised ?? 0); ?>
-
-        </span>
-    </h4>
-</div>
-<div class="goal">
-    <h4 class="raised"><?php echo e(__('Goal')); ?>: 
-        <span class="danger-color">
-            <?php echo e($data->amount); ?>
-
-        </span>
-    </h4>
-</div>
-
-    <div class="goal">
-        <h4 class="raised"><?php echo e(__('Price')); ?>:
-            <span class="main-color-three">
-                <?php echo e(amount_with_currency_symbol($data->price ?? 0)); ?>
-
-            </span>
-        </h4>
-    </div>
-                                    
-                                    <div class="btn-wrapper">
-                                        <a href="<?php echo e(route('frontend.donations.single',$data->slug)); ?>" class="boxed-btn btn-rounded <?php echo e($classes[$key % count($classes)]); ?> "> <?php echo filter_static_option_value('home_page_05_feature_area_donation_button_text',$static_field_data); ?> </a>
+                                            </a>
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div> 
                 </div>
             </div>
-
         </div>
-    </div>
-</section>
+    </section>
 <?php endif; ?>
 
-<?php if(get_static_option('home_page_category_area_05_section_status')): ?>
-<section class="category-area section-bg-3 padding-top-90 padding-bottom-80">
-    <div class="section-shapes">
-        <img src="<?php echo e(asset('assets/frontend/img/bg/top-shapes2.png')); ?>" alt="">
-        <img src="<?php echo e(asset('assets/frontend/img/bg/bottom-shapes2.png')); ?>" alt="">
-    </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-sm-11 col-11">
-                <div class="section-title section-title-four b-top desktop-center padding-top-25 margin-bottom-55">
-                    <span><?php echo filter_static_option_value('home_page_05_category_area_title',$static_field_data); ?></span>
-                    <h2 class="title"> <?php echo filter_static_option_value('home_page_05_category_area_subtitle',$static_field_data); ?> <img src="<?php echo e(asset('assets/frontend/img/section-line-shape.png')); ?>" alt=""> </h2>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="category-slider">
-                    <?php $__currentLoopData = $all_donation_category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="single-category-items">
-                        <div class="single-category">
-                            <div class="category-image">
-                                <?php echo render_image_markup_by_attachment_id($data->image,'thumb'); ?>
 
-                                <div class="category-shape">
-                                    <img src="<?php echo e(asset('assets/frontend/img/category/shape1.png')); ?>" alt="">
-                                </div>
-                            </div>
-                            <div class="category-content">
-                                <h4 class="category-para"> <a href="<?php echo e(route('frontend.donations.category',['id' => $data->id,'any' => Str::slug($data->title) ?? '' ])); ?>">  <?php echo e($data->title ?? ''); ?> </a> </h4>
-                            </div>
-                        </div>
-                    </div>
-                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
 
 <?php if(get_static_option('home_page_success_story_area_05_section_status')): ?>
 <section class="success-area-two padding-top-140 padding-bottom-140">
@@ -434,90 +615,153 @@
 <?php endif; ?>
 
 <?php if(get_static_option('home_page_recent_cause_area_05_section_status')): ?>
-<section class="recent-area-two padding-top-140 padding-bottom-170">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-sm-11 col-11">
-                <div class="section-title section-title-four b-top desktop-center padding-top-25 margin-bottom-55">
-                    <span><?php echo filter_static_option_value('home_page_05_recent_causes_area_title',$static_field_data); ?></span>
-                    <h2 class="title"> <?php echo filter_static_option_value('home_page_05_recent_causes_area_subtitle',$static_field_data); ?> <img src="<?php echo e(asset('assets/frontend/img/section-line-shape.png')); ?>" alt=""> </h2>
+
+    <?php
+     
+        // اللغة الحالية
+        $locale   = app()->getLocale();
+        $isArabic = ($locale === 'ar') || Str::startsWith($locale, 'ar');
+
+        // نصوص العناوين من الإعدادات (عربي + إنجليزي)
+        $title_ar      = get_static_option('home_page_05_recent_causes_area_title');
+        $title_en      = get_static_option('home_page_05_recent_causes_area_title_en');
+
+        $subtitle_ar   = get_static_option('home_page_05_recent_causes_area_subtitle');
+        $subtitle_en   = get_static_option('home_page_05_recent_causes_area_subtitle_en');
+
+        $btn_text_ar   = get_static_option('home_page_05_recent_causes_area_see_all_button_text');
+        $btn_text_en   = get_static_option('home_page_05_recent_causes_area_see_all_button_text_en');
+
+        // اختيار النص حسب اللغة مع Fallback
+        $recentTitle = $isArabic
+            ? ($title_ar ?: $title_en)
+            : ($title_en ?: $title_ar);
+
+        $recentSubtitle = $isArabic
+            ? ($subtitle_ar ?: $subtitle_en)
+            : ($subtitle_en ?: $subtitle_ar);
+
+        $recentBtnText = $isArabic
+            ? ($btn_text_ar ?: $btn_text_en)
+            : ($btn_text_en ?: $btn_text_ar);
+    ?>
+
+    <section class="recent-area-two padding-top-140 padding-bottom-170">
+        <div class="container">
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-sm-11 col-11">
+                    <div class="section-title section-title-four b-top desktop-center padding-top-25 margin-bottom-55">
+                        <span><?php echo e($recentTitle); ?></span>
+                        <h2 class="title">
+                            <?php echo e($recentSubtitle); ?>
+
+                            <img src="<?php echo e(asset('assets/frontend/img/section-line-shape.png')); ?>" alt="">
+                        </h2>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <?php $__currentLoopData = $all_recent_donation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=> $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            
-            <div class="col-lg-4 col-md-6 recent-childs">
-                <div class="single-recent-02 margin-bottom-30">
-                    <div class="recent-image">
-                        <a href="<?php echo e(route('frontend.donations.single',$data->slug)); ?>">
-                            <?php echo render_image_markup_by_attachment_id($data->image,'','grid'); ?>
 
-                        </a>
+            <div class="row">
+                <?php $__currentLoopData = $all_recent_donation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
+                        // عنوان الكيس حسب اللغة مع fallback
+                        $caseTitleAr = $data->title_ar ?? $data->title;
+                        $caseTitleEn = $data->title_en ?? $data->title;
 
-                        <div class="award-flex-position">
-                            <?php if($data->featured === 'on'): ?>
-                                <div class="award-new-icon">
-                                    <i class="las la-award"></i>
-                                </div>
-                            <?php endif; ?>
+                        $caseTitle = $isArabic
+                            ? ($caseTitleAr ?: $caseTitleEn)
+                            : ($caseTitleEn ?: $caseTitleAr);
+                    ?>
 
-                            <?php if($data->reward === 'on'): ?>
-                                <div class="award-new-icon">
-                                    <i class="las la-gift"></i>
-                                </div>
-                            <?php endif; ?>
-                        </div>
+                    <div class="col-lg-4 col-md-6 recent-childs">
+                        <div class="single-recent-02 margin-bottom-30">
+                            <div class="recent-image">
+                                <a href="<?php echo e(route('frontend.donations.single', $data->slug)); ?>">
+                                    <?php echo render_image_markup_by_attachment_id($data->image,'','grid'); ?>
 
+                                </a>
 
-                    </div>
-                    <div class="recent-contents">
-                        <h3 class="title">
-                            <a href="<?php echo e(route('frontend.donations.single',$data->slug)); ?>"> <?php echo e($data->title_ar); ?> </a>
-                        </h3>
-                        <div class="recent-flex">
-    <div class="goal">
-        <h4 class="raised"><?php echo e(__('Raised')); ?>:  
-            <span class="main-color-three">
-                <?php echo e($data->raised ?? 0); ?>
+                                <div class="award-flex-position">
+                                    <?php if($data->featured === 'on'): ?>
+                                        <div class="award-new-icon">
+                                            <i class="las la-award"></i>
+                                        </div>
+                                    <?php endif; ?>
 
-            </span>
-        </h4>
-    </div>
-    <div class="goal">
-        <h4 class="raised"><?php echo e(__('Goal')); ?>: 
-            <span class="danger-color">
-                <?php echo e($data->amount); ?>
-
-            </span>
-        </h4>
-    </div>
-    <div class="goal">
-        <h4 class="raised"><?php echo e(__('Price')); ?>:
-            <span class="main-color-three">
-                <?php echo e(amount_with_currency_symbol($data->price ?? 0)); ?>
-
-            </span>
-        </h4>
-    </div>
-                            <div class="progress-item">
-                                <div class="single-progressbar">
-                                    <div class="donation-progress" data-percentage="<?php echo e(get_percentage($data->amount,$data->raised)); ?>"></div>
+                                    <?php if($data->reward === 'on'): ?>
+                                        <div class="award-new-icon">
+                                            <i class="las la-gift"></i>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
+
+                            <div class="recent-contents">
+                                
+                                <h3 class="title">
+                                    <a href="<?php echo e(route('frontend.donations.single', $data->slug)); ?>">
+                                        <?php echo e($caseTitle); ?>
+
+                                    </a>
+                                </h3>
+
+                                <div class="recent-flex">
+                                    <div class="goal">
+                                        <h4 class="raised">
+                                            <?php echo e(__('Raised')); ?>:
+                                            <span class="main-color-three">
+                                                <?php echo e($data->raised ?? 0); ?>
+
+                                            </span>
+                                        </h4>
+                                    </div>
+
+                                    <div class="goal">
+                                        <h4 class="raised">
+                                            <?php echo e(__('Goal')); ?>:
+                                            <span class="danger-color">
+                                                <?php echo e($data->amount); ?>
+
+                                            </span>
+                                        </h4>
+                                    </div>
+
+                                    <div class="goal">
+                                        <h4 class="raised">
+                                            <?php echo e(__('Price')); ?>:
+                                            <span class="main-color-three">
+                                                <?php echo e(amount_with_currency_symbol($data->price ?? 0)); ?>
+
+                                            </span>
+                                        </h4>
+                                    </div>
+
+                                    <div class="progress-item">
+                                        <div class="single-progressbar">
+                                            <div class="donation-progress"
+                                                 data-percentage="<?php echo e(get_percentage($data->amount, $data->raised)); ?>">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div> 
                         </div>
+                    </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                <div class="col-lg-12">
+                    <div class="btn-wrapper text-center">
+                        <a href="<?php echo e(route('frontend.donations')); ?>"
+                           class="boxed-btn reverse-color btn-rounded ">
+                            <?php echo e($recentBtnText); ?>
+
+                        </a>
                     </div>
                 </div>
             </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            <div class="col-lg-12">
-                <div class="btn-wrapper text-center">
-                    <a href="<?php echo e(route('frontend.donations')); ?>" class="boxed-btn reverse-color btn-rounded "><?php echo filter_static_option_value('home_page_05_recent_causes_area_see_all_button_text',$static_field_data); ?> </a>
-                </div>
-            </div>
         </div>
-    </div>
-</section>
+    </section>
 <?php endif; ?>
 
 <?php if(get_static_option('home_page_events_area_05_section_status')): ?>

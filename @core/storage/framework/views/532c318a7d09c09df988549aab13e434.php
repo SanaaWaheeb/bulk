@@ -1,17 +1,18 @@
-<?php if(Session::has('success')): ?>
+ 
+ <?php if(Session::has('success')): ?>
 <script>
 Swal.fire({
     icon: 'success',
-    title: 'success!',
+    title: <?php echo json_encode(__('Success!'), 15, 512) ?>,
     html: `
         <div style="font-size: 14px; line-height: 1.3;">
             <?php echo Session::get('success'); ?>
 
         </div>
     `,
-    input: undefined,        // ✅ يلغي أي input/select موروث
+    input: undefined,
     showCancelButton: false,
-    confirmButtonText: "حسناً",
+    confirmButtonText: <?php echo json_encode(__('OK'), 15, 512) ?>,
     timer: 4000,
     confirmButtonColor: "#6C63FF",
     position: "center",
@@ -26,7 +27,6 @@ Swal.fire({
         htmlContainer: 'small-swal-content'
     },
     didOpen: () => {
-        // ✅ لو فيه أي select/input اتضاف بالغلط احذفه
         const popup = Swal.getPopup();
         popup.querySelectorAll('.swal2-input, .swal2-select, .swal2-textarea')
              .forEach(el => el.remove());
@@ -39,11 +39,11 @@ Swal.fire({
 <script>
 Swal.fire({
     icon: 'error',
-    title: 'error!',
+    title: <?php echo json_encode(__('Error!'), 15, 512) ?>,
     text: <?php echo json_encode(Session::get('error'), 15, 512) ?>,
-    input: undefined,        // ✅ نفس الفكرة هنا
+    input: undefined,
     showCancelButton: false,
-    confirmButtonText: "إغلاق",
+    confirmButtonText: <?php echo json_encode(__('Close'), 15, 512) ?>,
     timer: 4000,
     confirmButtonColor: "#d33",
     position: "center",

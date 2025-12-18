@@ -109,14 +109,26 @@
                             <input type="hidden" name="donation_id" value="<?php echo e($donation->id); ?>">
                             <div class="row">
                                 <div class="col-lg-12">
+                                     
                                     <div class="form-group">
-                                        <label for="title"><?php echo e(__('Title')); ?></label>
-                                        <input type="text" class="form-control"  id="title" name="title" value="<?php echo e($donation->title); ?>" >
+                                        <label for="title"><?php echo e(__('Title (English)')); ?></label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="title"
+                                               name="title"
+                                               value="<?php echo e($donation->title); ?>"
+                                               placeholder="<?php echo e(__('Title (English)')); ?>">
                                     </div>
                                     
+                                     
                                     <div class="form-group">
-                                        <label for="title_en"><?php echo e(__('Title AR')); ?></label>
-                                        <input type="text" class="form-control"  id="title_ar" name="title_ar" value="<?php echo e($donation->title_ar); ?>" >
+                                        <label for="title_ar"><?php echo e(__('Title (Arabic)')); ?></label>
+                                        <input type="text"
+                                               class="form-control"
+                                               id="title_ar"
+                                               name="title_ar"
+                                               value="<?php echo e($donation->title_ar); ?>"
+                                               placeholder="<?php echo e(__('Title (Arabic)')); ?>">
                                     </div>
 
                                     <div class="form-group permalink_label">
@@ -131,73 +143,190 @@
                                      </label>
                                     </div>
 
-
+                                    
                                     <div class="form-group">
-                                        <label><?php echo e(__('Content')); ?></label>
-                                        <input type="hidden" name="cause_content" value="<?php echo e($donation->cause_content); ?>">
-                                        <div class="summernote" data-content='<?php echo e($donation->cause_content); ?>'></div>
+                                        <label><?php echo e(__('Content (English)')); ?></label>
+                                        <input type="hidden"
+                                               name="cause_content_en"
+                                               value="<?php echo e($donation->cause_content_en ?? $donation->cause_content); ?>">
+                                        <div class="summernote"
+                                             data-content='<?php echo e($donation->cause_content_en ?? $donation->cause_content); ?>'></div>
                                     </div>
                                     
-                                   <div class="form-group">
-    <label for="specifications"><strong><?php echo e(__('Product Specifications')); ?></strong></label>
-    
-    <!-- حقل مخفي لتخزين البيانات كـ JSON -->
-    <input type="hidden" name="specifications" id="specifications_input" 
-           value="<?php echo e(is_array($donation->specifications) ? json_encode($donation->specifications) : '[]'); ?>">
-    
-    <!-- واجهة بناء الجدول الديناميكي -->
-    <div class="specifications-table-container">
-         <table class="table table-bordered" id="specifications_table" style="direction: ltr; text-align: left;">
-            <thead>
-                <tr>
-                    <th width="40%"><?php echo e(__('Specification Name')); ?></th>
-                    <th width="55%"><?php echo e(__('Value')); ?></th>
-                    <th width="5%"><?php echo e(__('Action')); ?></th>
-                </tr>
-            </thead>
-            <tbody id="specifications_tbody">
-                <?php
-                    $specs = is_array($donation->specifications) ? $donation->specifications : [];
-                    if(empty($specs)) {
-                        $specs = [['name' => '', 'value' => '']];
-                    }
-                ?>
-                
-                <?php $__currentLoopData = $specs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <tr class="specification-row">
-                    <td>
-                        <input type="text" class="form-control spec-name" 
-                               placeholder="<?php echo e(__('e.g., Brand Name, Capacity, etc.')); ?>" 
-                               value="<?php echo e($spec['name'] ?? ''); ?>">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control spec-value" 
-                               placeholder="<?php echo e(__('e.g., BOSCH, 682 Liters, etc.')); ?>" 
-                               value="<?php echo e($spec['value'] ?? ''); ?>">
-                    </td>
-                    <td>
-                        <?php if($index === 0): ?>
-                        <button type="button" class="btn btn-success btn-sm add-spec-row" title="<?php echo e(__('Add Row')); ?>">
-                            <i class="ti-plus"></i>
-                        </button>
-                        <?php else: ?>
-                        <button type="button" class="btn btn-danger btn-sm remove-spec-row" title="<?php echo e(__('Remove Row')); ?>">
-                            <i class="ti-trash"></i>
-                        </button>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </tbody>
-        </table>
-    </div>
-    
-    <small class="form-text text-muted"><?php echo e(__('Add product specifications in key-value format')); ?></small>
-</div>
+                                    <div class="form-group">
+                                        <label><?php echo e(__('Content (Arabic)')); ?></label>
+                                        <input type="hidden"
+                                               name="cause_content"
+                                               value="<?php echo e($donation->cause_content); ?>">
+                                        <div class="summernote"
+                                             data-content='<?php echo e($donation->cause_content); ?>'></div>
+                                    </div>
+                                    
+
+
+                                    
+                                    <div class="form-group mt-4">
+                                        <label for="specifications_en">
+                                            <strong><?php echo e(__('Product Specifications (English)')); ?></strong>
+                                        </label>
+
+                                        <input type="hidden"
+                                               name="specifications_en"
+                                               id="specifications_input_en"
+                                               value="
+                                                <?php if(is_array($donation->specifications_en ?? null)): ?>
+                                                    <?php echo e(json_encode($donation->specifications_en)); ?>
+
+                                                <?php elseif(is_array($donation->specifications)): ?>
+                                                    <?php echo e(json_encode($donation->specifications)); ?>
+
+                                                <?php else: ?>
+                                                    []
+                                                <?php endif; ?>
+                                            ">
+
+                                        <div class="specifications-table-container">
+                                            <table class="table table-bordered"
+                                                   id="specifications_table_en"
+                                                   style="direction: ltr; text-align: left;">
+                                                <thead>
+                                                <tr>
+                                                    <th width="40%"><?php echo e(__('Specification Name')); ?></th>
+                                                    <th width="55%"><?php echo e(__('Value')); ?></th>
+                                                    <th width="5%"><?php echo e(__('Action')); ?></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="specifications_tbody_en">
+                                                <?php
+                                                    $specsEn = is_array($donation->specifications_en ?? null)
+                                                        ? $donation->specifications_en
+                                                        : (is_array($donation->specifications) ? $donation->specifications : []);
+                                                    if (empty($specsEn)) {
+                                                        $specsEn = [['name' => '', 'value' => '']];
+                                                    }
+                                                ?>
+
+                                                <?php $__currentLoopData = $specsEn; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <tr class="specification-row-en">
+                                                        <td>
+                                                            <input type="text"
+                                                                   class="form-control spec-name-en"
+                                                                   placeholder="<?php echo e(__('e.g., Brand Name, Capacity, etc.')); ?>"
+                                                                   value="<?php echo e($spec['name'] ?? ''); ?>">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text"
+                                                                   class="form-control spec-value-en"
+                                                                   placeholder="<?php echo e(__('e.g., BOSCH, 682 Liters, etc.')); ?>"
+                                                                   value="<?php echo e($spec['value'] ?? ''); ?>">
+                                                        </td>
+                                                        <td>
+                                                            <?php if($index === 0): ?>
+                                                                <button type="button"
+                                                                        class="btn btn-success btn-sm add-spec-row-en"
+                                                                        title="<?php echo e(__('Add Row')); ?>">
+                                                                    <i class="ti-plus"></i>
+                                                                </button>
+                                                            <?php else: ?>
+                                                                <button type="button"
+                                                                        class="btn btn-danger btn-sm remove-spec-row-en"
+                                                                        title="<?php echo e(__('Remove Row')); ?>">
+                                                                    <i class="ti-trash"></i>
+                                                                </button>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <small class="form-text text-muted">
+                                            <?php echo e(__('Add product specifications in key-value format (English).')); ?>
+
+                                        </small>
+                                    </div>
+                                      
+                                    <div class="form-group">
+                                        <label for="specifications">
+                                            <strong><?php echo e(__('Product Specifications (Arabic)')); ?></strong>
+                                        </label>
+
+                                        <input type="hidden"
+                                               name="specifications"
+                                               id="specifications_input"
+                                               value="<?php echo e(is_array($donation->specifications) ? json_encode($donation->specifications) : '[]'); ?>">
+
+                                        <div class="specifications-table-container">
+                                            <table class="table table-bordered"
+                                                   id="specifications_table_ar"
+                                                   style="direction: ltr; text-align: left;">
+                                                <thead>
+                                                <tr>
+                                                    <th width="40%"><?php echo e(__('Specification Name')); ?></th>
+                                                    <th width="55%"><?php echo e(__('Value')); ?></th>
+                                                    <th width="5%"><?php echo e(__('Action')); ?></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="specifications_tbody_ar">
+                                                <?php
+                                                    $specsAr = is_array($donation->specifications)
+                                                        ? $donation->specifications
+                                                        : [];
+                                                    if (empty($specsAr)) {
+                                                        $specsAr = [['name' => '', 'value' => '']];
+                                                    }
+                                                ?>
+
+                                                <?php $__currentLoopData = $specsAr; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <tr class="specification-row-ar">
+                                                        <td>
+                                                            <input type="text"
+                                                                   class="form-control spec-name-ar"
+                                                                   placeholder="<?php echo e(__('e.g., Brand Name, Capacity, etc.')); ?>"
+                                                                   value="<?php echo e($spec['name'] ?? ''); ?>">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text"
+                                                                   class="form-control spec-value-ar"
+                                                                   placeholder="<?php echo e(__('e.g., BOSCH, 682 Liters, etc.')); ?>"
+                                                                   value="<?php echo e($spec['value'] ?? ''); ?>">
+                                                        </td>
+                                                        <td>
+                                                            <?php if($index === 0): ?>
+                                                                <button type="button"
+                                                                        class="btn btn-success btn-sm add-spec-row-ar"
+                                                                        title="<?php echo e(__('Add Row')); ?>">
+                                                                    <i class="ti-plus"></i>
+                                                                </button>
+                                                            <?php else: ?>
+                                                                <button type="button"
+                                                                        class="btn btn-danger btn-sm remove-spec-row-ar"
+                                                                        title="<?php echo e(__('Remove Row')); ?>">
+                                                                    <i class="ti-trash"></i>
+                                                                </button>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <small class="form-text text-muted">
+                                            <?php echo e(__('Add product specifications in key-value format (Arabic).')); ?>
+
+                                        </small>
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="amount"><?php echo e(__('Amount')); ?></label>
                                         <input type="number" class="form-control"  id="amount" name="amount" value="<?php echo e($donation->amount); ?>">
+                                        
+                                        <div class="form-group">
+                                    <label for="market_price"><?php echo e(__('Market Price')); ?></label>
+                                        <input type="number" step="0.01" class="form-control" id="market_price" name="market_price" placeholder="<?php echo e(__('Market Price')); ?>" value="<?php echo e($donation->market_price); ?>">
+                                       </div>
                                         
                                                                             <div class="form-group">
                                 <label for="price"><?php echo e(__('Price Per Order')); ?></label>
@@ -205,15 +334,39 @@
                                         </div>
                                         
                                     </div>
+
+                                    
                                     <div class="form-group">
-                                        <label for="excerpt"><?php echo e(__('Excerpt')); ?></label>
-                                        <textarea class="form-control" name="excerpt" rows="5" placeholder="<?php echo e(__('expert')); ?>"><?php echo e($donation->excerpt); ?></textarea>
+                                        <label for="excerpt_en"><?php echo e(__('Excerpt (English)')); ?></label>
+                                        <textarea class="form-control"
+                                                  name="excerpt_en"
+                                                  rows="5"
+                                                  placeholder="<?php echo e(__('expert')); ?>"><?php echo e($donation->excerpt_en ?? $donation->excerpt); ?></textarea>
                                     </div>
+                                      
+                                    <div class="form-group">
+                                        <label for="excerpt"><?php echo e(__('Excerpt (Arabic)')); ?></label>
+                                        <textarea class="form-control"
+                                                  name="excerpt"
+                                                  rows="5"
+                                                  placeholder="<?php echo e(__('expert')); ?>"><?php echo e($donation->excerpt); ?></textarea>
+                                    </div>
+                                  
                                     <div class="form-group">
                                         <label for="categories_id"><strong><?php echo e(__('Category')); ?></strong></label>
                                         <select name="categories_id" class="form-control">
+                                            <?php $isAr = app()->getLocale() === 'ar'; ?>
                                             <?php $__currentLoopData = $all_category; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($cat->id); ?>" <?php if($cat->id == $donation->categories_id): ?> selected <?php endif; ?>><?php echo e($cat->title); ?></option>
+                                                <?php
+                                                    $catTitle = $isAr
+                                                        ? ($cat->title_ar ?? $cat->title ?? $cat->title_en ?? '')
+                                                        : ($cat->title_en ?? $cat->title ?? $cat->title_ar ?? '');
+                                                ?>
+                                                <option value="<?php echo e($cat->id); ?>"
+                                                        <?php if($cat->id == $donation->categories_id): ?> selected <?php endif; ?>>
+                                                    <?php echo e($catTitle); ?>
+
+                                                </option>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
                                     </div>
@@ -492,50 +645,32 @@
                     $('.blog_slug').hide();
                 });
 
+                // Summernote (AR + EN)
                 $('.summernote').summernote({
-                    height: 500,   //set editable area's height
-                    codemirror: { // codemirror options
+                    height: 500,
+                    codemirror: {
                         theme: 'monokai'
                     },
                     callbacks: {
-                        onChange: function(contents, $editable) {
+                        onChange: function (contents, $editable) {
                             $(this).prev('input').val(contents);
                         }
                     }
                 });
 
-                if($('.summernote').length > 0){
-                    $('.summernote').each(function(index,value){
+                if ($('.summernote').length > 0) {
+                    $('.summernote').each(function () {
                         $(this).summernote('code', $(this).data('content'));
                     });
                 }
 
-                $(document).on('change','#language',function(e){
-                    e.preventDefault();
-                    var selectedLang = $(this).val();
-                    $('select[name="categories_id"]').html('<option value=""><?php echo e(__('Select Category')); ?></option>');
-                    $.ajax({
-                        url: "<?php echo e(route('admin.donations.category.by.lang')); ?>",
-                        type: "POST",
-                        data: {
-                            _token : "<?php echo e(csrf_token()); ?>",
-                            lang : selectedLang
-                        },
-                        success:function (data) {
-                            $.each(data,function(index,value){
-                                $('select[name="categories_id"]').append('<option value="'+value.id+'">'+value.title+'</option>')
-                            });
-                        }
-                    });
-                });
-
-                // ====== Specifications Table Management ======
-                function updateSpecificationsInput() {
+                // ====== Specifications AR ======
+                function updateSpecificationsInputAr() {
                     var specifications = [];
-                    $('.specification-row').each(function() {
-                        var name = $(this).find('.spec-name').val().trim();
-                        var value = $(this).find('.spec-value').val().trim();
-                        
+                    $('.specification-row-ar').each(function () {
+                        var name = $(this).find('.spec-name-ar').val().trim();
+                        var value = $(this).find('.spec-value-ar').val().trim();
+
                         if (name !== '' || value !== '') {
                             specifications.push({
                                 name: name,
@@ -546,56 +681,95 @@
                     $('#specifications_input').val(JSON.stringify(specifications));
                 }
 
-                // إضافة صف جديد
-                $(document).on('click', '.add-spec-row', function() {
+                $(document).on('click', '.add-spec-row-ar', function () {
                     var newRow = `
-                        <tr class="specification-row">
+                        <tr class="specification-row-ar">
                             <td>
-                                <input type="text" class="form-control spec-name" 
+                                <input type="text" class="form-control spec-name-ar"
                                        placeholder="<?php echo e(__('e.g., Brand Name, Capacity, etc.')); ?>">
                             </td>
                             <td>
-                                <input type="text" class="form-control spec-value" 
+                                <input type="text" class="form-control spec-value-ar"
                                        placeholder="<?php echo e(__('e.g., BOSCH, 682 Liters, etc.')); ?>">
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger btn-sm remove-spec-row" title="<?php echo e(__('Remove Row')); ?>">
+                                <button type="button" class="btn btn-danger btn-sm remove-spec-row-ar"
+                                        title="<?php echo e(__('Remove Row')); ?>">
                                     <i class="ti-trash"></i>
                                 </button>
                             </td>
                         </tr>
                     `;
-                    
-                    $('#specifications_tbody').append(newRow);
-                    updateSpecificationsInput();
+                    $('#specifications_tbody_ar').append(newRow);
+                    updateSpecificationsInputAr();
                 });
 
-                // حذف صف
-                $(document).on('click', '.remove-spec-row', function() {
-                    if ($('.specification-row').length > 1) {
-                        $(this).closest('.specification-row').remove();
-                        updateSpecificationsInput();
+                $(document).on('click', '.remove-spec-row-ar', function () {
+                    if ($('.specification-row-ar').length > 1) {
+                        $(this).closest('.specification-row-ar').remove();
+                        updateSpecificationsInputAr();
                     }
                 });
 
-                // تحديث عند الكتابة
-                $(document).on('keyup', '.spec-name, .spec-value', function() {
-                    updateSpecificationsInput();
+                $(document).on('keyup', '.spec-name-ar, .spec-value-ar', function () {
+                    updateSpecificationsInputAr();
                 });
 
-                // التهيئة الأولية للمواصفات
-                var specsInput = $('#specifications_input').val();
-                if (specsInput && specsInput !== '[]') {
-                    try {
-                        var specs = JSON.parse(specsInput);
-                        if (Array.isArray(specs) && specs.length > 0) {
-                            updateSpecificationsInput();
+                updateSpecificationsInputAr();
+
+                // ====== Specifications EN ======
+                function updateSpecificationsInputEn() {
+                    var specificationsEn = [];
+                    $('.specification-row-en').each(function () {
+                        var name = $(this).find('.spec-name-en').val().trim();
+                        var value = $(this).find('.spec-value-en').val().trim();
+
+                        if (name !== '' || value !== '') {
+                            specificationsEn.push({
+                                name: name,
+                                value: value
+                            });
                         }
-                    } catch(e) {
-                        console.log('Error parsing specifications:', e);
-                    }
+                    });
+                    $('#specifications_input_en').val(JSON.stringify(specificationsEn));
                 }
-                // ====== نهاية Specifications Table Management ======
+
+                $(document).on('click', '.add-spec-row-en', function () {
+                    var newRow = `
+                        <tr class="specification-row-en">
+                            <td>
+                                <input type="text" class="form-control spec-name-en"
+                                       placeholder="<?php echo e(__('e.g., Brand Name, Capacity, etc.')); ?>">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control spec-value-en"
+                                       placeholder="<?php echo e(__('e.g., BOSCH, 682 Liters, etc.')); ?>">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm remove-spec-row-en"
+                                        title="<?php echo e(__('Remove Row')); ?>">
+                                    <i class="ti-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    $('#specifications_tbody_en').append(newRow);
+                    updateSpecificationsInputEn();
+                });
+
+                $(document).on('click', '.remove-spec-row-en', function () {
+                    if ($('.specification-row-en').length > 1) {
+                        $(this).closest('.specification-row-en').remove();
+                        updateSpecificationsInputEn();
+                    }
+                });
+
+                $(document).on('keyup', '.spec-name-en, .spec-value-en', function () {
+                    updateSpecificationsInputEn();
+                });
+
+                updateSpecificationsInputEn();
+                // ====== END Specifications EN ======
 
             });
         })(jQuery)

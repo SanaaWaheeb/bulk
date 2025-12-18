@@ -7,7 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class CauseCategory extends Model
 {
     protected $table = 'cause_categories';
-    protected $fillable = ['title','description','image','status'];
+    protected $fillable = [
+    'title',
+    'title_en',
+    'image',
+    'description',
+    'description_en',
+    'status',
+];
 
     public function donation(){
         return $this->hasMany(Cause::class,'categories_id','id');

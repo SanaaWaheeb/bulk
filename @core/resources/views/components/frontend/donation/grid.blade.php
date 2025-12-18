@@ -1,10 +1,25 @@
-@php
+@props([
+    'featured'      => null,
+    'image'         => null,
+    'amount'        => 0,
+    'raised'        => 0,
+    'price'         => null,
+    'market_price'  => null,
+    'slug'          => '',
+    'title'         => null,
+    'title_ar'      => null,
+    'excerpt'       => null,
+    'deadline'      => null,
+    'reward'        => null,])
+    '
+    @php
     // عناوين/قيم افتراضية آمنة
     $title      = $title ?? ($title_ar ?? '');
     $imgId      = $image ?? null;
     $goal       = (float)($amount ?? 0);
     $raisedAmt  = (float)($raised ?? 0);
     $priceVal   = isset($price) ? (float)$price : null;
+    $marketPriceVal = isset($market_price) ? (float)$market_price : null;
 
     // نسبة التقدّم
     $progress   = $goal > 0 ? min(100, round(($raisedAmt / max($goal,1)) * 100)) : 0;
@@ -54,6 +69,11 @@
                 {{ $title }}
             </a>
         </h3>
+@if(!is_null($marketPriceVal))
+    <div class="price h6 mb-1">
+        {{ __('Market Price') }}: {{ number_format($marketPriceVal, 0, '.', ',') }}
+    </div>
+@endif
 
         {{-- السعر (إن وُجد) - أرقام فقط بدون ريال --}}
         @if(!is_null($priceVal))

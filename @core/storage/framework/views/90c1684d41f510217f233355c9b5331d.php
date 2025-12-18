@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('site-title'); ?>
     <?php echo e(__('Home Variant Settings')); ?>
 

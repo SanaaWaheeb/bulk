@@ -100,32 +100,62 @@
                         </li>
                     </ul>
                 </div>
-                <?php if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data))): ?>
-                <li class="nav-item dropdown" style="list-style: none; margin-left: 15px;">
-                    <button class="btn btn-outline-dark dropdown-toggle"
-                            type="button"
-                            id="languageDropdown"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            style="padding: 5px 12px; font-size: 14px;">
-                        <?php echo e(__('Change Language')); ?>
+                <?php
+    // جلب لغة المستخدم الحالية من نظام السكربت
+    // لو عندك helper اسمه get_user_lang() استخدمه:
+    $currentLocale = function_exists('get_user_lang')
+        ? get_user_lang()
+        : (session('lang') ?? app()->getLocale());
 
-                    </button>
-                
-                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                        <a href="<?php echo e(route('home.language.switch', 'en')); ?>" class="dropdown-item">
-                            English
-                        </a>
-                        <a href="<?php echo e(route('home.language.switch', 'ar')); ?>" class="dropdown-item">
-                            العربية
-                        </a>
-                    </div>
-                </li>
-                <div class="nav-right-content">
-                    <ul>
-                        </li>
-                            <?php if (isset($component)) { $__componentOriginald1925107298da580a065174dff34523e = $component; } ?>
+    // نخلي القيم ثابتة حسب الـ slug اللي تستخدمه في الروت
+    $labels = [
+        'en' => 'English',
+        'ar' => 'العربية',
+    ];
+
+    $currentLabel = $labels[$currentLocale] ?? 'English';
+?>
+
+<?php if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data))): ?>
+    <li class="nav-item dropdown" style="list-style: none; margin-left: 15px;">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle d-flex align-items-center"
+                type="button"
+                id="languageDropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                style="
+                    padding: 6px 18px;
+                    font-size: 13px;
+                    border-radius: 999px;
+                    background-color: #333;
+                    color: #fff;
+                    border-color: transparent;
+                ">
+            <span style="margin-inline-end: 6px;">
+                <?php echo e($currentLabel); ?>
+
+            </span>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-right shadow-sm border-0"
+             aria-labelledby="languageDropdown"
+             style="min-width: 150px; font-size: 13px;">
+            <a href="<?php echo e(route('home.language.switch', 'en')); ?>"
+               class="dropdown-item <?php if($currentLocale === 'en'): ?> active <?php endif; ?>">
+                English
+            </a>
+            <a href="<?php echo e(route('home.language.switch', 'ar')); ?>"
+               class="dropdown-item <?php if($currentLocale === 'ar'): ?> active <?php endif; ?>">
+                العربية
+            </a>
+        </div>
+    </li>
+
+    <div class="nav-right-content d-flex align-items-center">
+        <ul class="nav mb-0">
+            <li class="nav-item">
+                <?php if (isset($component)) { $__componentOriginald1925107298da580a065174dff34523e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald1925107298da580a065174dff34523e = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.front-donate-btn','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('front-donate-btn'); ?>
@@ -145,10 +175,11 @@
 <?php $component = $__componentOriginald1925107298da580a065174dff34523e; ?>
 <?php unset($__componentOriginald1925107298da580a065174dff34523e); ?>
 <?php endif; ?>
-                        </li>
-                    </ul>
-                </div>
-                <?php endif; ?>
+            </li>
+        </ul>
+    </div>
+<?php endif; ?>
+
             </div>
         </nav>
     </div>

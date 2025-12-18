@@ -215,5 +215,19 @@
     "Deleting": "Deleting",
     "Deleting...": "Deleting...",
     "Descending": "Descending",
-    "Phone number must be a valid Saudi number (example: 5XXXXXXXX)":"Phone number must be a valid Saudi number (example: 5XXXXXXXX)"
+    "Phone number must be a valid Saudi number (example: 5XXXXXXXX)":"Phone number must be a valid Saudi number (example: 5XXXXXXXX)",
+    "Phone number is required.": "Phone number is required.",
+    "Phone number must be exactly 9 digits.": "Phone number must be exactly 9 digits.",
+    "Phone number must start with digit 5.": "Phone number must start with digit 5.",
+    "You are not registered. Please create an account.": "You are not registered. Please create an account.",
+    "You are not registered with number :phone, please create an account.": "You are not registered with number :phone, please create an account.",
+    "Failed to send the verification code.": "Failed to send the verification code.",
+    "Failed to send the code: :error": "Failed to send the code: :error",
+    "Verification code has been sent to :phone": "Verification code has been sent to :phone",
+    "The verification code was sent successfully": "The verification code was sent successfully", 
+    "swal.success_title": "Success!",
+    "swal.success_button": "OK",
+    "swal.error_title": "Error!",
+    "swal.error_button": "Close",
+    "OTP sent":"OTP sent"
 }

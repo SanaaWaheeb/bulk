@@ -1,6 +1,21 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html class="no-js" lang="{{get_default_language()}}"dir="{{get_default_language_direction()}}">
+<head> --}}
+    @php
+    // القيمة الخام من السيستم (مثلاً: ar_frontend أو en_frontend)
+    $rawLocale = app()->getLocale();
+
+    // نحولها لـ ar أو en فقط
+    $locale = \Illuminate\Support\Str::startsWith($rawLocale, 'ar') ? 'ar' : 'en';
+
+    // الاتجاه بناءً على اللغة
+    $dir = $locale === 'ar' ? 'rtl' : 'ltr';
+@endphp
+
+<!doctype html>
+<html class="no-js" lang="{{ $locale }}" dir="{{ $dir }}">
 <head>
+
     @include('frontend.partials.google-analytics')
     
     <meta charset="UTF-8">

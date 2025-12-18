@@ -79,35 +79,66 @@
                         </li>
                     </ul>
                 </div>
-                @if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data)))
-                <li class="nav-item dropdown" style="list-style: none; margin-left: 15px;">
-                    <button class="btn btn-outline-dark dropdown-toggle"
-                            type="button"
-                            id="languageDropdown"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            style="padding: 5px 12px; font-size: 14px;">
-                        {{ __('Change Language') }}
-                    </button>
-                
-                    <div class="dropdown-menu" aria-labelledby="languageDropdown">
-                        <a href="{{ route('home.language.switch', 'en') }}" class="dropdown-item">
-                            English
-                        </a>
-                        <a href="{{ route('home.language.switch', 'ar') }}" class="dropdown-item">
-                            العربية
-                        </a>
-                    </div>
-                </li>
-                <div class="nav-right-content">
-                    <ul>
-                        </li>
-                            <x-front-donate-btn/>
-                        </li>
-                    </ul>
-                </div>
-                @endif
+                @php
+    // جلب لغة المستخدم الحالية من نظام السكربت
+    // لو عندك helper اسمه get_user_lang() استخدمه:
+    $currentLocale = function_exists('get_user_lang')
+        ? get_user_lang()
+        : (session('lang') ?? app()->getLocale());
+
+    // نخلي القيم ثابتة حسب الـ slug اللي تستخدمه في الروت
+    $labels = [
+        'en' => 'English',
+        'ar' => 'العربية',
+    ];
+
+    $currentLabel = $labels[$currentLocale] ?? 'English';
+@endphp
+
+@if(!empty(filter_static_option_value('home_page_navbar_button_status',$global_static_field_data)))
+    <li class="nav-item dropdown" style="list-style: none; margin-left: 15px;">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle d-flex align-items-center"
+                type="button"
+                id="languageDropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                style="
+                    padding: 6px 18px;
+                    font-size: 13px;
+                    border-radius: 999px;
+                    background-color: #333;
+                    color: #fff;
+                    border-color: transparent;
+                ">
+            <span style="margin-inline-end: 6px;">
+                {{ $currentLabel }}
+            </span>
+        </button>
+
+        <div class="dropdown-menu dropdown-menu-right shadow-sm border-0"
+             aria-labelledby="languageDropdown"
+             style="min-width: 150px; font-size: 13px;">
+            <a href="{{ route('home.language.switch', 'en') }}"
+               class="dropdown-item @if($currentLocale === 'en') active @endif">
+                English
+            </a>
+            <a href="{{ route('home.language.switch', 'ar') }}"
+               class="dropdown-item @if($currentLocale === 'ar') active @endif">
+                العربية
+            </a>
+        </div>
+    </li>
+
+    <div class="nav-right-content d-flex align-items-center">
+        <ul class="nav mb-0">
+            <li class="nav-item">
+                <x-front-donate-btn/>
+            </li>
+        </ul>
+    </div>
+@endif
+
             </div>
         </nav>
     </div>

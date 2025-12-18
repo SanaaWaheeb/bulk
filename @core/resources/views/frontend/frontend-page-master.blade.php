@@ -3,3 +3,4 @@
 @include('frontend.partials.breadcrumb')
 @yield('content')
 @include('frontend.partials.footer')
+

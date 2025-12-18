@@ -1,6 +1,3 @@
-
-
-
 <?php $__env->startSection('content'); ?>
     <div class="login-area">
         <div class="container">

@@ -1,1 +1,0 @@
-<div class="info-text"><?php echo e(__('user {color} color text {/color} to make text colorful')); ?></div><?php /**PATH /home/u177601598/domains/bulk.com.sa/public_html/@core/resources/views/components/title-info-text.blade.php ENDPATH**/ ?>
