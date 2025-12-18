@@ -42,12 +42,12 @@
         </a>
 
         <div class="position-absolute top-0 start-0 m-2 d-flex gap-2 flex-wrap">
-            @if(!empty($featured) && $featured === 'on')
+            {{-- @if(!empty($featured) && $featured === 'on')
                 <span class="badge bg-success"><i class="las la-award"></i> مميز</span>
             @endif
             @if(!empty($reward) && $reward === 'on')
                 <span class="badge bg-info text-dark"><i class="las la-gift"></i> مكافأة</span>
-            @endif
+            @endif --}}
 
             {{-- شارات الحالة وفق منطق الفرز --}}
             {{-- @if($isDone)
