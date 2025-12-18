@@ -47,7 +47,6 @@
     if (array_key_exists($__key, $__defined_vars)) unset($$__key);
 } ?>
 <?php unset($__defined_vars); ?>
-    '
     <?php
     // عناوين/قيم افتراضية آمنة
     $title      = $title ?? ($title_ar ?? '');
@@ -88,13 +87,7 @@
             <?php endif; ?>
 
             
-            <?php if($isDone): ?>
-                <span class="badge bg-primary">مكتمل</span>
-            <?php elseif($isExpired): ?>
-                <span class="badge bg-secondary">منتهي</span>
-            <?php elseif($isSoon): ?>
-                <span class="badge bg-warning text-dark">قريب ينتهي</span>
-            <?php endif; ?>
+            
         </div>
     </div>
 
@@ -157,7 +150,7 @@
         
         <div class="btn-wrapper mt-auto">
             <a href="<?php echo e(route('frontend.donations.single', $slug)); ?>" class="boxed-btn w-100">
-                <?php echo e($buttontext ?? __(' التفاصيل')); ?>
+                <?php echo e($buttontext ?? __('Details')); ?>
 
             </a>
         </div>

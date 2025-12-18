@@ -11,7 +11,6 @@
     'excerpt'       => null,
     'deadline'      => null,
     'reward'        => null,])
-    '
     @php
     // عناوين/قيم افتراضية آمنة
     $title      = $title ?? ($title_ar ?? '');
@@ -51,13 +50,13 @@
             @endif
 
             {{-- شارات الحالة وفق منطق الفرز --}}
-            @if($isDone)
+            {{-- @if($isDone)
                 <span class="badge bg-primary">مكتمل</span>
             @elseif($isExpired)
                 <span class="badge bg-secondary">منتهي</span>
             @elseif($isSoon)
                 <span class="badge bg-warning text-dark">قريب ينتهي</span>
-            @endif
+            @endif --}}
         </div>
     </div>
 
@@ -116,7 +115,7 @@
         {{-- زر التفاصيل --}}
         <div class="btn-wrapper mt-auto">
             <a href="{{ route('frontend.donations.single', $slug) }}" class="boxed-btn w-100">
-                {{ $buttontext ?? __(' التفاصيل') }}
+                {{ $buttontext ?? __('Details') }}
             </a>
         </div>
     </div>
