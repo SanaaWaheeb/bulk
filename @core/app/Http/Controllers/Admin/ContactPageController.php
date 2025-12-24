@@ -16,26 +16,34 @@ class ContactPageController extends Controller
     public function contact_page_form_area(){
         return view('backend.pages.contact-page.form-section');
     }
-    public function contact_page_update_form_area(Request $request){
-        $this->validate($request,[
-            'contact_page_form_receiving_mail' => 'nullable|string'
-        ]);
+ public function contact_page_update_form_area(Request $request)
+{
+    // تحقق من صحة البيانات
+    $this->validate($request, [
+        'contact_page_form_receiving_mail'       => 'nullable|string',
+        'contact_page_form_section_title'        => 'nullable|string',
+        'contact_page_form_section_title_en'     => 'nullable|string',
+        'contact_page_form_submit_btn_text'      => 'nullable|string',
+        'contact_page_form_submit_btn_text_en'   => 'nullable|string',
+    ]);
 
-            $this->validate($request,[
-                'contact_page_form_section_title' => 'nullable|string',
-                'contact_page_form_submit_btn_text' => 'nullable|string',
-            ]);
+    // 🔹 تخزين العنوان (AR / EN)
+    update_static_option('contact_page_form_section_title',    $request->contact_page_form_section_title ?? '');
+    update_static_option('contact_page_form_section_title_en', $request->contact_page_form_section_title_en ?? '');
 
-            $field = 'contact_page_form_section_title';
-            $form_submit_btn_text = 'contact_page_form_submit_btn_text';
+    // 🔹 تخزين نص الزر (AR / EN)
+    update_static_option('contact_page_form_submit_btn_text',    $request->contact_page_form_submit_btn_text ?? '');
+    update_static_option('contact_page_form_submit_btn_text_en', $request->contact_page_form_submit_btn_text_en ?? '');
 
-            update_static_option('contact_page_form_section_title',$request->$field);
-            update_static_option('contact_page_form_submit_btn_text',$request->$form_submit_btn_text);
+    // 🔹 تخزين إيميل الاستقبال
+    update_static_option('contact_page_form_receiving_mail', $request->contact_page_form_receiving_mail ?? '');
 
-            update_static_option('contact_page_form_receiving_mail',$request->contact_page_form_receiving_mail);
+    return redirect()->back()->with([
+        'msg'  => __('Settings Updated..'),
+        'type' => 'success'
+    ]);
+}
 
-        return redirect()->back()->with(['msg' => __('Settings Updated..'),'type' => 'success']);
-    }
     public function contact_page_map_area(){
         return view('backend.pages.contact-page.google-map-section');
     }

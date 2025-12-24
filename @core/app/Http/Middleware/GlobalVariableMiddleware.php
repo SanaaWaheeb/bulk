@@ -71,8 +71,17 @@ $lang = !empty(session()->get('lang')) ? session()->get('lang') : Language::wher
 
         $all_social_item = SocialIcons::all();
         $all_donation = Cause::where(['status'=>'publish'])->get();
+        $primary_menu = null;
+        if ($lang === 'ar') {
+            $primary_menu = Menu::where(['status' => 'default_ar'])->first();
+        } elseif ($lang === 'en') {
+            $primary_menu = Menu::where(['status' => 'default_en'])->first();
+        }
+        if (!$primary_menu) {
+            $primary_menu = Menu::where(['status' => 'default'])->first();
+        }
         $all_language = Language::where('status', 'publish')->get();
-        $primary_menu = Menu::where(['status' => 'default'])->first();
+        // $primary_menu = Menu::where(['status' => 'default'])->first();
         $home_variant_number = get_static_option('home_page_variant');
         $viewData = [
             'global_static_field_data' => $static_field_data,

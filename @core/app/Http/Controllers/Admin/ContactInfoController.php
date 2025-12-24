@@ -19,26 +19,54 @@ class ContactInfoController extends Controller
         return view('backend.pages.contact-page.contact-info')->with(['all_contact_info' => $all_contact_info]);
     }
 
-    public function store(Request $request){
-        $this->validate($request,[
-            'title' => 'required|string|max:191',
-            'icon' => 'required|string|max:191',
-            'description' => 'required|string',
-        ]);
-        ContactInfoItem::create($request->all());
-        return redirect()->back()->with(['msg' => __('New Contact Info Item Added...'),'type' => 'success']);
-    }
+  public function store(Request $request)
+{
+    $this->validate($request,[
+        'title'         => 'required|string|max:191',
+        'title_en'      => 'nullable|string|max:191',
+        'icon'          => 'required|string|max:191',
+        'description'   => 'required|string',
+        'description_en'=> 'nullable|string',
+    ]);
 
-    public function update(Request $request){
+    ContactInfoItem::create([
+        'title'          => $request->title,
+        'title_en'       => $request->title_en,
+        'icon'           => $request->icon,
+        'description'    => $request->description,
+        'description_en' => $request->description_en,
+    ]);
 
-        $this->validate($request,[
-            'title' => 'required|string|max:191',
-            'icon' => 'required|string|max:191',
-            'description' => 'required|string',
-        ]);
-        ContactInfoItem::find($request->id)->update($request->all());
-        return redirect()->back()->with(['msg' => __('Contact Info Item Updated...'),'type' => 'success']);
-    }
+    return redirect()->back()->with([
+        'msg'  => __('New Contact Info Item Added...'),
+        'type' => 'success'
+    ]);
+}
+
+public function update(Request $request)
+{
+    $this->validate($request,[
+        'title'         => 'required|string|max:191',
+        'title_en'      => 'nullable|string|max:191',
+        'icon'          => 'required|string|max:191',
+        'description'   => 'required|string',
+        'description_en'=> 'nullable|string',
+    ]);
+
+    ContactInfoItem::findOrFail($request->id)->update([
+        'title'          => $request->title,
+        'title_en'       => $request->title_en,
+        'icon'           => $request->icon,
+        'description'    => $request->description,
+        'description_en' => $request->description_en,
+    ]);
+
+    return redirect()->back()->with([
+        'msg'  => __('Contact Info Item Updated...'),
+        'type' => 'success'
+    ]);
+}
+
 
     public function delete($id){
         ContactInfoItem::find($id)->delete();

@@ -25,81 +25,161 @@
                                    class="btn btn-primary mt-4 pr-4 pl-4">{{__('All Blog Post')}}</a>
                             </div>
                         </div>
+
                         <form action="{{route('admin.blog.update',$blog_post->id)}}" method="post"
                               enctype="multipart/form-data">
                             @csrf
 
-
+                            {{-- Title (AR / EN) --}}
                             <div class="form-group">
-                                <label for="title">{{__('Title')}}</label>
-                                <input type="text" class="form-control" name="title"
-                                       value="{{$blog_post->title}}" id="title">
+                                <label for="title">{{ __('Title (Arabic)') }}</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="title"
+                                       id="title"
+                                       value="{{ $blog_post->title }}">
                             </div>
 
+                            <div class="form-group">
+                                <label for="title_en">{{ __('Title (English)') }}</label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="title_en"
+                                       id="title_en"
+                                       value="{{ $blog_post->title_en }}">
+                            </div>
+
+                            {{-- Permalink / Slug --}}
                             <div class="form-group permalink_label">
                                 <label class="text-dark">{{__('Permalink / Slug * : ')}}
                                     <span id="slug_show" class="display-inline"></span>
                                     <span id="slug_edit" class="display-inline">
-                                         <button class="btn btn-warning btn-sm slug_edit_button px-2 py-1 ml-1"> <i class="fas fa-edit"></i> </button>
-                                          <input type="text" name="slug" value="{{$blog_post->slug}}" class="form-control blog_slug mt-2" style="display: none">
-                                          <button class="btn btn-info btn-sm slug_update_button mt-2 px-2 py-1" style="display: none">{{__('Update')}}</button>
+                                         <button class="btn btn-warning btn-sm slug_edit_button px-2 py-1 ml-1">
+                                             <i class="fas fa-edit"></i>
+                                         </button>
+                                          <input type="text" name="slug" value="{{$blog_post->slug}}"
+                                                 class="form-control blog_slug mt-2" style="display: none">
+                                          <button class="btn btn-info btn-sm slug_update_button mt-2 px-2 py-1"
+                                                  style="display: none">{{__('Update')}}</button>
                                     </span>
                                 </label>
                             </div>
 
+                            {{-- Blog Content (AR / EN) --}}
                             <div class="form-group">
-                                <label>{{__('Blog Content')}}</label>
+                                <label>{{ __('Blog Content (Arabic)') }}</label>
                                 <input type="hidden" name="blog_content" value="{{ $blog_post->blog_content }}">
                                 <div class="summernote" data-content="{{ $blog_post->blog_content }}"></div>
                             </div>
 
+                            <div class="form-group">
+                                <label>{{ __('Blog Content (English)') }}</label>
+                                <input type="hidden" name="blog_content_en" value="{{ $blog_post->blog_content_en }}">
+                                <div class="summernote" data-content="{{ $blog_post->blog_content_en }}"></div>
+                            </div>
+
+                            {{-- Author / Tags / Meta tags --}}
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="author">{{__('Author')}}</label>
-                                    <input type="text" class="form-control" name="author"
-                                           value="{{$blog_post->author}}">
+                                <div class="form-group col-md-3">
+                                    <label for="author">{{ __('Author (Arabic)') }}</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="author"
+                                           id="author"
+                                           value="{{ $blog_post->author }}">
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="title">{{__('Blog Tags')}}</label>
-                                    <input type="text" class="form-control" name="tags"
-                                           data-role="tagsinput" value="{{$blog_post->tags}}">
+
+                                <div class="form-group col-md-3">
+                                    <label for="author_en">{{ __('Author (English)') }}</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="author_en"
+                                           id="author_en"
+                                           value="{{ $blog_post->author_en }}">
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="meta_tags">{{__('Meta Tags')}}</label>
-                                    <input type="text" class="form-control" name="meta_tags"
-                                           data-role="tagsinput" value="{{$blog_post->meta_tags}}">
+
+                                <div class="form-group col-md-3">
+                                    <label for="tags">{{ __('Blog Tags') }}</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="tags"
+                                           id="tags"
+                                           data-role="tagsinput"
+                                           value="{{ $blog_post->tags }}">
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    <label for="meta_tags">{{ __('Meta Tags') }}</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="meta_tags"
+                                           id="meta_tags"
+                                           data-role="tagsinput"
+                                           value="{{ $blog_post->meta_tags }}">
                                 </div>
                             </div>
+
+                            {{-- Excerpt (AR / EN) + Meta titles --}}
                             <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="title">{{__('Excerpt')}}</label>
-                                    <textarea name="excerpt" id="excerpt" class="form-control max-height-150" cols="30"
-                                              rows="10">{{$blog_post->excerpt}}</textarea>
+                                <div class="form-group col-md-6">
+                                    <label for="excerpt">{{ __('Excerpt (Arabic)') }}</label>
+                                    <textarea name="excerpt"
+                                              id="excerpt"
+                                              class="form-control max-height-150"
+                                              cols="30"
+                                              rows="10">{{ $blog_post->excerpt }}</textarea>
                                 </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="excerpt_en">{{ __('Excerpt (English)') }}</label>
+                                    <textarea name="excerpt_en"
+                                              id="excerpt_en"
+                                              class="form-control max-height-150"
+                                              cols="30"
+                                              rows="10">{{ $blog_post->excerpt_en }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="meta_title">{{__('Meta Title')}}</label>
-                                    <input type="text" class="form-control" name="meta_title"
+                                    <input type="text"
+                                           class="form-control"
+                                           name="meta_title"
+                                           id="meta_title"
                                            value="{{$blog_post->meta_title}}">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="og_meta_title">{{__('Og Meta Title')}}</label>
-                                    <input type="text" class="form-control" name="og_meta_title"
+                                    <input type="text"
+                                           class="form-control"
+                                           name="og_meta_title"
+                                           id="og_meta_title"
                                            value="{{$blog_post->og_meta_title}}">
                                 </div>
                             </div>
+
+                            {{-- Meta descriptions --}}
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="meta_description">{{__('Meta Description')}}</label>
-                                    <textarea type="text" class="form-control" name="meta_description"
-                                              rows="5" cols="10">{{$blog_post->meta_description}}</textarea>
+                                    <textarea class="form-control"
+                                              name="meta_description"
+                                              id="meta_description"
+                                              rows="5"
+                                              cols="10">{{$blog_post->meta_description}}</textarea>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="og_meta_description">{{__('Og Meta Description')}}</label>
-                                    <textarea type="text" class="form-control"
-                                              name="og_meta_description" rows="5"
-                                              cols="10">{{$blog_post->og_meta_description}} </textarea>
+                                    <textarea class="form-control"
+                                              name="og_meta_description"
+                                              id="og_meta_description"
+                                              rows="5"
+                                              cols="10">{{$blog_post->og_meta_description}}</textarea>
                                 </div>
                             </div>
+
+                            {{-- Images --}}
                             <div class="row">
                                 <div class="form-group col-md-6 col-lg-6">
                                     <label for="image">{{__('Blog Image')}}</label>
@@ -113,8 +193,8 @@
                                                 <div class="attachment-preview">
                                                     <div class="thumbnail">
                                                         <div class="centered">
-                                                            <img class="avatar user-thumb" src="{{$image['img_url']}}"
-                                                                 alt="">
+                                                            <img class="avatar user-thumb"
+                                                                 src="{{$image['img_url']}}" alt="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -125,13 +205,17 @@
                                                value="{{$blog_post->image}}">
                                         <button type="button" class="btn btn-info media_upload_form_btn"
                                                 data-btntitle="{{__('Select Image')}}"
-                                                data-modaltitle="{{__('Upload Image')}}" data-toggle="modal"
+                                                data-modaltitle="{{__('Upload Image')}}"
+                                                data-toggle="modal"
                                                 data-target="#media_upload_modal">
                                             {{__($image_btn_label)}}
                                         </button>
                                     </div>
-                                    <small class="form-text text-muted">{{__('allowed image format: jpg,jpeg,png')}}</small>
+                                    <small class="form-text text-muted">
+                                        {{__('allowed image format: jpg,jpeg,png')}}
+                                    </small>
                                 </div>
+
                                 <div class="form-group col-md-6 col-lg-6">
                                     <label for="og_meta_image">{{__('Og Meta Image')}}</label>
                                     <div class="media-upload-btn-wrapper">
@@ -144,8 +228,8 @@
                                                 <div class="attachment-preview">
                                                     <div class="thumbnail">
                                                         <div class="centered">
-                                                            <img class="avatar user-thumb" src="{{$image['img_url']}}"
-                                                                 alt="">
+                                                            <img class="avatar user-thumb"
+                                                                 src="{{$image['img_url']}}" alt="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -156,35 +240,46 @@
                                                value="{{$blog_post->og_meta_image}}">
                                         <button type="button" class="btn btn-info media_upload_form_btn"
                                                 data-btntitle="{{__('Select Image')}}"
-                                                data-modaltitle="{{__('Upload Image')}}" data-toggle="modal"
+                                                data-modaltitle="{{__('Upload Image')}}"
+                                                data-toggle="modal"
                                                 data-target="#media_upload_modal">
                                             {{__($image_btn_label)}}
                                         </button>
                                     </div>
-                                    <small class="form-text text-muted">{{__('allowed image format: jpg,jpeg,png')}}</small>
+                                    <small class="form-text text-muted">
+                                        {{__('allowed image format: jpg,jpeg,png')}}
+                                    </small>
                                 </div>
-
                             </div>
 
+                            {{-- Category + Status --}}
                             <div class="row">
                                 <div class="form-group  col-md-6">
                                     <label for="category">{{__('Category')}}</label>
                                     <select name="category" class="form-control" id="category">
                                         <option value="">{{__("Select Category")}}</option>
                                         @foreach($all_category as $category)
-                                            <option @if($category->id == $blog_post->blog_categories_id) selected
-                                                    @endif  value="{{$category->id}}">{{purify_html($category->name)}}</option>
+                                            <option
+                                                @if($category->id == $blog_post->blog_categories_id) selected @endif
+                                                value="{{$category->id}}">
+                                                {{ purify_html($category->name) }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="status">{{__('Status')}}</label>
                                     <select name="status" class="form-control" id="status">
-                                        <option value="draft" {{($blog_post->status == 'draft' )? 'selected' : ''}}>{{__("Draft")}}</option>
-                                        <option value="publish" {{($blog_post->status  == 'publish')? 'selected' : ''}}>{{__("Publish")}}</option>
+                                        <option value="draft" {{ $blog_post->status == 'draft' ? 'selected' : '' }}>
+                                            {{__("Draft")}}
+                                        </option>
+                                        <option value="publish" {{ $blog_post->status == 'publish' ? 'selected' : '' }}>
+                                            {{__("Publish")}}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
+
                             <button type="submit" id="update"
                                     class="btn btn-primary mt-4 pr-4 pl-4">{{__('Update Post')}}</button>
 
@@ -196,6 +291,7 @@
     </div>
     <x-media.markup/>
 @endsection
+
 @section('script')
     <x-summernote.js/>
     <x-media.js/>
@@ -216,8 +312,7 @@
                 //Permalink Code
                 var sl =  $('.blog_slug').val();
                 var url = `{{url('/blog/')}}/` + sl;
-                var data = $('#slug_show').text(url).css('color', 'blue');
-                var form = $('#blog_new_form');
+                $('#slug_show').text(url).css('color', 'blue');
 
                 //Slug Edit Code
                 $(document).on('click', '.slug_edit_button', function (e) {
@@ -239,10 +334,10 @@
                     $('.blog_slug').hide();
                 });
 
-
+                // Summernote (works for both AR & EN editors)
                 $('.summernote').summernote({
-                    height: 400,   //set editable area's height
-                    codemirror: { // codemirror options
+                    height: 400,
+                    codemirror: {
                         theme: 'monokai'
                     },
                     callbacks: {
@@ -252,7 +347,7 @@
                     }
                 });
                 if ($('.summernote').length > 0) {
-                    $('.summernote').each(function (index, value) {
+                    $('.summernote').each(function () {
                         $(this).summernote('code', $(this).data('content'));
                     });
                 }

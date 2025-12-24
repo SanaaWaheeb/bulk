@@ -13,31 +13,38 @@
                <x-msg.error/>
                <x-msg.success/>
             </div>
+
             <div class="col-lg-12 mt-5">
                 <div class="card">
                     <div class="card-body">
+
                         <h4 class="header-title">{{__('All Categories')}}</h4>
-                        <div class="bulk-delete-wrapper">
-                           @can('blog-category-delete')
-                            <x-bulk-action/>
+
+                        <div class="bulk-delete-wrapper d-flex justify-content-between align-items-center">
+
+                            @can('blog-category-delete')
+                                <x-bulk-action/>
                             @endcan
-                           @can('blog-category-create')
+
+                            @can('blog-category-create')
                                 <div class="btn-wrapper">
                                     <a data-toggle="modal" data-target="#new_category_modal"
-                                       class="btn btn-info text-white pull-right mb-3">{{__('New Category')}}</a>
+                                       class="btn btn-info text-white pull-right mb-3">
+                                        {{__('New Category')}}
+                                    </a>
                                 </div>
                             @endcan
                         </div>
 
-
                         <div class="table-wrap table-responsive">
                             <table class="table table-default">
                                 <thead>
-                                <x-bulk-th/>
-                                <th>{{__('ID')}}</th>
-                                <th>{{__('Name')}}</th>
-                                <th>{{__('Status')}}</th>
-                                <th>{{__('Action')}}</th>
+                                    <x-bulk-th/>
+                                    <th>{{__('ID')}}</th>
+                                    <th>{{__('Name (Arabic)')}}</th>
+                                    <th>{{__('Name (English)')}}</th>
+                                    <th>{{__('Status')}}</th>
+                                    <th>{{__('Action')}}</th>
                                 </thead>
                                 <tbody>
                                 @foreach($all_category as $data)
@@ -48,6 +55,8 @@
 
                                         <td>{{$data->id}}</td>
                                         <td>{{$data->name}}</td>
+                                        <td>{{$data->name_en ?? ''}}</td>
+
                                         <td>
                                             <x-status-span :status="$data->status"/>
                                         </td>
@@ -55,18 +64,20 @@
                                             @can('blog-category-delete')
                                                 <x-delete-popover :url="route('admin.blog.category.delete',$data->id)"/>
                                             @endcan
+
                                             @can('blog-category-edit')
-                                            <a href="#"
-                                               data-toggle="modal"
-                                               data-target="#category_edit_modal"
-                                               class="btn btn-primary btn-xs mb-3 mr-1 category_edit_btn"
-                                               data-id="{{$data->id}}"
-                                               data-name="{{$data->name}}"
-                                               data-lang="{{$data->lang}}"
-                                               data-status="{{$data->status}}"
-                                            >
-                                                <i class="ti-pencil"></i>
-                                            </a>
+                                                <a href="#"
+                                                   data-toggle="modal"
+                                                   data-target="#category_edit_modal"
+                                                   class="btn btn-primary btn-xs mb-3 mr-1 category_edit_btn"
+                                                   data-id="{{$data->id}}"
+                                                   data-name="{{$data->name}}"
+                                                   data-name_en="{{$data->name_en}}"
+                                                   data-lang="{{$data->lang}}"
+                                                   data-status="{{$data->status}}"
+                                                >
+                                                    <i class="ti-pencil"></i>
+                                                </a>
                                             @endcan
                                         </td>
                                     </tr>
@@ -80,6 +91,8 @@
             </div>
         </div>
     </div>
+
+    {{-- New Category Modal --}}
     @can('blog-category-create')
     <div class="modal fade" id="new_category_modal" aria-hidden="true">
         <div class="modal-dialog">
@@ -92,10 +105,26 @@
                     <div class="modal-body">
                         @csrf
 
+                        {{-- Arabic Name --}}
                         <div class="form-group">
-                            <label for="name">{{__('Name')}}</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="{{__('Name')}}">
+                            <label for="name">{{__('Name (Arabic)')}}</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="name"
+                                   name="name"
+                                   placeholder="{{__('Name (Arabic)')}}">
                         </div>
+
+                        {{-- English Name --}}
+                        <div class="form-group">
+                            <label for="name_en">{{__('Name (English)')}}</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="name_en"
+                                   name="name_en"
+                                   placeholder="{{__('Name (English)')}}">
+                        </div>
+
                         <div class="form-group">
                             <label for="status">{{__('Status')}}</label>
                             <select name="status" class="form-control" id="status">
@@ -103,33 +132,58 @@
                                 <option value="draft">{{__("Draft")}}</option>
                             </select>
                         </div>
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
-                        <button id="submit" type="submit" class="btn btn-primary">{{__('Submit')}}</button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal">{{__('Close')}}</button>
+                        <button id="submit"
+                                type="submit"
+                                class="btn btn-primary">{{__('Submit')}}</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     @endcan
+
+    {{-- Edit Category Modal --}}
     @can('blog-category-edit')
     <div class="modal fade" id="category_edit_modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h5 class="modal-title">{{__('Update Category')}}</h5>
                     <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
                 </div>
+
                 <form action="{{route('admin.blog.category.update')}}" method="post">
                     <input type="hidden" name="id" id="category_id">
                     <div class="modal-body">
                         @csrf
+
+                        {{-- Arabic Name --}}
                         <div class="form-group">
-                            <label for="edit_name">{{__('Name')}}</label>
-                            <input type="text" class="form-control" id="edit_name" name="name"
-                                   placeholder="{{__('Name')}}">
+                            <label for="edit_name">{{__('Name (Arabic)')}}</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="edit_name"
+                                   name="name"
+                                   placeholder="{{__('Name (Arabic)')}}">
                         </div>
+
+                        {{-- English Name --}}
+                        <div class="form-group">
+                            <label for="edit_name_en">{{__('Name (English)')}}</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="edit_name_en"
+                                   name="name_en"
+                                   placeholder="{{__('Name (English)')}}">
+                        </div>
+
                         <div class="form-group">
                             <label for="edit_status">{{__('Status')}}</label>
                             <select name="status" class="form-control" id="edit_status">
@@ -137,35 +191,52 @@
                                 <option value="publish">{{__("Publish")}}</option>
                             </select>
                         </div>
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
-                        <button id="update" type="submit" class="btn btn-primary">{{__('Save Change')}}</button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal">{{__('Close')}}</button>
+                        <button id="update"
+                                type="submit"
+                                class="btn btn-primary">{{__('Save Change')}}</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
     @endcan
 @endsection
+
 @section('script')
     <script>
         (function($){
             "use strict";
             $(document).ready(function () {
-             <x-bulk-action-js :url="route('admin.blog.category.bulk.action')"/>
-            <x-btn.submit/>
-            <x-btn.update/>
+
+                <x-bulk-action-js :url="route('admin.blog.category.bulk.action')"/>
+                <x-btn.submit/>
+                <x-btn.update/>
+
                 $(document).on('click', '.category_edit_btn', function () {
-                    var el = $(this);
-                    var id = el.data('id');
-                    var name = el.data('name');
+                    var el     = $(this);
+                    var id     = el.data('id');
+                    var name   = el.data('name');
+                    var nameEn = el.data('name_en');
                     var status = el.data('status');
-                    var modal = $('#category_edit_modal');
+
+                    var modal  = $('#category_edit_modal');
+
                     modal.find('#category_id').val(id);
-                    modal.find('#edit_status option[value="' + status + '"]').attr('selected', true);
                     modal.find('#edit_name').val(name);
-                    modal.find('#edit_language option[value="' + el.data('lang') + '"]').attr('selected', true);
+                    modal.find('#edit_name_en').val(nameEn);
+
+                    modal.find('#edit_status option').prop('selected', false);
+                    modal.find('#edit_status option[value="' + status + '"]').prop('selected', true);
+
+                    // لو عندك حقل لغة مخفي/سلكت اسمه edit_language في مكان تاني
+                    // modal.find('#edit_language option[value="' + el.data('lang') + '"]').attr('selected', true);
                 });
             });
         })(jQuery);

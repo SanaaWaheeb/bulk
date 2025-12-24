@@ -25,29 +25,64 @@
                             </div>
                         </div>
                         <form action="{{route('admin.page.new')}}" method="post" enctype="multipart/form-data">
-                            @csrf
+    @csrf
 
-                                <div class="form-group">
-                                    <label for="title">{{__('Title')}}</label>
-                                    <input type="text" class="form-control" name="title" placeholder="{{__('Title')}}" id="title">
-                                </div>
+    {{-- 🔹 العنوان بالعربي --}}
+    <div class="form-group">
+        <label for="title">{{ __('Title (AR)') }}</label>
+        <input type="text" class="form-control" name="title"
+               placeholder="{{ __('Title in Arabic') }}" id="title">
+    </div>
 
-                                <div class="form-group permalink_label">
-                                    <label class="text-dark">{{__('Permalink / Slug * : ')}}
-                                        <span id="slug_show" class="display-inline"></span>
-                                        <span id="slug_edit" class="display-inline">
-                                             <button class="btn btn-warning btn-sm ml-1 px-2 py-1 slug_edit_button"> <i class="fas fa-edit"></i> </button>
-                                            <input type="text" name="slug" class="form-control blog_slug mt-2" style="display: none">
-                                              <button class="btn btn-info btn-sm slug_update_button mt-2 px-2 py-1" style="display: none">{{__('Update')}}</button>
-                                        </span>
-                                    </label>
-                                </div>
+    {{-- 🔹 العنوان بالإنجليزي --}}
+    <div class="form-group">
+        <label for="title_en">{{ __('Title (EN)') }}</label>
+        <input type="text" class="form-control" name="title_en"
+               placeholder="{{ __('Title in English') }}" id="title_en">
+    </div>
 
-                                <div class="form-group">
-                                    <label>{{__('Content')}}</label>
-                                    <input type="hidden" name="page_content">
-                                    <div class="summernote"></div>
-                                </div>
+    <div class="form-group permalink_label">
+        <label class="text-dark">{{ __('Permalink / Slug * : ') }}
+            <span id="slug_show" class="display-inline"></span>
+            <span id="slug_edit" class="display-inline">
+                 <button class="btn btn-warning btn-sm ml-1 px-2 py-1 slug_edit_button">
+                     <i class="fas fa-edit"></i>
+                 </button>
+                <input type="text" name="slug" class="form-control blog_slug mt-2" style="display: none">
+                <button class="btn btn-info btn-sm slug_update_button mt-2 px-2 py-1" style="display: none">
+                    {{ __('Update') }}
+                </button>
+            </span>
+        </label>
+    </div>
+
+    {{-- 🔹 المحتوى بالعربي --}}
+    <div class="form-group">
+        <label>{{ __('Content (AR)') }}</label>
+        <input type="hidden" name="page_content">
+        <div class="summernote"></div>
+    </div>
+
+    {{-- 🔹 المحتوى بالإنجليزي --}}
+    <div class="form-group">
+        <label>{{ __('Content (EN)') }}</label>
+        <input type="hidden" name="page_content_en">
+        <div class="summernote summernote-en"></div>
+    </div>
+
+    {{-- باقي الكود كما هو --}}
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="meta_title">{{__('Meta Title')}}</label>
+            <input type="text" name="meta_title" class="form-control" >
+        </div>
+        <div class="form-group col-md-6">
+            <label for="og_meta_title">{{__('OG Meta Title')}}</label>
+            <input type="text" name="og_meta_title" class="form-control">
+        </div>
+    </div>
+
+
 
                                 <div class="row">
                                     <div class="form-group col-md-6">

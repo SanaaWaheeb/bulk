@@ -79,12 +79,7 @@
         </a>
 
         <div class="position-absolute top-0 start-0 m-2 d-flex gap-2 flex-wrap">
-            <?php if(!empty($featured) && $featured === 'on'): ?>
-                <span class="badge bg-success"><i class="las la-award"></i> مميز</span>
-            <?php endif; ?>
-            <?php if(!empty($reward) && $reward === 'on'): ?>
-                <span class="badge bg-info text-dark"><i class="las la-gift"></i> مكافأة</span>
-            <?php endif; ?>
+            
 
             
             

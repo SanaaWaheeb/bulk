@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Faq extends Model
 {
     protected $table = 'faqs';
-    protected $fillable = ['title','status','is_open','description'];
+    protected $fillable = ['title','status','is_open','description','title_en','description_en',];
 }

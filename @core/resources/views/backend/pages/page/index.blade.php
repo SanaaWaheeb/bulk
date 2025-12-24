@@ -6,6 +6,12 @@
     <x-datatable.css/>
 @endsection
 @section('content')
+    @php
+        // تحديد اللغة الحالية
+        $locale   = app()->getLocale();
+        $isArabic = (strpos($locale, 'ar') === 0);
+    @endphp
+
     <div class="col-lg-12 col-ml-12 padding-bottom-30">
         <div class="row">
             <div class="col-lg-12">
@@ -44,13 +50,25 @@
                                 </thead>
                                 <tbody>
                                 @foreach($all_pages as $data)
+                                    @php
+                                        // اختيار العنوان حسب اللغة مع Fallback
+                                        $titleAr = $data->title ?? null;
+                                        $titleEn = $data->title_en ?? null;
+
+                                        $pageTitle = $isArabic
+                                            ? ($titleAr ?: $titleEn)
+                                            : ($titleEn ?: $titleAr);
+
+                                        $pageTitle = $pageTitle ?: __('Untitled');
+                                    @endphp
+
                                     <tr class="{{ $data['id']}}">
                                         <td>
                                             <x-bulk-delete-checkbox :id="$data->id"/>
                                         </td>
-                                        <td>{{$data->id}}</td>
-                                        <td>{{($data->title) ?? __('Untitled')}}</td>
-                                        <td>{{$data->created_at->diffForHumans()}}</td>
+                                        <td>{{ $data->id }}</td>
+                                        <td>{{ $pageTitle }}</td>
+                                        <td>{{ $data->created_at->diffForHumans() }}</td>
                                         <td>
                                             <x-status-span :status="$data->status"/>
                                         </td>

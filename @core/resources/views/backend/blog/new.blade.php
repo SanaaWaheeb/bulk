@@ -17,134 +17,234 @@
                 <x-msg.error/>
             </div>
             <div class="col-lg-12 mt-t">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="header-wrapp">
-                            <h4 class="header-title">{{__('Add New Blog Post')}}  </h4>
-                            <div class="header-title">
-                                <a href="{{ route('admin.blog') }}"
-                                   class="btn btn-primary mt-4 pr-4 pl-4">{{__('All Blog Post')}}</a>
-                            </div>
-                        </div>
-                        <form action="{{route('admin.blog.new')}}" method="post" enctype="multipart/form-data">@csrf
+             <div class="card">
+    <div class="card-body">
+        <div class="header-wrapp">
+            <h4 class="header-title">{{__('Add New Blog Post')}}  </h4>
+            <div class="header-title">
+                <a href="{{ route('admin.blog') }}"
+                   class="btn btn-primary mt-4 pr-4 pl-4">{{__('All Blog Post')}}</a>
+            </div>
+        </div>
 
-                            <div class="form-group">
-                                <label for="title">{{__('Title')}}</label>
-                                <input id="title" type="text" class="form-control" name="title" value="{{old('title')}}" placeholder="{{__('Title')}}">
-                            </div>
+        <form action="{{route('admin.blog.new')}}" method="post" enctype="multipart/form-data">
+            @csrf
 
-                            <div class="form-group permalink_label">
-                                <label class="text-dark">{{__('Permalink / Slug * : ')}}
-                                    <span id="slug_show" class="display-inline"></span>
-                                    <span id="slug_edit" class="display-inline">
-                                         <button class="btn btn-warning btn-sm ml-1 px-2 py-1 slug_edit_button"> <i class="fas fa-edit"></i> </button>
-                                        <input type="text" name="slug" value="{{old('slug')}}" class="form-control blog_slug mt-2" style="display: none">
-                                          <button class="btn btn-info btn-sm slug_update_button mt-2 px-2 py-1" style="display: none">{{__('Update')}}</button>
-                                    </span>
-                                </label>
-                             </div>
+            {{-- ====== Title (AR / EN) ====== --}}
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="title">{{__('Title (Arabic)')}}</label>
+                    <input id="title"
+                           type="text"
+                           class="form-control"
+                           name="title"
+                           value="{{ old('title') }}"
+                           placeholder="{{__('Title (Arabic)')}}">
+                </div>
 
+                <div class="form-group col-md-6">
+                    <label for="title_en">{{__('Title (English)')}}</label>
+                    <input id="title_en"
+                           type="text"
+                           class="form-control"
+                           name="title_en"
+                           value="{{ old('title_en') }}"
+                           placeholder="{{__('Title (English)')}}">
+                </div>
+            </div>
 
-                            <div class="form-group">
-                                <label>{{__('Content')}}</label>
-                                <input type="hidden" name="blog_content" value="{{old('blog_content')}}">
-                                <div class="summernote"> {{old('blog_content')}}</div>
-                            </div>
+            {{-- ====== Slug ====== --}}
+            <div class="form-group permalink_label">
+                <label class="text-dark">{{__('Permalink / Slug * : ')}}
+                    <span id="slug_show" class="display-inline"></span>
+                    <span id="slug_edit" class="display-inline">
+                        <button class="btn btn-warning btn-sm ml-1 px-2 py-1 slug_edit_button">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <input type="text"
+                               name="slug"
+                               value="{{ old('slug') }}"
+                               class="form-control blog_slug mt-2"
+                               style="display: none">
+                        <button class="btn btn-info btn-sm slug_update_button mt-2 px-2 py-1"
+                                style="display: none">
+                            {{__('Update')}}
+                        </button>
+                    </span>
+                </label>
+            </div>
 
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="author">{{__('Author')}}</label>
-                                    <input type="text" class="form-control"  value="{{old('author')}}" name="author">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="title">{{__('Blog Tags')}}</label>
-                                    <input type="text" class="form-control" value="{{old('tags')}}" name="tags"
-                                           data-role="tagsinput">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="meta_tags">{{__('Meta Tags')}}</label>
-                                    <input type="text" class="form-control" name="meta_tags"
-                                           data-role="tagsinput">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="title">{{__('Excerpt')}}</label>
-                                    <textarea name="excerpt" id="excerpt"  class="form-control max-height-150" cols="30" rows="10">{{old('excerpt')}}</textarea>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="meta_title">{{__('Meta Title')}}</label>
-                                    <input type="text" class="form-control" name="meta_title">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="og_meta_title">{{__('Og Meta Title')}}</label>
-                                    <input type="text" class="form-control" name="og_meta_title">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="meta_description">{{__('Meta Description')}}</label>
-                                    <textarea type="text" class="form-control" name="meta_description"
-                                              rows="5" cols="10"> </textarea>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="og_meta_description">{{__('Og Meta Description')}}</label>
-                                    <textarea type="text" class="form-control"
-                                              name="og_meta_description" rows="5"
-                                              cols="10"> </textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="image">{{__('Blog Image')}}</label>
-                                    <div class="media-upload-btn-wrapper">
-                                        <div class="img-wrap"></div>
-                                        <input type="hidden" name="image">
-                                        <button type="button" class="btn btn-info media_upload_form_btn"
-                                                data-btntitle="{{__('Select Image')}}"
-                                                data-modaltitle="{{__('Upload Image')}}" data-toggle="modal"
-                                                data-target="#media_upload_modal">
-                                            {{__('Upload Image')}}
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="og_meta_image">{{__('OG Meta Image')}}</label>
-                                    <div class="media-upload-btn-wrapper">
-                                        <div class="img-wrap"></div>
-                                        <input type="hidden" name="og_meta_image">
-                                        <button type="button" class="btn btn-info media_upload_form_btn"
-                                                data-btntitle="{{__('Select Image')}}"
-                                                data-modaltitle="{{__('Upload Image')}}" data-toggle="modal"
-                                                data-target="#media_upload_modal">
-                                            {{__('Upload Image')}}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+            {{-- ====== Content (AR / EN) ====== --}}
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>{{__('Content (Arabic)')}}</label>
+                    <input type="hidden" name="blog_content" value="{{ old('blog_content') }}">
+                    <div class="summernote">{{ old('blog_content') }}</div>
+                </div>
 
-                            <div class="row">
-                                <div id="category_list" class="form-group col-md-6">
-                                    <label for="category">{{__('Category')}}</label>
-                                    <select name="category" class="form-control">
-                                        <option value="">{{__("Select Category")}}</option>
-                                        @foreach($all_category as $category)
-                                            <option value="{{$category->id}}">{{purify_html($category->name)}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="status">{{__('Status')}}</label>
-                                    <select name="status" class="form-control" id="status">
-                                        <option value="draft">{{__("Draft")}}</option>
-                                        <option value="publish">{{__("Publish")}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" id="submit" class="btn btn-primary mt-4 pr-4 pl-4">{{__('Add New Post')}}</button>
-                        </form>
+                <div class="form-group col-md-6">
+                    <label>{{__('Content (English)')}}</label>
+                    <input type="hidden" name="blog_content_en" value="{{ old('blog_content_en') }}">
+                    <div class="summernote">{{ old('blog_content_en') }}</div>
+                </div>
+            </div>
+
+            {{-- ====== Author (AR / EN), Tags, Meta Tags ====== --}}
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="author">{{__('Author (Arabic)')}}</label>
+                    <input type="text"
+                           class="form-control"
+                           value="{{ old('author') }}"
+                           name="author">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="author_en">{{__('Author (English)')}}</label>
+                    <input type="text"
+                           class="form-control"
+                           value="{{ old('author_en') }}"
+                           name="author_en">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="tags">{{__('Blog Tags')}}</label>
+                    <input type="text"
+                           class="form-control"
+                           value="{{ old('tags') }}"
+                           name="tags"
+                           data-role="tagsinput">
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="meta_tags">{{__('Meta Tags')}}</label>
+                    <input type="text"
+                           class="form-control"
+                           name="meta_tags"
+                           value="{{ old('meta_tags') }}"
+                           data-role="tagsinput">
+                </div>
+            </div>
+
+            {{-- ====== Excerpt (AR / EN) + Meta Titles ====== --}}
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="excerpt">{{__('Excerpt (Arabic)')}}</label>
+                    <textarea name="excerpt"
+                              id="excerpt"
+                              class="form-control max-height-150"
+                              cols="30"
+                              rows="10">{{ old('excerpt') }}</textarea>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="excerpt_en">{{__('Excerpt (English)')}}</label>
+                    <textarea name="excerpt_en"
+                              id="excerpt_en"
+                              class="form-control max-height-150"
+                              cols="30"
+                              rows="10">{{ old('excerpt_en') }}</textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="meta_title">{{__('Meta Title')}}</label>
+                    <input type="text"
+                           class="form-control"
+                           name="meta_title"
+                           value="{{ old('meta_title') }}">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="og_meta_title">{{__('Og Meta Title')}}</label>
+                    <input type="text"
+                           class="form-control"
+                           name="og_meta_title"
+                           value="{{ old('og_meta_title') }}">
+                </div>
+            </div>
+
+            {{-- ====== Meta Descriptions ====== --}}
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="meta_description">{{__('Meta Description')}}</label>
+                    <textarea class="form-control"
+                              name="meta_description"
+                              rows="5"
+                              cols="10">{{ old('meta_description') }}</textarea>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="og_meta_description">{{__('Og Meta Description')}}</label>
+                    <textarea class="form-control"
+                              name="og_meta_description"
+                              rows="5"
+                              cols="10">{{ old('og_meta_description') }}</textarea>
+                </div>
+            </div>
+
+            {{-- ====== Images ====== --}}
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="image">{{__('Blog Image')}}</label>
+                    <div class="media-upload-btn-wrapper">
+                        <div class="img-wrap"></div>
+                        <input type="hidden" name="image" value="{{ old('image') }}">
+                        <button type="button" class="btn btn-info media_upload_form_btn"
+                                data-btntitle="{{__('Select Image')}}"
+                                data-modaltitle="{{__('Upload Image')}}"
+                                data-toggle="modal"
+                                data-target="#media_upload_modal">
+                            {{__('Upload Image')}}
+                        </button>
                     </div>
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="og_meta_image">{{__('OG Meta Image')}}</label>
+                    <div class="media-upload-btn-wrapper">
+                        <div class="img-wrap"></div>
+                        <input type="hidden" name="og_meta_image" value="{{ old('og_meta_image') }}">
+                        <button type="button" class="btn btn-info media_upload_form_btn"
+                                data-btntitle="{{__('Select Image')}}"
+                                data-modaltitle="{{__('Upload Image')}}"
+                                data-toggle="modal"
+                                data-target="#media_upload_modal">
+                            {{__('Upload Image')}}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ====== Category + Status ====== --}}
+            <div class="row">
+                <div id="category_list" class="form-group col-md-6">
+                    <label for="category">{{__('Category')}}</label>
+                    <select name="category" class="form-control">
+                        <option value="">{{__("Select Category")}}</option>
+                        @foreach($all_category as $category)
+                            <option value="{{$category->id}}">{{ purify_html($category->name) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="status">{{__('Status')}}</label>
+                    <select name="status" class="form-control" id="status">
+                        <option value="draft">{{__("Draft")}}</option>
+                        <option value="publish">{{__("Publish")}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit"
+                    id="submit"
+                    class="btn btn-primary mt-4 pr-4 pl-4">
+                {{__('Add New Post')}}
+            </button>
+
+        </form>
+    </div>
+</div>
+
             </div>
         </div>
     </div>

@@ -22,40 +22,62 @@ class FaqController extends Controller
         $all_faqs = Faq::latest()->get();
         return view('backend.pages.faqs')->with('all_faqs', $all_faqs);
     }
-    public function store(Request $request){
-        $this->validate($request,[
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'status' => 'nullable|string|max:191',
-        ]);
+    public function store(Request $request)
+{
+    $this->validate($request, [
+        'title'         => 'required|string',
+        'description'   => 'required|string',
+        'title_en'      => 'nullable|string',
+        'description_en'=> 'nullable|string',
+        'status'        => 'nullable|string|max:191',
+    ]);
 
-        Faq::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'status' => $request->status,
-            'is_open' => !empty($request->is_open) ? 'on' : '',
-        ]);
+    Faq::create([
+    
+        'title'       => $request->title,
+        'description' => $request->description,
 
-        return redirect()->back()->with(['msg' => __('New Faq Added...'),'type' => 'success']);
-    }
+        'title_en'       => $request->title_en ?: $request->title,
+        'description_en' => $request->description_en ?: $request->description,
 
-    public function update(Request $request){
+        'status'   => $request->status,
+        'is_open'  => !empty($request->is_open) ? 'on' : '',
+     
+    ]);
 
-        $this->validate($request,[
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'status' => 'nullable|string|max:191',
-        ]);
+    return redirect()->back()->with(['msg' => __('New Faq Added...'), 'type' => 'success']);
+}
 
-        Faq::find($request->id)->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'status' => $request->status,
-            'is_open' => !empty($request->is_open) ? 'on' : '',
-        ]);
 
-        return redirect()->back()->with(['msg' => __('Faq Updated...'),'type' => 'success']);
-    }
+  public function update(Request $request)
+{
+    $this->validate($request, [
+        'id'           => 'required|integer|exists:faqs,id',
+        'title'        => 'required|string',
+        'description'  => 'required|string',
+        'title_en'     => 'nullable|string',
+        'description_en'=> 'nullable|string',
+        'status'       => 'nullable|string|max:191',
+    ]);
+
+    $faq = Faq::findOrFail($request->id);
+
+    $faq->update([
+        
+        'title'       => $request->title,
+        'description' => $request->description,
+
+    
+        'title_en'       => $request->title_en ?: $request->title,
+        'description_en' => $request->description_en ?: $request->description,
+
+        'status'   => $request->status,
+        'is_open'  => !empty($request->is_open) ? 'on' : '',
+    ]);
+
+    return redirect()->back()->with(['msg' => __('Faq Updated...'), 'type' => 'success']);
+}
+
 
     public function delete($id){
         Faq::find($id)->delete();

@@ -6,3 +6,5 @@ node_modules/
 @core/node_modules/
 vendor/
 @core/vendor/
+assets/uploads/media-uploader/
+

@@ -27,27 +27,31 @@ class RegisterPageManageController extends Controller
         return view('backend.pages.register-page-manage', compact('pages'));
     }
 
-    public function update_register_page_setting(Request $request){
+   public function update_register_page_setting(Request $request)
+{
+    $this->validate($request, [
+        'register_page_terms_of_service_url'      => 'nullable|string',
+        'register_page_terms_of_service_url_en'   => 'nullable|string',
+        'register_page_privacy_policy_url'        => 'nullable|string',
+        'register_page_privacy_policy_url_en'     => 'nullable|string',
+        'recaptcha_2_site_key'                    => 'nullable|string',
+    ]);
 
-        $this->validate($request,[
-            'register_page_terms_of_service_url' => 'nullable|string',
-            'register_page_privacy_policy_url' => 'nullable|string',
-            'recaptcha_2_site_key' => 'nullable|string',
-        ]);
+    $data = [
+        'register_page_terms_of_service_url',
+        'register_page_terms_of_service_url_en',
+        'register_page_privacy_policy_url',
+        'register_page_privacy_policy_url_en',
+        'recaptcha_2_site_key',
+    ];
 
-        $data = [
-            'register_page_terms_of_service_url',
-            'register_page_privacy_policy_url',
-            'recaptcha_2_site_key',
-        ];
-
-        foreach ($data as $item){
-            if($request->has($item)){
-                update_static_option($item,$request->$item);
-            }
+    foreach ($data as $item) {
+        if ($request->has($item)) {
+            update_static_option($item, $request->$item);
         }
-
-        return redirect()->back()->with(FlashMsg::settings_update());
-
     }
+
+    return redirect()->back()->with(FlashMsg::settings_update());
+}
+
 }

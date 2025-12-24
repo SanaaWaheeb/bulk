@@ -1,96 +1,164 @@
 @extends('frontend.frontend-page-master')
+
 @section('site-title')
-    {{get_static_option('contact_page_name')}}
+    {{ get_static_option('contact_page_name') }}
 @endsection
-@section('page-title')
-    {{get_static_option('contact_page_name')}}
-@endsection
+
+@section('page-title',     __('Contact'))
+
 @section('page-meta-data')
-    <meta name="description" content="{{get_static_option('contact_page_meta_description')}}">
-    <meta name="tags" content="{{get_static_option('contact_page_meta_tags')}}">
+    <meta name="description" content="{{ get_static_option('contact_page_meta_description') }}">
+    <meta name="tags" content="{{ get_static_option('contact_page_meta_tags') }}">
 @endsection
+
 @section('content')
+    @php
+        use Illuminate\Support\Str;
+
+        // 🔹 تحديد اللغة الحالية
+        $locale   = app()->getLocale();
+        $isArabic = Str::startsWith($locale, 'ar');
+
+        // 🔹 نصوص الفورم (AR / EN) مع Fallback
+        $formTitleAr   = get_static_option('contact_page_form_section_title');
+        $formTitleEn   = get_static_option('contact_page_form_section_title_en');
+
+        $btnTextAr     = get_static_option('contact_page_form_submit_btn_text');
+        $btnTextEn     = get_static_option('contact_page_form_submit_btn_text_en');
+
+        $formTitle = $isArabic
+            ? ($formTitleAr ?: $formTitleEn)
+            : ($formTitleEn ?: $formTitleAr);
+
+        $btnText = $isArabic
+            ? ($btnTextAr ?: $btnTextEn)
+            : ($btnTextEn ?: $btnTextAr);
+    @endphp
+
+    {{-- ======================== CONTACT INFO SECTION ======================== --}}
     @if(!empty(get_static_option('contact_page_contact_info_section_status')))
         <div class="inner-contact-section padding-top-120 padding-bottom-120">
             <div class="container">
                 <div class="row">
-                    @php $a = 1;@endphp
+                    @php $a = 1; @endphp
+
                     @foreach($all_contact_info as $data)
+                        @php
+                            // 🔹 عنوان ووصف الـ Contact Info حسب اللغة مع Fallback
+                            $titleAr = $data->title ?? '';
+                            $titleEn = $data->title_en ?? '';
+
+                            $descAr  = $data->description ?? '';
+                            $descEn  = $data->description_en ?? '';
+
+                            $displayTitle = $isArabic
+                                ? ($titleAr ?: $titleEn)
+                                : ($titleEn ?: $titleAr);
+
+                            $displayDescription = $isArabic
+                                ? ($descAr ?: $descEn)
+                                : ($descEn ?: $descAr);
+
+                            // كسر الوصف لأسطر متعددة
+                            $info_details = !empty($displayDescription)
+                                ? preg_split('/\r\n|\r|\n/', $displayDescription)
+                                : [];
+                        @endphp
+
                         <div class="col-md-6 col-lg-3">
                             <div class="single-contact-item">
                                 <div class="icon style-0{{$a}}">
-                                    <i class="{{$data->icon}}"></i>
+                                    <i class="{{ $data->icon }}"></i>
                                 </div>
                                 <div class="content">
-                                    <span class="title">{{$data->title}}</span>
-                                    @php
-                                        $info_details = !empty($data->description) ? explode("\n",$data->description) : [];
-                                    @endphp
+                                    <span class="title">{{ $displayTitle }}</span>
+
                                     @foreach($info_details as $item)
-                                        <p class="details">{{$item}}</p>
+                                        @if(trim($item) !== '')
+                                            <p class="details">{{ $item }}</p>
+                                        @endif
                                     @endforeach
                                 </div>
                             </div>
                         </div>
-                        @php if($a == 4){$a =1;}else{$a++;} @endphp
+
+                        @php
+                            // تدوير الـ style-01, style-02, style-03, style-04
+                            if ($a == 4) { $a = 1; } else { $a++; }
+                        @endphp
                     @endforeach
                 </div>
             </div>
-
         </div>
     @endif
+
+    {{-- ======================== CONTACT FORM SECTION ======================== --}}
     @if(!empty(get_static_option('contact_page_contact_section_status')))
         <div class="contact-section padding-bottom-120">
             <div class="container">
                 <div class="row">
+                    {{-- LEFT: FORM --}}
                     <div class="col-lg-6">
                         <div class="contact-info">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="section-title">
-                                        <h4 class="title">{{get_static_option('contact_page_form_section_title')}}</h4>
+                                        {{-- 🔹 عنوان الفورم حسب اللغة --}}
+                                        <h4 class="title">{{ $formTitle }}</h4>
                                     </div>
+
                                     @include('backend.partials.message')
+
                                     @if($errors->any())
                                         <ul class="alert alert-danger">
                                             @foreach($errors->all() as $error)
-                                                <li>{{$error}}</li>
+                                                <li>{{ $error }}</li>
                                             @endforeach
                                         </ul>
                                     @endif
                                 </div>
                             </div>
-                            <form action="{{route('frontend.contact.message')}}" method="POST"
-                                  class="contact-page-form style-01" id="contact_us_form">
-                                <input type="hidden" name="captcha_token" id="gcaptcha_token">
-                                @csrf
-                                <div class="error-message margin-bottom-20"></div>
-                                {!! render_form_field_for_frontend(get_static_option('contact_page_contact_form_fields')) !!}
-                                <div class="btn-wrapper">
-                                    <button id="contact_us_submit_btn" type="submit" class="boxed-btn reverse-color">{{get_static_option('contact_page_form_submit_btn_text')}}</button>
-                                </div>
 
+                            <form action="{{ route('frontend.contact.message') }}"
+                                  method="POST"
+                                  class="contact-page-form style-01"
+                                  id="contact_us_form">
+                                @csrf
+                                <input type="hidden" name="captcha_token" id="gcaptcha_token">
+
+                                <div class="error-message margin-bottom-20"></div>
+
+                                {!! render_form_field_for_frontend(get_static_option('contact_page_contact_form_fields')) !!}
+
+                                <div class="btn-wrapper">
+                                    {{-- 🔹 نص الزر حسب اللغة --}}
+                                    <button id="contact_us_submit_btn" type="submit" class="boxed-btn reverse-color">
+                                        {{ $btnText }}
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
 
-
+                    {{-- RIGHT: MAP --}}
                     <div class="col-md-6 offset-lg-1 col-lg-5">
                         <div class="map-area mt-5 pt-5">
                             <div class="container-fluid p-0">
                                 <div class="contact_map">
-                                    {!! render_embed_google_map(get_static_option('contact_page_map_section_location'),get_static_option('contact_page_map_section_zoom')) !!}
+                                    {!! render_embed_google_map(
+                                        get_static_option('contact_page_map_section_location'),
+                                        get_static_option('contact_page_map_section_zoom')
+                                    ) !!}
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> {{-- .row --}}
             </div>
-
         </div>
     @endif
 @endsection
+
 @section('scripts')
     <script>
         (function ($) {
@@ -109,21 +177,22 @@
                     var el = $(this);
                     var myForm = document.getElementById('contact_us_form');
                     var formData = new FormData(myForm);
+
                     $.ajax({
                         type: "POST",
-                        url: "{{route('frontend.contact.message')}}",
+                        url: "{{ route('frontend.contact.message') }}",
                         data: formData,
                         processData: false,
                         contentType: false,
                         beforeSend: function () {
-                            el.html('<i class="fas fa-spinner fa-spin mr-1"></i> {{__("Submitting")}}');
+                            el.html('<i class="fas fa-spinner fa-spin mr-1"></i> {{ __("Submitting") }}');
                         },
                         success: function (data) {
                             var errMsgContainer = $('#contact_us_form').find('.error-message');
                             errMsgContainer.html('');
                             errMsgContainer.html('<div class="alert alert-' + data.type + '">' + removeTags(data.msg) + '</div>');
                             $('#contact_us_form').find('.form-control').val('');
-                            el.text('{{__("Submit")}}');
+                            el.text('{{ __("Submit") }}');
                         },
                         error: function (data) {
                             var error = data.responseJSON;
@@ -132,7 +201,7 @@
                             $.each(error.errors, function (index, value) {
                                 errMsgContainer.find('.alert').append('<span>' + removeTags(value) + '</span>');
                             });
-                            el.text('{{__("Submit")}}');
+                            el.text('{{ __("Submit") }}');
                         }
                     });
                 });
@@ -141,12 +210,13 @@
     </script>
 
     @if(!empty(get_static_option('site_google_captcha_v3_site_key')))
-        <script src="https://www.google.com/recaptcha/api.js?render={{get_static_option('site_google_captcha_v3_site_key')}}"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render={{ get_static_option('site_google_captcha_v3_site_key') }}"></script>
         <script>
             grecaptcha.ready(function () {
-                grecaptcha.execute("{{get_static_option('site_google_captcha_v3_site_key')}}", {action: 'homepage'}).then(function (token) {
-                    document.getElementById('gcaptcha_token').value = token;
-                });
+                grecaptcha.execute("{{ get_static_option('site_google_captcha_v3_site_key') }}", {action: 'homepage'})
+                    .then(function (token) {
+                        document.getElementById('gcaptcha_token').value = token;
+                    });
             });
         </script>
     @endif

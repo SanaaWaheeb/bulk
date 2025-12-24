@@ -41,7 +41,24 @@
                 </div>
             </div>
         </div>
-        <nav class="navbar navbar-area navbar-expand-lg has-topbar nav-style-02">
+@php
+            // Determine if current language is English (normalize locale like en or en_frontend)
+            $currentLocale = function_exists('get_user_lang') ? get_user_lang() : (session('lang') ?? app()->getLocale());
+            $isEnglish = \Illuminate\Support\Str::startsWith($currentLocale, 'en');
+        @endphp
+
+        @if($isEnglish)
+            <style>
+                /* Make only the navbar layout RTL, keep menu items themselves LTR */
+                .en-rtl-navbar { direction: rtl; }
+                .en-rtl-navbar .navbar-nav.keep-ltr { direction: ltr; }
+                /* keep dropdown caret and toggler pleasant */
+                .en-rtl-navbar .navbar-toggler { margin-left: 0; margin-right: auto; }
+                .en-rtl-navbar .logo-wrapper { margin-left: 15px; margin-right: 0; }
+            </style>
+        @endif
+
+        <nav class="navbar navbar-area navbar-expand-lg has-topbar nav-style-02 @if($isEnglish) en-rtl-navbar @endif" @if($isEnglish) dir="rtl" @endif>
             <div class="container nav-container">
                 <div class="responsive-mobile-menu">
                     <div class="logo-wrapper">
@@ -59,7 +76,7 @@
                     </button>
                 </div>
                 <div class="collapse navbar-collapse" id="bizcoxx_main_menu">
-                    <ul class="navbar-nav">
+                     <ul class="navbar-nav @if($isEnglish) keep-ltr @endif">
                          {!! render_frontend_menu($primary_menu) !!}
                         <li class="search-lists">
                           @if(!empty(get_static_option('home_page_navbar_search_show_hide')))

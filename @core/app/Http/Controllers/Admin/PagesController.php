@@ -30,43 +30,52 @@ class PagesController extends Controller
         return view('backend.pages.page.new');
     }
 
-    public function store_new_page(Request $request){
-        $this->validate($request,[
-            'page_content' => 'nullable',
-            'meta_tags' => 'nullable',
-            'meta_description' => 'nullable',
-            'title' => 'required',
-            'og_meta-title' => 'nullable',
-            'og_meta_description' => 'nullable',
-            'og_meta_image' => 'nullable',
-            'slug' => 'nullable',
-            'status' => 'nullable|string|max:191',
-            'visibility' => 'required|string|max:191',
-        ]);
+   public function store_new_page(Request $request)
+{
+    $this->validate($request, [
+        'page_content'      => 'nullable',
+        'page_content_en'   => 'nullable',
+        'meta_tags'         => 'nullable',
+        'meta_description'  => 'nullable',
+        'title'             => 'required|string|max:191',
+        'title_en'          => 'nullable|string|max:191',
+        'og_meta-title'     => 'nullable',
+        'og_meta_description' => 'nullable',
+        'og_meta_image'     => 'nullable',
+        'slug'              => 'nullable',
+        'status'            => 'nullable|string|max:191',
+        'visibility'        => 'required|string|max:191',
+    ]);
 
-        $slug = !empty($request->slug) ? Str::slug($request->slug ) : Str::slug($request->title);
-        $slug_check = Page::where(['slug' => $slug])->count();
-        $page_slug = $slug_check >= 1 ? $slug.'-2' : $slug;
+    $slug = !empty($request->slug)
+        ? \Illuminate\Support\Str::slug($request->slug)
+        : \Illuminate\Support\Str::slug($request->title);
 
-        Page::create([
-            'slug' => $page_slug,
-            'status' => $request->status,
-            'page_content' => $request->page_content,
-            'title' => $request->title,
-            'meta_tags' => $request->meta_tags,
-            'meta_title' => $request->meta_title,
-            'meta_description' => $request->meta_description,
-            'og_meta_title' => $request->og_meta_title,
-            'og_meta_description' => $request->og_meta_description,
-            'og_meta_image' => $request->og_meta_image,
-            'visibility' => $request->visibility,
-        ]);
+    $slug_check = Page::where(['slug' => $slug])->count();
+    $page_slug  = $slug_check >= 1 ? $slug . '-2' : $slug;
 
-        return redirect()->back()->with([
-            'msg' => __('New Page Created...'),
-            'type' => 'success'
-        ]);
-    }
+    Page::create([
+        'slug'             => $page_slug,
+        'status'           => $request->status,
+        'page_content'     => $request->page_content,
+        'page_content_en'  => $request->page_content_en ?: $request->page_content, // ✅ Fallback
+        'title'            => $request->title,
+        'title_en'         => $request->title_en ?: $request->title,              // ✅ Fallback
+        'meta_tags'        => $request->meta_tags,
+        'meta_title'       => $request->meta_title,
+        'meta_description' => $request->meta_description,
+        'og_meta_title'    => $request->og_meta_title,
+        'og_meta_description' => $request->og_meta_description,
+        'og_meta_image'    => $request->og_meta_image,
+        'visibility'       => $request->visibility,
+    ]);
+
+    return redirect()->back()->with([
+        'msg'  => __('New Page Created...'),
+        'type' => 'success'
+    ]);
+}
+
     public function edit_page($id){
         $page_post = Page::find($id);
         return view('backend.pages.page.edit')->with([
@@ -74,41 +83,49 @@ class PagesController extends Controller
         ]);
     }
 
-    public function update_page(Request $request,$id){
+   public function update_page(Request $request, $id)
+{
+    $this->validate($request, [
+        'page_content'      => 'nullable',
+        'page_content_en'   => 'nullable',
+        'meta_tags'         => 'nullable',
+        'meta_description'  => 'nullable',
+        'title'             => 'required|string|max:191',
+        'title_en'          => 'nullable|string|max:191',
+        'slug'              => 'nullable',
+        'status'            => 'required|string|max:191',
+        'visibility'        => 'required|string|max:191',
+    ]);
 
-        $this->validate($request,[
-            'page_content' => 'nullable',
-            'meta_tags' => 'nullable',
-            'meta_description' => 'nullable',
-            'title' => 'required',
-            'slug' => 'nullable',
-            'status' => 'required|string|max:191',
-        ]);
+    $slug = !empty($request->slug)
+        ? \Illuminate\Support\Str::slug($request->slug)
+        : \Illuminate\Support\Str::slug($request->title);
 
-        $slug = !empty($request->slug) ? Str::slug($request->slug) : Str::slug($request->title);
-        $slug_check = Page::where(['slug' => $slug])->count();
-        $page_slug = $slug_check > 1 ? $slug.'-3' : $slug;
+    $slug_check = Page::where(['slug' => $slug])->where('id', '!=', $id)->count();
+    $page_slug  = $slug_check >= 1 ? $slug . '-3' : $slug;
 
-        Page::where('id',$id)->update([
-            'slug' => $page_slug,
-            'status' => $request->status,
-            'page_content' => $request->page_content,
-            'title' => $request->title,
-            'meta_tags' => $request->meta_tags,
-            'meta_title' => $request->meta_title,
-            'meta_description' => $request->meta_description,
-            'og_meta_title' => $request->og_meta_title,
-            'og_meta_description' => $request->og_meta_description,
-            'og_meta_image' => $request->og_meta_image,
-            'visibility' => $request->visibility,
-        ]);
+    Page::where('id', $id)->update([
+        'slug'             => $page_slug,
+        'status'           => $request->status,
+        'page_content'     => $request->page_content,
+        'page_content_en'  => $request->page_content_en ?: $request->page_content,
+        'title'            => $request->title,
+        'title_en'         => $request->title_en ?: $request->title,
+        'meta_tags'        => $request->meta_tags,
+        'meta_title'       => $request->meta_title,
+        'meta_description' => $request->meta_description,
+        'og_meta_title'    => $request->og_meta_title,
+        'og_meta_description' => $request->og_meta_description,
+        'og_meta_image'    => $request->og_meta_image,
+        'visibility'       => $request->visibility,
+    ]);
 
-        return redirect()->back()->with([
-            'msg' => __('Page updated...'),
-            'type' => 'success'
-        ]);
+    return redirect()->back()->with([
+        'msg'  => __('Page updated...'),
+        'type' => 'success'
+    ]);
+}
 
-    }
     public function delete_page(Request $request,$id){
         Page::find($id)->delete();
         return redirect()->back()->with([

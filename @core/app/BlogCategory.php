@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class BlogCategory extends Model
 {
     protected $table ='blog_categories';
-    protected $fillable = ['name','status'];
+    protected $fillable = ['name','name_en','status'];
 }

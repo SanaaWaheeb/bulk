@@ -12,62 +12,123 @@
                 @include('backend.partials.error')
             </div>
             <div class="col-lg-12 mt-5">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title">{{__('Navbar Settings')}}</h4>
-                        <form action="{{route('admin.navbar.settings')}}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="home_page_navbar_button_status"><strong>{{__('Button Show/Hide')}}</strong></label>
-                                <label class="switch">
-                                    <input type="checkbox" name="home_page_navbar_button_status"  @if(!empty(get_static_option('home_page_navbar_button_status'))) checked @endif >
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label for="home_page_navbar_button_status"><strong>{{__('Search Show/Hide')}}</strong></label>
-                                <label class="switch">
-                                    <input type="checkbox" name="home_page_navbar_search_show_hide"  @if(!empty(get_static_option('home_page_navbar_search_show_hide'))) checked @endif >
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
+              <div class="card">
+    <div class="card-body">
+        <h4 class="header-title">{{ __('Navbar Settings') }}</h4>
+        <form action="{{ route('admin.navbar.settings') }}" method="post" enctype="multipart/form-data">
+            @csrf
 
-                            <div class="tab-content margin-top-20" id="nav-tabContent">
+            {{-- Button Show/Hide --}}
+            <div class="form-group">
+                <label for="home_page_navbar_button_status">
+                    <strong>{{ __('Button Show/Hide') }}</strong>
+                </label>
+                <label class="switch">
+                    <input type="checkbox" name="home_page_navbar_button_status"
+                           @if(!empty(get_static_option('home_page_navbar_button_status'))) checked @endif>
+                    <span class="slider"></span>
+                </label>
+            </div>
 
-                            <div class="form-group">
-                                <label for="home_page_navbar_button_subtitle">{{__('Button Subtitle')}}</label>
-                                <input type="text" name="home_page_navbar_button_subtitle" class="form-control" value="{{get_static_option('home_page_navbar_button_subtitle')}}">
-                            </div>
-                            <div class="form-group">
-                                <label for="home_page_navbar_button_title">{{__('Button Title')}}</label>
-                                <input type="text" name="home_page_navbar_button_title" class="form-control" value="{{get_static_option('home_page_navbar_button_title')}}">
-                            </div>
+            {{-- Search Show/Hide --}}
+            <div class="form-group">
+                <label for="home_page_navbar_search_show_hide">
+                    <strong>{{ __('Search Show/Hide') }}</strong>
+                </label>
+                <label class="switch">
+                    <input type="checkbox" name="home_page_navbar_search_show_hide"
+                           @if(!empty(get_static_option('home_page_navbar_search_show_hide'))) checked @endif>
+                    <span class="slider"></span>
+                </label>
+            </div>
 
-                            </div>
-                            <div class="form-group">
-                                <label for="home_page_navbar_button_url">{{__('Button URL')}}</label>
-                                <input type="text" name="home_page_navbar_button_url" class="form-control" value="{{get_static_option('home_page_navbar_button_url')}}">
-                                <small class="text-danger">{{ __('** If you dont have any custom url then please leave this field blank or provide a valid URL **') }}</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="home_page_navbar_button_icon" class="d-block">{{__('Icon')}}</label>
-                                <div class="btn-group ">
-                                    <button type="button" class="btn btn-primary iconpicker-component">
-                                        <i class="{{get_static_option('home_page_navbar_button_icon')}}"></i>
-                                    </button>
-                                    <button type="button" class="icp icp-dd btn btn-primary dropdown-toggle"
-                                            data-selected="{{get_static_option('home_page_navbar_button_icon')}}" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <div class="dropdown-menu"></div>
-                                </div>
-                                <input type="hidden" class="form-control" value="{{get_static_option('home_page_navbar_button_icon')}}" name="home_page_navbar_button_icon">
-                            </div>
-                            <button id="update" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">{{__('Update Settings')}}</button>
-                        </form>
-                    </div>
+            <div class="tab-content margin-top-20" id="nav-tabContent">
+                {{-- Button Subtitle AR --}}
+                <div class="form-group">
+                    <label for="home_page_navbar_button_subtitle">
+                        {{ __('Button Subtitle (AR)') }}
+                    </label>
+                    <input type="text"
+                           name="home_page_navbar_button_subtitle"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_navbar_button_subtitle') }}">
                 </div>
+
+                {{-- Button Subtitle EN --}}
+                <div class="form-group">
+                    <label for="home_page_navbar_button_subtitle_en">
+                        {{ __('Button Subtitle (EN)') }}
+                    </label>
+                    <input type="text"
+                           name="home_page_navbar_button_subtitle_en"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_navbar_button_subtitle_en') }}">
+                </div>
+
+                {{-- Button Title AR --}}
+                <div class="form-group">
+                    <label for="home_page_navbar_button_title">
+                        {{ __('Button Title (AR)') }}
+                    </label>
+                    <input type="text"
+                           name="home_page_navbar_button_title"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_navbar_button_title') }}">
+                </div>
+
+                {{-- Button Title EN --}}
+                <div class="form-group">
+                    <label for="home_page_navbar_button_title_en">
+                        {{ __('Button Title (EN)') }}
+                    </label>
+                    <input type="text"
+                           name="home_page_navbar_button_title_en"
+                           class="form-control"
+                           value="{{ get_static_option('home_page_navbar_button_title_en') }}">
+                </div>
+            </div>
+
+            {{-- Button URL --}}
+            <div class="form-group">
+                <label for="home_page_navbar_button_url">{{ __('Button URL') }}</label>
+                <input type="text"
+                       name="home_page_navbar_button_url"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_navbar_button_url') }}">
+                <small class="text-danger">
+                    {{ __('** If you dont have any custom url then please leave this field blank or provide a valid URL **') }}
+                </small>
+            </div>
+
+            {{-- Button Icon --}}
+            <div class="form-group">
+                <label for="home_page_navbar_button_icon" class="d-block">{{ __('Icon') }}</label>
+                <div class="btn-group ">
+                    <button type="button" class="btn btn-primary iconpicker-component">
+                        <i class="{{ get_static_option('home_page_navbar_button_icon') }}"></i>
+                    </button>
+                    <button type="button"
+                            class="icp icp-dd btn btn-primary dropdown-toggle"
+                            data-selected="{{ get_static_option('home_page_navbar_button_icon') }}"
+                            data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu"></div>
+                </div>
+                <input type="hidden"
+                       class="form-control"
+                       value="{{ get_static_option('home_page_navbar_button_icon') }}"
+                       name="home_page_navbar_button_icon">
+            </div>
+
+            <button id="update" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+                {{ __('Update Settings') }}
+            </button>
+        </form>
+    </div>
+</div>
+
             </div>
         </div>
     </div>

@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+       Schema::table('pages', function (Blueprint $table) {
+            $table->string('title_en')->nullable()->after('title');
+            $table->longText('page_content_en')->nullable()->after('page_content');
+        });
+        DB::table('pages')->update([
+            'title_en'        => DB::raw('title'),
+            'page_content_en' => DB::raw('page_content'),
+        ]);
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('pages', function (Blueprint $table) {
+                  $table->dropColumn(['title_en', 'page_content_en']);
+        });
+    }
+};

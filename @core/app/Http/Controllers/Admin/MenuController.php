@@ -20,7 +20,7 @@ class MenuController extends Controller
         $this->middleware('auth:admin');
         $this->middleware('permission:appearance-menu-manage-list|appearance-menu-manage-create|appearance-menu-manage-edit|appearance-menu-manage-delete',['only' => ['index']]);
         $this->middleware('permission:appearance-menu-manage-create',['only' => ['store_new_menu']]);
-        $this->middleware('permission:appearance-menu-manage-edit',['only' => ['edit_menu','update_menu','set_default_menu']]);
+        $this->middleware('permission:appearance-menu-manage-edit',["only" => ['edit_menu','update_menu','set_default_menu','set_default_menu_en','set_default_menu_ar']]);
         $this->middleware('permission:appearance-menu-manage-delete',['only' => ['delete_menu']]);
     }
     public function index(){
@@ -78,14 +78,37 @@ class MenuController extends Controller
     }
 
     public function set_default_menu(Request $request,$id){
-        $lang = Menu::find($id);
+        $menu = Menu::find($id);
+        // clear global default
         Menu::where(['status' => 'default'])->update(['status' => '']);
-
-        Menu::find($id)->update(['status' => 'default']);
-        $lang->status = 'default';
-        $lang->save();
+        $menu->status = 'default';
+        $menu->save();
         return redirect()->back()->with([
-            'msg' => 'Default Menu Set To '.$lang->title,
+            'msg' => 'Default Menu Set To '.$menu->title,
+            'type' => 'success'
+        ]);
+    }
+
+    public function set_default_menu_en(Request $request,$id){
+        $menu = Menu::find($id);
+        // clear previous EN default
+        Menu::where(['status' => 'default_en'])->update(['status' => '']);
+        $menu->status = 'default_en';
+        $menu->save();
+        return redirect()->back()->with([
+            'msg' => 'Default EN Menu Set To '.$menu->title,
+            'type' => 'success'
+        ]);
+    }
+
+    public function set_default_menu_ar(Request $request,$id){
+        $menu = Menu::find($id);
+        // clear previous AR default
+        Menu::where(['status' => 'default_ar'])->update(['status' => '']);
+        $menu->status = 'default_ar';
+        $menu->save();
+        return redirect()->back()->with([
+            'msg' => 'Default AR Menu Set To '.$menu->title,
             'type' => 'success'
         ]);
     }

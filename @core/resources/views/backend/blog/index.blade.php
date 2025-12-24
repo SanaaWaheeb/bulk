@@ -7,12 +7,21 @@
     {{__('Blogs')}}
 @endsection
 @section('content')
+    @php
+        // detect current admin language (ar / en ...)
+        $currentLocale = function_exists('get_user_lang')
+            ? get_user_lang()
+            : (session('lang') ?? app()->getLocale());
+
+        $isArabic = strpos($currentLocale,'ar') === 0;
+    @endphp
+
     <div class="col-lg-12 col-ml-12 padding-bottom-30">
         <div class="row">
             <div class="col-lg-12">
                 <div class="margin-top-40"></div>
-               <x-msg.error/>
-               <x-msg.success/>
+                <x-msg.error/>
+                <x-msg.success/>
             </div>
             <div class="col-lg-12 mt-5">
                 <div class="card">
@@ -44,32 +53,65 @@
                                 </thead>
                                 <tbody>
                                 @foreach($all_blog as $data)
+                                    @php
+                                        // title AR/EN with fallback
+                                        $titleAr   = $data->title ?? '';
+                                        $titleEn   = $data->title_en ?? '';
+                                        $showTitle = $isArabic
+                                            ? ($titleAr ?: $titleEn)
+                                            : ($titleEn ?: $titleAr);
+
+                                        // author AR/EN with fallback
+                                        $authorAr   = $data->author ?? '';
+                                        $authorEn   = $data->author_en ?? '';
+                                        $showAuthor = $isArabic
+                                            ? ($authorAr ?: $authorEn)
+                                            : ($authorEn ?: $authorAr);
+
+                                        // category name AR/EN with fallback
+                                        $showCategory = '';
+                                        if (!empty($data->blog_categories_id)) {
+                                            // if relation "category" exists, use it; otherwise find by id
+                                            $cat = $data->category ?? \App\BlogCategory::find($data->blog_categories_id);
+                                            if ($cat) {
+                                                $catAr = $cat->name ?? '';
+                                                $catEn = $cat->name_en ?? '';
+                                                $showCategory = $isArabic
+                                                    ? ($catAr ?: $catEn)
+                                                    : ($catEn ?: $catAr);
+                                            }
+                                        }
+                                    @endphp
+
                                     <tr>
                                         <td>
                                             <x-bulk-delete-checkbox :id="$data->id"/>
                                         </td>
-                                        <td>{{$data->id}}</td>
-                                        <td>{{$data->title}}</td>
-                                        <td>
-                                            {!! render_attachment_preview_for_admin($data->image) !!}
-                                        </td>
-                                        <td>{{$data->author}}</td>
-                                        <td>
-                                            @if(!empty($data->blog_categories_id))
-                                                {{get_blog_category_by_id($data->blog_categories_id)}}
-                                            @endif
-                                        </td>
+                                        <td>{{ $data->id }}</td>
+
+                                        {{-- title --}}
+                                        <td>{{ $showTitle ?: __('Untitled') }}</td>
+
+                                        {{-- image --}}
+                                        <td>{!! render_attachment_preview_for_admin($data->image) !!}</td>
+
+                                        {{-- author --}}
+                                        <td>{{ $showAuthor }}</td>
+
+                                        {{-- category --}}
+                                        <td>{{ $showCategory }}</td>
+
                                         <td>
                                             <x-status-span :status="$data->status"/>
                                         </td>
-                                        <td>{{date_format($data->created_at,'d M Y')}}</td>
+                                        <td>{{ date_format($data->created_at,'d M Y') }}</td>
                                         <td>
                                             @can('blog-delete')
-                                            <x-delete-popover :url="route('admin.blog.delete',$data->id)"/>
+                                                <x-delete-popover :url="route('admin.blog.delete',$data->id)"/>
                                             @endcan
-                                           @can('blog-edit')
-                                            <x-edit-icon :url="route('admin.blog.edit',$data->id)"/>
-                                            <x-clone-icon :action="route('admin.blog.clone')" :id="$data->id"/>
+                                            @can('blog-edit')
+                                                <x-edit-icon :url="route('admin.blog.edit',$data->id)"/>
+                                                <x-clone-icon :action="route('admin.blog.clone')" :id="$data->id"/>
                                             @endcan
                                             <x-view-icon :url="route('frontend.blog.single', $data->slug)"/>
                                         </td>

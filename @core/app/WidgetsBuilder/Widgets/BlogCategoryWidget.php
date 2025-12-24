@@ -13,6 +13,33 @@ use Illuminate\Support\Str;
 class BlogCategoryWidget extends WidgetBase
 {
 
+    private function pickLocalized($settings, $baseKey, $locale)
+    {
+        $candidates = [];
+        $candidates[] = $baseKey . '_' . $locale;
+        $lc = strtolower($locale);
+        if ($lc !== $locale) { $candidates[] = $baseKey . '_' . $lc; }
+        $two = substr($lc, 0, 2);
+        if (!empty($two)) { $candidates[] = $baseKey . '_' . $two; }
+        // also try any variant that starts with two-letter base (e.g., widget_title_en_us)
+        if (!empty($two)) {
+            $prefix = $baseKey . '_' . $two . '_';
+            foreach ($settings as $k => $v) {
+                if (strpos($k, $prefix) === 0 && $v !== '') {
+                    return $v;
+                }
+            }
+        }
+        $candidates[] = $baseKey . '_' . ($two === 'ar' ? 'ar' : 'en');
+        $candidates[] = $baseKey;
+        foreach ($candidates as $key) {
+            if (isset($settings[$key]) && $settings[$key] !== '') {
+                return $settings[$key];
+            }
+        }
+        return '';
+    }
+
     public function admin_render()
     {
         // TODO: Implement admin_render() method.
@@ -21,8 +48,20 @@ class BlogCategoryWidget extends WidgetBase
         $output .= $this->default_fields();
         $widget_saved_values = $this->get_settings();
 
-        $widget_title = $widget_saved_values['widget_title'] ?? '';
-        $output .= '<div class="form-group"><input type="text" name="widget_title" class="form-control" placeholder="' . __('Widget Title') . '" value="' . $widget_title . '"></div>';
+        // multilingual widget title
+        $output .= $this->admin_language_tab();
+        $output .= $this->admin_language_tab_start();
+        foreach (Language::all() as $key => $lang){
+            $id = 'nav-home-' . $lang->slug;
+            $class = $key == 0 ? 'tab-pane fade show active' : 'tab-pane fade';
+            $output .= $this->admin_language_tab_content_start(['id' => $id, 'class' => $class]);
+            $title_key = 'widget_title_' . $lang->slug;
+            $widget_title = $widget_saved_values[$title_key] ?? ($widget_saved_values['widget_title'] ?? '');
+            $placeholder = __('Widget Title') . ' ' . strtoupper($lang->slug);
+            $output .= '<div class="form-group"><input type="text" name="'.$title_key.'" class="form-control" placeholder="' . $placeholder . '" value="' . e($widget_title) . '"></div>';
+            $output .= $this->admin_language_tab_content_end();
+        }
+        $output .= $this->admin_language_tab_end();
 
         $post_items = $widget_saved_values['post_items'] ?? '';
         $output .= '<div class="form-group"><input type="text" name="post_items" class="form-control" placeholder="' . __('Post Items') . '" value="' . $post_items . '"></div>';
@@ -39,7 +78,8 @@ class BlogCategoryWidget extends WidgetBase
         // TODO: Implement frontend_render() method.
         $widget_saved_values = $this->get_settings();
 
-        $widget_title = $widget_saved_values['widget_title'] ?? '';
+        $locale = function_exists('get_user_lang') ? get_user_lang() : app()->getLocale();
+        $widget_title = $this->pickLocalized($widget_saved_values, 'widget_title', $locale);
         $post_items = $widget_saved_values['post_items'] ?? '';
 
         $blog_posts = BlogCategory::where([ 'status' => 'publish'])->orderBy('id', 'DESC')->take($post_items)->get();
@@ -50,8 +90,10 @@ class BlogCategoryWidget extends WidgetBase
             $output .= '<h4 class="widget-title">' . purify_html($widget_title) . '</h4>';
         }
         $output .= '<ul>';
+        $isEnglish = substr(strtolower($locale), 0, 2) === 'en';
         foreach ($blog_posts as $post) {
-            $output .= '<li><a href="' . route('frontend.blog.category', ['id' => $post->id,'any' => Str::slug($post->name)]) . '"><i class="fas fa-chevron-right"></i> ' . purify_html($post->name) . '</a></li>';
+            $name = $isEnglish && !empty($post->name_en) ? $post->name_en : $post->name;
+            $output .= '<li><a href="' . route('frontend.blog.category', ['id' => $post->id,'any' => Str::slug($name)]) . '"><i class="fas fa-chevron-right"></i> ' . purify_html($name) . '</a></li>'; 
         }
         $output .= '</ul>';
 

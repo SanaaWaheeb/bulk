@@ -15,33 +15,76 @@
                 @include('backend/partials/error')
             </div>
             <div class="col-lg-12 mt-t">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="header-title">{{__('About Us Section Settings')}}</h4>
+               <div class="card">
+    <div class="card-body">
+        <h4 class="header-title">{{__('About Us Section Settings')}}</h4>
 
-                        <form action="{{route('admin.about.page.about')}}" method="post" enctype="multipart/form-data">
-                            @csrf
+        <form action="{{route('admin.about.page.about')}}" method="post" enctype="multipart/form-data">
+            @csrf
 
+            {{-- Arabic Subtitle --}}
+            <div class="form-group">
+                <label for="about_page_about_section_subtitle">{{__('Subtitle (AR)')}}</label>
+                <input type="text"
+                       name="about_page_about_section_subtitle"
+                       value="{{ get_static_option('about_page_about_section_subtitle') }}"
+                       class="form-control">
+            </div>
 
-                            <div class="form-group">
-                                <label for="about_page_about_section_subtitle">{{__('Subtitle')}}</label>
-                                <input type="text" name="about_page_about_section_subtitle" value="{{get_static_option('about_page_about_section_subtitle')}}" class="form-control" >
-                            </div>
-                            <div class="form-group">
-                                <label for="about_page_about_section_title">{{__('Title')}}</label>
-                                <input type="text" name="about_page_about_section_title" value="{{get_static_option('about_page_about_section_title')}}" class="form-control" >
-                                <div class="info-text">{{__('user {color} color text {/color} to make text colorful')}}</div>
-                            </div>
-                            <div class="form-group">
-                                <label for="about_page_about_section_description">{{__('Description')}}</label>
-                                <input type="hidden" name="about_page_about_section_description" >
-                                <div class="summernote" data-content='{{get_static_option('about_page_about_section_description')}}'></div>
-                            </div>
+            {{-- English Subtitle --}}
+            <div class="form-group">
+                <label for="about_page_about_section_subtitle_en">{{__('Subtitle (EN)')}}</label>
+                <input type="text"
+                       name="about_page_about_section_subtitle_en"
+                       value="{{ get_static_option('about_page_about_section_subtitle_en') }}"
+                       class="form-control">
+            </div>
 
-                            <button id="update" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">{{__('Update Settings')}}</button>
-                        </form>
-                    </div>
+            {{-- Arabic Title --}}
+            <div class="form-group">
+                <label for="about_page_about_section_title">{{__('Title (AR)')}}</label>
+                <input type="text"
+                       name="about_page_about_section_title"
+                       value="{{ get_static_option('about_page_about_section_title') }}"
+                       class="form-control">
+                <div class="info-text">
+                    {{__('use {color} color text {/color} to make text colorful')}}
                 </div>
+            </div>
+
+            {{-- English Title --}}
+            <div class="form-group">
+                <label for="about_page_about_section_title_en">{{__('Title (EN)')}}</label>
+                <input type="text"
+                       name="about_page_about_section_title_en"
+                       value="{{ get_static_option('about_page_about_section_title_en') }}"
+                       class="form-control">
+            </div>
+
+            {{-- Arabic Description --}}
+            <div class="form-group">
+                <label for="about_page_about_section_description">{{__('Description (AR)')}}</label>
+                <input type="hidden" name="about_page_about_section_description">
+                <div class="summernote"
+                     data-content='{{ get_static_option('about_page_about_section_description') }}'></div>
+            </div>
+
+            {{-- English Description --}}
+            <div class="form-group">
+                <label for="about_page_about_section_description_en">{{__('Description (EN)')}}</label>
+                <input type="hidden" name="about_page_about_section_description_en">
+                <div class="summernote"
+                     data-content='{{ get_static_option('about_page_about_section_description_en') }}'></div>
+            </div>
+
+            <button id="update" type="submit"
+                    class="btn btn-primary mt-4 pr-4 pl-4">
+                {{__('Update Settings')}}
+            </button>
+        </form>
+    </div>
+</div>
+
             </div>
         </div>
     </div>

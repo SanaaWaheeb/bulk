@@ -2,9 +2,9 @@
 @section('site-title')
     {{ get_static_option('donation_page_name') }}
 @endsection
-@section('page-title')
-    {{ get_static_option('donation_page_name') }}
-@endsection
+@section('page-title',
+__('Products'))
+
 @section('page-meta-data')
     <meta name="description" content="{{ get_static_option('donation_page_meta_description') }}">
     <meta name="tags" content="{{ get_static_option('donation_page_meta_tags') }}">

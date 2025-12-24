@@ -950,6 +950,8 @@ Route::prefix('admin-home')->middleware(['setlang:backend','adminglobalVariable'
         Route::post('/update/{id}', 'MenuController@update_menu')->name('admin.menu.update');
         Route::post('/delete/{id}', 'MenuController@delete_menu')->name('admin.menu.delete');
         Route::post('/default/{id}', 'MenuController@set_default_menu')->name('admin.menu.default');
+        Route::post('/default-en/{id}', 'MenuController@set_default_menu_en')->name('admin.menu.default.en');
+        Route::post('/default-ar/{id}', 'MenuController@set_default_menu_ar')->name('admin.menu.default.ar');
         Route::post('/mega-menu', 'MenuController@mega_menu_item_select_markup')->name('admin.mega.menu.item.select.markup');
     });
 

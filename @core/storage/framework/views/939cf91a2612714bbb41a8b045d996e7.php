@@ -3,10 +3,9 @@
     <?php echo e(get_static_option('donation_page_name')); ?>
 
 <?php $__env->stopSection(); ?>
-<?php $__env->startSection('page-title'); ?>
-    <?php echo e(get_static_option('donation_page_name')); ?>
+<?php $__env->startSection('page-title',
+__('Products')); ?>
 
-<?php $__env->stopSection(); ?>
 <?php $__env->startSection('page-meta-data'); ?>
     <meta name="description" content="<?php echo e(get_static_option('donation_page_meta_description')); ?>">
     <meta name="tags" content="<?php echo e(get_static_option('donation_page_meta_tags')); ?>">

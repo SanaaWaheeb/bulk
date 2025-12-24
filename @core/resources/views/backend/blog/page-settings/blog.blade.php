@@ -15,18 +15,46 @@
                     <div class="card-body">
                         <h4 class="header-title">{{__('Blog Page Settings')}}</h4>
                         <form action="{{route('admin.blog.page.settings')}}" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="blog_page_read_more_btn_text">{{__('Blog Read More Text')}}</label>
-                                <input type="text" class="form-control"  id="blog_page_read_more_btn_text" name="blog_page_read_more_btn_text" value="{{get_static_option('blog_page_read_more_btn_text')}}" placeholder="{{__('Blog Read More Text')}}">
-                            </div>
-                            <div class="form-group">
-                                <label for="blog_page_item">{{__('Post Items')}}</label>
-                                <input type="text" class="form-control"  id="blog_page_item" value="{{get_static_option('blog_page_item')}}" name="blog_page_item" placeholder="{{__('Post Items')}}">
-                                <small class="text-danger">{{__('Enter how many post you want to show in blog page')}}</small>
-                            </div>
-                            <button id="update" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">{{__('Update Blog Page Settings')}}</button>
-                        </form>
+    @csrf
+
+    {{-- Blog Read More Text (AR) --}}
+    <div class="form-group">
+        <label for="blog_page_read_more_btn_text">{{__('Blog Read More Text (AR)')}}</label>
+        <input type="text"
+               class="form-control"
+               id="blog_page_read_more_btn_text"
+               name="blog_page_read_more_btn_text"
+               value="{{ get_static_option('blog_page_read_more_btn_text') }}">
+    </div>
+
+    {{-- Blog Read More Text (EN) --}}
+    <div class="form-group">
+        <label for="blog_page_read_more_btn_text_en">{{__('Blog Read More Text (EN)')}}</label>
+        <input type="text"
+               class="form-control"
+               id="blog_page_read_more_btn_text_en"
+               name="blog_page_read_more_btn_text_en"
+               value="{{ get_static_option('blog_page_read_more_btn_text_en') }}">
+    </div>
+
+    <div class="form-group">
+        <label for="blog_page_item">{{__('Post Items')}}</label>
+        <input type="text"
+               class="form-control"
+               id="blog_page_item"
+               name="blog_page_item"
+               value="{{ get_static_option('blog_page_item') }}"
+               placeholder="{{__('Post Items')}}">
+        <small class="text-danger">
+            {{__('Enter how many post you want to show in blog page')}}
+        </small>
+    </div>
+
+    <button id="update" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">
+        {{__('Update Blog Page Settings')}}
+    </button>
+</form>
+
                     </div>
                 </div>
             </div>
