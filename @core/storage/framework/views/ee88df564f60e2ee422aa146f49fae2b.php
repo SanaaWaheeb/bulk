@@ -3,13 +3,39 @@
     $post_img = null;
     $blog_image = get_attachment_image_by_id($donation->image,"full",false);
     $post_img = !empty($blog_image) ? $blog_image['img_url'] : '';
+
+    // locale-aware fields with safe fallbacks
+    $locale   = function_exists('get_user_lang') ? get_user_lang() : app()->getLocale();
+    $isEnglish = strpos($locale,'en') === 0;
+
+    $titleAr = $donation->title_ar ?? null;
+    $titleEn = $donation->title_en ?? null;
+    $baseTitle = $donation->title ?? null;
+    $displayTitle = $isEnglish ? ($titleEn ?: ($baseTitle ?: $titleAr)) : ($titleAr ?: ($baseTitle ?: $titleEn));
+
+    $contentAr = $donation->cause_content ?? null;
+    $contentEn = $donation->cause_content_en ?? null;
+    $displayContent = $isEnglish ? ($contentEn ?: ($contentAr)) : ($contentAr ?: $contentEn);
+
+    $excerptAr = $donation->excerpt ?? null; // legacy
+    $excerptEn = $donation->excerpt_en ?? null;
+    $displayExcerpt = $isEnglish ? ($excerptEn ?: $excerptAr) : ($excerptAr ?: $excerptEn);
+
+    $specsAr = $donation->specifications ?? null;
+    $specsEn = $donation->specifications_en ?? null;
+    $displaySpecs = $isEnglish ? ($specsEn ?: $specsAr) : ($specsAr ?: $specsEn);
+
+    $categoryObj = $donation->category ?? null;
+    $catTitleAr = optional($categoryObj)->title ?? __('Uncategorized');
+    $catTitleEn = optional($categoryObj)->title_en ?? null;
+    $displayCatTitle = $isEnglish ? ($catTitleEn ?: $catTitleAr) : ($catTitleAr ?: $catTitleEn);
     ?>
     <?php $__env->startSection('og-meta'); ?>
 
     <?php $__env->stopSection(); ?>
 
     <?php $__env->startSection('site-title'); ?>
-        <?php echo e($donation->title_ar); ?>
+        <?php echo e($displayTitle); ?>
 
     <?php $__env->stopSection(); ?>
 
@@ -18,8 +44,8 @@
 
     <?php $__env->startSection('page-meta-data'); ?>
         <meta property="og:type" content="website">
-        <meta property="og:title" content="<?php echo e($donation->title_ar); ?>">
-        <meta property="og:description" content="<?php echo e(strip_tags(\Str::words($donation->cause_content,150))); ?>">
+        <meta property="og:title" content="<?php echo e($displayTitle); ?>">
+        <meta property="og:description" content="<?php echo e(strip_tags(\Str::words(strip_tags($displayExcerpt ?: $displayContent),150))); ?>">
         <meta property="og:image:width" content="600" />
         <meta property="og:image:height" content="315" />
         <meta property="og:image" content="<?php echo e($post_img); ?>"/>
@@ -29,7 +55,7 @@
         <meta property="twitter:card" content="summary_large_image">
 
 
-    <meta property="title" content="<?php echo e($donation->title_ar); ?>">
+    <meta property="title" content="<?php echo e($displayTitle); ?>">
         <meta property="description" content="<?php echo e($donation->meta_tags); ?>">
         <meta property="tags" content="<?php echo e($donation->meta_description); ?>">
     <?php $__env->stopSection(); ?>
@@ -241,7 +267,7 @@
 
                                                 <li>
                                                     <i class="fas fa-tag"></i>
-                                                    <a href="<?php echo e(route('frontend.donations.category',['id' => $donation->categories_id,'any' => Str::slug($donation->category->title ?? __('Uncategorized')) ?? '' ])); ?>"><?php echo e($donation->category->title ?? __('Uncategorized')); ?></a>
+                                                    <a href="<?php echo e(route('frontend.donations.category',['id' => $donation->categories_id,'any' => Str::slug($displayCatTitle) ?? '' ])); ?>"><?php echo e($displayCatTitle); ?></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -283,9 +309,21 @@
 
                                 <?php if(count($all_related_cause) > 1): ?>
                                     <div class="related-post-area margin-top-40">
-                                        <div class="section-title ">
-                                            <h4 class="title "><?php echo e(get_static_option('releated_donation_text')); ?></h4>
-                                        </div>
+                                       <?php
+    $locale = function_exists('get_user_lang')
+        ? get_user_lang()
+        : app()->getLocale();
+
+    $relatedDonationText =
+        $locale === 'en'
+            ? (get_static_option('releated_donation_text_en') ?: get_static_option('releated_donation_text'))
+            : get_static_option('releated_donation_text');
+?>
+
+<div class="section-title ">
+    <h4 class="title "><?php echo e($relatedDonationText); ?></h4>
+</div>
+
                                         <div class="related-news-carousel global-carousel-init"
                                             data-desktopitem="2"
                                             data-mobileitem="1"
@@ -297,14 +335,14 @@
                                                 <?php if($data->id === $donation->id): ?> <?php continue; ?> <?php endif; ?>
                                                 <?php if (isset($component)) { $__componentOriginal56b2481d3ce654ea8116fb484333d559 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal56b2481d3ce654ea8116fb484333d559 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.donation.related','data' => ['featured' => $data->featured,'image' => $data->image,'amount' => $data->amount,'raised' => $data->raised,'price' => $data->price,'slug' => $data->slug,'title' => $data->title,'titleAr' => $data->title_ar,'excerpt' => $data->excerpt,'deadline' => $data->deadline,'buttontext' => get_static_option('donation_button_text')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.frontend.donation.related','data' => ['featured' => $data->featured,'image' => $data->image,'amount' => $data->amount,'raised' => $data->raised,'price' => $data->price,'slug' => $data->slug,'title' => $data->title,'titleEn' => $data->title_en,'titleAr' => $data->title_ar,'excerpt' => $data->excerpt,'deadline' => $data->deadline,'buttontext' => get_static_option('donation_button_text')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
 <?php $component->withName('frontend.donation.related'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
 <?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['featured' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->featured),'image' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->image),'amount' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->amount),'raised' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->raised),'price' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->price),'slug' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->slug),'title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->title),'titleAr' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->title_ar),'excerpt' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->excerpt),'deadline' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->deadline),'buttontext' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(get_static_option('donation_button_text'))]); ?>
+<?php $component->withAttributes(['featured' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->featured),'image' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->image),'amount' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->amount),'raised' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->raised),'price' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->price),'slug' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->slug),'title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->title),'titleEn' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->title_en),'titleAr' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->title_ar),'excerpt' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->excerpt),'deadline' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($data->deadline),'buttontext' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(get_static_option('donation_button_text'))]); ?>
                                                  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal56b2481d3ce654ea8116fb484333d559)): ?>
@@ -347,7 +385,7 @@
 
                             <div class="widget-area">
                                 <?php if(!empty(get_static_option('donation_single_page_countdown_status'))): ?>
-                                <h2 class="single-product-title"><?php echo e($donation->title_ar); ?></h2>
+                                <h2 class="single-product-title"><?php echo e($displayTitle); ?></h2>
 
                                     <div class="counterdown-wrap event-page">
                                         <div id="event_countdown"></div>
@@ -420,7 +458,7 @@
                                                     $img_url = $image_url['img_url'] ?? '';
                                                 ?>
 
-                                                <?php echo single_post_share(route('frontend.donations.single',$donation->slug), $donation->title_ar, $img_url); ?>
+                                                <?php echo single_post_share(route('frontend.donations.single',$donation->slug), $displayTitle, $img_url); ?>
 
                                             </ul>
                                         </div>

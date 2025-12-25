@@ -46,10 +46,27 @@
             <?php if(get_static_option('donation_descriptions_show_hide')): ?>
              <div class="shotcontent-wrapper">
                 <div id="main-data" class="collapsed-content">
-                  <?php echo $donation->cause_content; ?>
+                  <?php echo $displayContent ?? $donation->cause_content; ?>
 
                   <!-- ======== جدول المواصفات هنا ======== -->
-              <?php if(!empty($donation->specifications) && is_array($donation->specifications)): ?>
+              <?php
+                  $specDataRaw = isset($displaySpecs) && !empty($displaySpecs) ? $displaySpecs : ($donation->specifications ?? []);
+                  // Normalize to array: handle array/object/JSON/serialized strings
+                  if (is_string($specDataRaw)) {
+                      $decoded = json_decode($specDataRaw, true);
+                      if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                          $specData = $decoded;
+                      } else {
+                          $unserialized = @unserialize($specDataRaw);
+                          $specData = is_array($unserialized) ? $unserialized : [];
+                      }
+                  } elseif (is_object($specDataRaw)) {
+                      $specData = (array)$specDataRaw;
+                  } else {
+                      $specData = $specDataRaw;
+                  }
+              ?>
+              <?php if(!empty($specData) && is_array($specData)): ?>
               <div class="specifications-section margin-top-40">
                   <div class="section-title">
                       <h4 class="title" style="font-size: 25px;"><?php echo e(__('Product information')); ?></h4>
@@ -57,8 +74,12 @@
                   <div class="table-responsive">
       <table class="table table-bordered table-striped">
     <tbody>
-        <?php $__currentLoopData = $donation->specifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <?php if(!empty(trim($spec['name'])) && !empty(trim($spec['value']))): ?>
+        <?php $__currentLoopData = $specData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spec): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php
+                $name = is_array($spec) ? ($spec['name'] ?? '') : ($spec->name ?? '');
+                $value = is_array($spec) ? ($spec['value'] ?? '') : ($spec->value ?? '');
+            ?>
+            <?php if(!empty(trim($name)) && !empty(trim($value))): ?>
             <tr>
                <!-- القيمة (value) -->
 <td width="60%" style="padding: 10px; font-size: 16px; background-color: #fdfdfd; text-align: left; direction: ltr;">
@@ -71,14 +92,14 @@
         text-align: left;
 
     ">
-        <?php echo e($spec['value']); ?>
+        <?php echo e($value); ?>
 
     </div>
 </td>
 
                 <!-- الاسم (key) -->
                 <td width="30%" class="fw-bold bg-light" style="padding: 10px; vertical-align: middle; font-size: 16px; text-align: left;">
-                    <?php echo e($spec['name']); ?>
+                    <?php echo e($name); ?>
 
                 </td>
             </tr>
@@ -96,8 +117,8 @@
               
                 </div>
                 <div class="btn-wrapper">
-                    <a id="ReadMoreButton" class="text-primary" href=""><?php echo e(__('اقرأ أكثر')); ?></a>
-                    <a id="ReadLessButton" class="text-primary" href="" style="display: none;"><?php echo e(__('اقرأ أقل')); ?></a>
+                    <a id="ReadMoreButton" class="text-primary" href=""><?php echo e(__('Read more')); ?></a>
+                    <a id="ReadLessButton" class="text-primary" href="" style="display: none;"><?php echo e(__('Read less')); ?></a>
                 </div>
            </div>
              <?php endif; ?>

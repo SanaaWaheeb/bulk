@@ -3,13 +3,39 @@
     $post_img = null;
     $blog_image = get_attachment_image_by_id($donation->image,"full",false);
     $post_img = !empty($blog_image) ? $blog_image['img_url'] : '';
+
+    // locale-aware fields with safe fallbacks
+    $locale   = function_exists('get_user_lang') ? get_user_lang() : app()->getLocale();
+    $isEnglish = strpos($locale,'en') === 0;
+
+    $titleAr = $donation->title_ar ?? null;
+    $titleEn = $donation->title_en ?? null;
+    $baseTitle = $donation->title ?? null;
+    $displayTitle = $isEnglish ? ($titleEn ?: ($baseTitle ?: $titleAr)) : ($titleAr ?: ($baseTitle ?: $titleEn));
+
+    $contentAr = $donation->cause_content ?? null;
+    $contentEn = $donation->cause_content_en ?? null;
+    $displayContent = $isEnglish ? ($contentEn ?: ($contentAr)) : ($contentAr ?: $contentEn);
+
+    $excerptAr = $donation->excerpt ?? null; // legacy
+    $excerptEn = $donation->excerpt_en ?? null;
+    $displayExcerpt = $isEnglish ? ($excerptEn ?: $excerptAr) : ($excerptAr ?: $excerptEn);
+
+    $specsAr = $donation->specifications ?? null;
+    $specsEn = $donation->specifications_en ?? null;
+    $displaySpecs = $isEnglish ? ($specsEn ?: $specsAr) : ($specsAr ?: $specsEn);
+
+    $categoryObj = $donation->category ?? null;
+    $catTitleAr = optional($categoryObj)->title ?? __('Uncategorized');
+    $catTitleEn = optional($categoryObj)->title_en ?? null;
+    $displayCatTitle = $isEnglish ? ($catTitleEn ?: $catTitleAr) : ($catTitleAr ?: $catTitleEn);
     @endphp
     @section('og-meta')
 
     @endsection
 
     @section('site-title')
-        {{$donation->title_ar}}
+        {{$displayTitle}}
     @endsection
 
    @section('page-title', __('Products'))
@@ -17,8 +43,8 @@
 
     @section('page-meta-data')
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{$donation->title_ar}}">
-        <meta property="og:description" content="{{strip_tags(\Str::words($donation->cause_content,150))}}">
+        <meta property="og:title" content="{{$displayTitle}}">
+        <meta property="og:description" content="{{ strip_tags(\Str::words(strip_tags($displayExcerpt ?: $displayContent),150)) }}">
         <meta property="og:image:width" content="600" />
         <meta property="og:image:height" content="315" />
         <meta property="og:image" content="{{$post_img}}"/>
@@ -28,7 +54,7 @@
         <meta property="twitter:card" content="summary_large_image">
 
 
-    <meta property="title" content="{{$donation->title_ar}}">
+    <meta property="title" content="{{$displayTitle}}">
         <meta property="description" content="{{$donation->meta_tags}}">
         <meta property="tags" content="{{$donation->meta_description}}">
     @endsection
@@ -200,7 +226,7 @@
 
                                                 <li>
                                                     <i class="fas fa-tag"></i>
-                                                    <a href="{{route('frontend.donations.category',['id' => $donation->categories_id,'any' => Str::slug($donation->category->title ?? __('Uncategorized')) ?? '' ])}}">{{$donation->category->title ?? __('Uncategorized')}}</a>
+                                                    <a href="{{route('frontend.donations.category',['id' => $donation->categories_id,'any' => Str::slug($displayCatTitle) ?? '' ])}}">{{$displayCatTitle}}</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -241,9 +267,21 @@
 
                                 @if(count($all_related_cause) > 1)
                                     <div class="related-post-area margin-top-40">
-                                        <div class="section-title ">
-                                            <h4 class="title ">{{ get_static_option('releated_donation_text') }}</h4>
-                                        </div>
+                                       @php
+    $locale = function_exists('get_user_lang')
+        ? get_user_lang()
+        : app()->getLocale();
+
+    $relatedDonationText =
+        $locale === 'en'
+            ? (get_static_option('releated_donation_text_en') ?: get_static_option('releated_donation_text'))
+            : get_static_option('releated_donation_text');
+@endphp
+
+<div class="section-title ">
+    <h4 class="title ">{{ $relatedDonationText }}</h4>
+</div>
+
                                         <div class="related-news-carousel global-carousel-init"
                                             data-desktopitem="2"
                                             data-mobileitem="1"
@@ -261,6 +299,7 @@
                                                         :price="$data->price"
                                                         :slug="$data->slug"
                                                         :title="$data->title"
+                                                        :titleEn="$data->title_en"
                                                         :titleAr="$data->title_ar"
                                                         :excerpt="$data->excerpt"
                                                         :deadline="$data->deadline"
@@ -297,7 +336,7 @@
 
                             <div class="widget-area">
                                 @if(!empty(get_static_option('donation_single_page_countdown_status')))
-                                <h2 class="single-product-title">{{ $donation->title_ar }}</h2>
+                                <h2 class="single-product-title">{{ $displayTitle }}</h2>
 
                                     <div class="counterdown-wrap event-page">
                                         <div id="event_countdown"></div>
@@ -365,7 +404,7 @@
                                                     $img_url = $image_url['img_url'] ?? '';
                                                 @endphp
 
-                                                {!! single_post_share(route('frontend.donations.single',$donation->slug), $donation->title_ar, $img_url) !!}
+                                                {!! single_post_share(route('frontend.donations.single',$donation->slug), $displayTitle, $img_url) !!}
                                             </ul>
                                         </div>
                                     </div>

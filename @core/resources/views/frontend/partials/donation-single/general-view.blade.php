@@ -1,10 +1,13 @@
 
+
+
+
 <div class="details-content-area">
     @if(get_static_option('donation_descriptions_show_hide'))
 <div class="shotcontent-wrapper">
     <div class="cause-description-wrapper" style="position: relative;">
         <div class="cause-description collapsed-description" id="main-data">
-            {!! $donation->cause_content !!}
+            {!! $displayContent ?? $donation->cause_content !!}
         </div>
         <div class="btn-wrapper text-right mt-3">
             <a id="ReadMoreButton" class="btn btn-sm btn-primary" href="#">{{__('Read More')}}</a>

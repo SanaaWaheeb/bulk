@@ -14,8 +14,8 @@
     $baseTitle = $blog_post->title;
 
     $displayTitle = $isArabic
-        ? ($titleAr ?: ($titleEn ?: $baseTitle))
-        : ($titleEn ?: ($titleAr ?: $baseTitle));
+        ? ($titleAr ?: ($baseTitle ?: $titleEn))
+        : ($titleEn ?: ($baseTitle ?: $titleAr));
 
     // ✅ المحتوى حسب اللغة مع Fallback
     $contentAr   = $blog_post->blog_content_ar ?? null;
@@ -23,8 +23,8 @@
     $baseContent = $blog_post->blog_content;
 
     $displayContent = $isArabic
-        ? ($contentAr ?: ($contentEn ?: $baseContent))
-        : ($contentEn ?: ($contentAr ?: $baseContent));
+        ? ($contentAr ?: ($baseContent ?: $contentEn))
+        : ($contentEn ?: ($baseContent ?: $contentAr));
 
     // ✅ المؤلف حسب اللغة مع Fallback
     $authorAr   = $blog_post->author_ar ?? null;
@@ -32,8 +32,8 @@
     $baseAuthor = $blog_post->author;
 
     $displayAuthor = $isArabic
-        ? ($authorAr ?: ($authorEn ?: $baseAuthor))
-        : ($authorEn ?: ($authorAr ?: $baseAuthor));
+        ? ($authorAr ?: ($baseAuthor ?: $authorEn))
+        : ($authorEn ?: ($baseAuthor ?: $authorAr));
 
            $locale = function_exists('get_user_lang')
         ? get_user_lang()
@@ -100,7 +100,13 @@
                             <ul class="post-meta">
                                 <li>
                                     <i class="fas fa-calendar-alt"></i>
-                                    <?php echo e(date_format($blog_post->created_at,'d M Y')); ?>
+                                    <?php
+                                        $dateObj = \Carbon\Carbon::parse($blog_post->created_at);
+                                        // اجعل اللغة حسب واجهة المستخدم
+                                        $dateLocale = $isArabic ? 'ar' : 'en';
+                                        $dateText = $dateObj->locale($dateLocale)->translatedFormat($isArabic ? 'd F Y' : 'd M Y');
+                                    ?>
+                                    <?php echo e($dateText); ?>
 
                                 </li>
                                 <li>
@@ -127,7 +133,7 @@
                                 </li>
                             </ul>
 
-                            <div class="content-area mt-4">
+                            <div class="content-area mt-4" dir="<?php echo e($isArabic ? 'rtl' : 'ltr'); ?>">
                                 <?php echo $displayContent; ?>
 
                             </div>

@@ -46,9 +46,26 @@
             @if(get_static_option('donation_descriptions_show_hide'))
              <div class="shotcontent-wrapper">
                 <div id="main-data" class="collapsed-content">
-                  {!! $donation->cause_content !!}
+                  {!! $displayContent ?? $donation->cause_content !!}
                   <!-- ======== جدول المواصفات هنا ======== -->
-              @if(!empty($donation->specifications) && is_array($donation->specifications))
+              @php
+                  $specDataRaw = isset($displaySpecs) && !empty($displaySpecs) ? $displaySpecs : ($donation->specifications ?? []);
+                  // Normalize to array: handle array/object/JSON/serialized strings
+                  if (is_string($specDataRaw)) {
+                      $decoded = json_decode($specDataRaw, true);
+                      if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                          $specData = $decoded;
+                      } else {
+                          $unserialized = @unserialize($specDataRaw);
+                          $specData = is_array($unserialized) ? $unserialized : [];
+                      }
+                  } elseif (is_object($specDataRaw)) {
+                      $specData = (array)$specDataRaw;
+                  } else {
+                      $specData = $specDataRaw;
+                  }
+              @endphp
+              @if(!empty($specData) && is_array($specData))
               <div class="specifications-section margin-top-40">
                   <div class="section-title">
                       <h4 class="title" style="font-size: 25px;">{{__('Product information')}}</h4>
@@ -56,8 +73,12 @@
                   <div class="table-responsive">
       <table class="table table-bordered table-striped">
     <tbody>
-        @foreach($donation->specifications as $spec)
-            @if(!empty(trim($spec['name'])) && !empty(trim($spec['value'])))
+        @foreach($specData as $spec)
+            @php
+                $name = is_array($spec) ? ($spec['name'] ?? '') : ($spec->name ?? '');
+                $value = is_array($spec) ? ($spec['value'] ?? '') : ($spec->value ?? '');
+            @endphp
+            @if(!empty(trim($name)) && !empty(trim($value)))
             <tr>
                <!-- القيمة (value) -->
 <td width="60%" style="padding: 10px; font-size: 16px; background-color: #fdfdfd; text-align: left; direction: ltr;">
@@ -70,13 +91,13 @@
         text-align: left;
 
     ">
-        {{ $spec['value'] }}
+        {{ $value }}
     </div>
 </td>
 
                 <!-- الاسم (key) -->
                 <td width="30%" class="fw-bold bg-light" style="padding: 10px; vertical-align: middle; font-size: 16px; text-align: left;">
-                    {{ $spec['name'] }}
+                    {{ $name }}
                 </td>
             </tr>
             @endif
@@ -93,8 +114,8 @@
               
                 </div>
                 <div class="btn-wrapper">
-                    <a id="ReadMoreButton" class="text-primary" href="">{{__('اقرأ أكثر')}}</a>
-                    <a id="ReadLessButton" class="text-primary" href="" style="display: none;">{{__('اقرأ أقل')}}</a>
+                    <a id="ReadMoreButton" class="text-primary" href="">{{__('Read more')}}</a>
+                    <a id="ReadLessButton" class="text-primary" href="" style="display: none;">{{__('Read less')}}</a>
                 </div>
            </div>
              @endif

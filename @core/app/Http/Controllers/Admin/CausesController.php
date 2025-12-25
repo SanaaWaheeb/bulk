@@ -772,77 +772,83 @@ public function update_donation(Request $request)
     }
 
     public function update_settings(Request $request)
-    {
-        $this->validate($request, [
-            'donation_charge_active_deactive_button' => 'nullable|string',
-            'charge_amount_type' => 'nullable|string',
-            'charge_amount' => 'nullable|string',
-            'donation_deadline_text' => 'required|string',
-            'donation_terms_and_conditions' => 'nullable|string',
-            'donation_privacy_policy' => 'nullable|string',
-        ]);
-        $fields = [
-            'donation_charge_active_deactive_button',
-            'charge_amount_type',
-            'charge_amount',
-            'donation_button_text',
-            'donation_raised_text',
-            'donation_goal_text',
-            'site_events_post_items',
-            'donation_single_form_button_text',
-            'donation_single_recent_donation_text',
-            'donation_custom_amount',
-            'donation_default_amount',
-            'donation_notify_mail',
-            'donation_single_faq_title',
-            'cause_single_donate_button_text',
-            'cause_single_donate_sidebar_text',
-            'donation_success_page_title',
-            'donation_success_page_description',
-            'donation_cancel_page_title',
-            'donation_cancel_page_description',
-            'donation_single_page_countdown_status',
-            'donation_charge_form',
-            'user_campaign_metadata_status',
-            'allow_user_to_add_custom_tip_in_donation',
-            'donation_deadline_text',
-            'donation_medical_document_button_text',
-            'emmergency_donation_text',
-            'releated_donation_text',
-            'donation_medical_document_button_show_hide',
-            'donation_flag_show_hide',
-            'donation_descriptions_show_hide',
-            'donation_updates_show_hide',
-            'donation_comments_show_hide',
-            'donation_faq_show_hide',
+{
+    $this->validate($request, [
+        'donation_charge_active_deactive_button' => 'nullable|string',
+        'charge_amount_type' => 'nullable|string',
+        'charge_amount' => 'nullable|string',
+        'donation_deadline_text' => 'required|string',
+        'donation_terms_and_conditions' => 'nullable|string',
+        'donation_privacy_policy' => 'nullable|string',
+        // 👇 جديد
+        'releated_donation_text'    => 'nullable|string',
+        'releated_donation_text_en' => 'nullable|string',
+    ]);
 
-            'donation_social_icons_show_hide',
-            'donation_recent_donors_show_hide',
-            'donation_single_reward_heading',
-            'donation_single_reward_image',
-            'donation_single_reward_title',
-            'donation_login_user_donate_show_hide',
-            'minimum_donation_amount',
-            'minimum_donation_amount',
+    $fields = [
+        'donation_charge_active_deactive_button',
+        'charge_amount_type',
+        'charge_amount',
+        'donation_button_text',
+        'donation_raised_text',
+        'donation_goal_text',
+        'site_events_post_items',
+        'donation_single_form_button_text',
+        'donation_single_recent_donation_text',
+        'donation_custom_amount',
+        'donation_default_amount',
+        'donation_notify_mail',
+        'donation_single_faq_title',
+        'cause_single_donate_button_text',
+        'cause_single_donate_sidebar_text',
+        'donation_success_page_title',
+        'donation_success_page_description',
+        'donation_cancel_page_title',
+        'donation_cancel_page_description',
+        'donation_single_page_countdown_status',
+        'donation_charge_form',
+        'user_campaign_metadata_status',
+        'allow_user_to_add_custom_tip_in_donation',
+        'donation_deadline_text',
+        'donation_medical_document_button_text',
+        'emmergency_donation_text',
+        // 👇 الحقلين (خلي نفس الـ key الموجود حالياً)
+        'releated_donation_text',
+        'releated_donation_text_en',
+        'donation_medical_document_button_show_hide',
+        'donation_flag_show_hide',
+        'donation_descriptions_show_hide',
+        'donation_updates_show_hide',
+        'donation_comments_show_hide',
+        'donation_faq_show_hide',
+        'donation_social_icons_show_hide',
+        'donation_recent_donors_show_hide',
+        'donation_single_reward_heading',
+        'donation_single_reward_image',
+        'donation_single_reward_title',
+        'donation_login_user_donate_show_hide',
+        'minimum_donation_amount',
+        'donation_custom_amount_once',
+        'donation_custom_amount_monthly',
+        'how_many_days_ago_user_get_recuring_notification',
+        'donor_page_post_items',
+        'donation_terms_and_conditions',
+        'donation_privacy_policy',
+        'donation_page_qr_code_title',
+        'donation_page_qr_code_show_hide',
+        'transaction_minimum_charge_amount_type',
+        'transaction_minimum_charge_amount',
+    ];
 
-            'donation_custom_amount_once',
-            'donation_custom_amount_monthly',
-            'how_many_days_ago_user_get_recuring_notification',
-            'donor_page_post_items',
-            'donation_terms_and_conditions',
-            'donation_privacy_policy',
-            'donation_page_qr_code_title',
-            'donation_page_qr_code_show_hide',
-            'transaction_minimum_charge_amount_type',
-            'transaction_minimum_charge_amount',
-        ];
-
-        foreach ($fields as $field) {
+    foreach ($fields as $field) {
+        if ($request->has($field)) {
             update_static_option($field, $request->$field);
         }
-
-        return redirect()->back()->with(FlashMsg::settings_update());
     }
+
+    return redirect()->back()->with(FlashMsg::settings_update());
+}
+
 
 
     public function donation_approve(Request $request)

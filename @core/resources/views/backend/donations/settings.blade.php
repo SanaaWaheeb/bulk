@@ -191,10 +191,26 @@
                                 <label for="donation_deadline_text">{{__('Emmergency Donation Text')}}</label>
                                 <input type="text" name="emmergency_donation_text" class="form-control" id="emmergency_donation_text" value="{{get_static_option('emmergency_donation_text')}}">
                             </div>
-                            <div class="form-group">
-                                <label for="donation_deadline_text">{{__('Related Donation Text')}}</label>
-                                <input type="text" name="releated_donation_text" class="form-control" id="emmergency_donation_text" value="{{get_static_option('releated_donation_text')}}">
-                            </div>
+                           {{-- Related Donation Text - Arabic --}}
+<div class="form-group">
+    <label for="releated_donation_text">{{ __('Related Donation Text (Arabic)') }}</label>
+    <input type="text"
+           name="releated_donation_text"
+           class="form-control"
+           id="releated_donation_text"
+           value="{{ get_static_option('releated_donation_text') }}">
+</div>
+
+{{-- Related Donation Text - English --}}
+<div class="form-group">
+    <label for="releated_donation_text_en">{{ __('Related Donation Text (English)') }}</label>
+    <input type="text"
+           name="releated_donation_text_en"
+           class="form-control"
+           id="releated_donation_text_en"
+           value="{{ get_static_option('releated_donation_text_en') }}">
+</div>
+
 
                             <div class="form-group">
                                 <label for="donation_deadline_text">{{__('Reward Heading')}}</label>
