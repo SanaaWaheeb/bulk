@@ -45,7 +45,7 @@
                             @csrf
                             <div class="error-wrap"></div>
                             <div class="form-group">
-                                <label>{{ __('رقم الجوال') }}</label>
+                                <label>{{ __('Mobile Number') }}</label>
 <input type="text" name="phone" class="form-control" 
        value="{{ session('login_phone') ?? old('phone') }}"
        style="background-color: #f5f5f5; color: #666; text-align: left;"
@@ -57,7 +57,7 @@
                                        placeholder="{{__('Enter verification code')}}" required>
                             </div>
                             <div class="form-group btn-wrapper">
-                                <button type="submit" id="verify_btn" class="submit-btn boxed-btn reverse-color ">{{__('تحقق من الرمز')}}</button>
+                                <button type="submit" id="verify_btn" class="submit-btn boxed-btn reverse-color ">{{__('Verify Code')}}</button>
                             </div>
                         </form>
                         
@@ -66,7 +66,7 @@
                             <form action="{{ route('login.send.otp') }}" method="POST" style="display: inline;">
                                 @csrf
                                 <input type="hidden" name="phone" value="{{ substr(session('login_phone'), 4) }}">
-                                <button type="submit" class="btn btn-link">{{__('إعادة ارسال رمز التحقق')}}</button>
+                                <button type="submit" class="btn btn-link">{{__('Resend Verification Code')}}</button>
                             </form>
                         </div>
                     @endif
@@ -122,7 +122,7 @@
         });
         
         $(document).on('submit', '#verify_otp_form', function () {
-            $('#verify_btn').text('{{ __("تحقق...") }}');
+            $('#verify_btn').text('{{ __("Verifying...") }}');
         });
     });
 })(jQuery);

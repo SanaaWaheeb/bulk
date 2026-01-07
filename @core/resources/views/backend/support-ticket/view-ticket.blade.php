@@ -221,122 +221,142 @@
     </style>
 @endsection
 @section('content')
-    <div class="col-lg-12 col-ml-12 padding-bottom-30">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="margin-top-40"></div>
-            </div>
-            <div class="col-lg-12 mt-5">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="gig-chat-message-heading">
-                            <div class="header-wrap d-flex justify-content-between">
-                                <h4 class="header-title">{{('تفاصيل الطلب')}}</h4>
-                                <a class="btn btn-primary btn-xs" href="{{route('admin.support.ticket.all')}}">{{__('All Tickets')}}</a>
-                            </div>
-                            <div class="gig-order-info">
-                                <ul>
-                                    <li><strong>{{__('User:')}}</strong> {{$ticket_details->user->name ?? __('anonymous')}}</li>
-                                    <li><strong>{{__('Phone:')}}</strong> 0{{$ticket_details->user->phone ?? __('anonymous')}}</li>
-                                    <li><strong>{{('رقم الطلب:')}}</strong> #{{$ticket_details->id}}</li>
-                                    <li><strong>اسم المنتج :</strong> {{$ticket_details->title}}</li>
-                                    <li><strong>الرابط : </strong> <a href="{{ $ticket_details->URL }}" target="_blank" rel="noopener noreferrer">{{ $ticket_details->URL }}</a></li>
+   <div class="col-lg-12 col-ml-12 padding-bottom-30">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="margin-top-40"></div>
+        </div>
 
-                                    <li><strong>{{('التصنيف :')}}</strong> {{$ticket_details->department->name ?? ''}} </li>
-                                    <li><strong>{{('الحالة :')}}</strong> <span class="status-{{$ticket_details->status}}">{{$ticket_details->status}}</span>
-                                    </li>
-                                    
-                                    <li>
-                                        <strong>الوصف :</strong> {{$ticket_details->description}}
-                                    </li>
-                                    
-                                    @if($ticket_details->admin_id)
-                                        <li><strong>{{__('Admin:')}}</strong> {{$ticket_details->admin->name ?? __('anonymous')}}</li>
-                                    @endif
-                                </ul>
-                            </div>
-                            <div class="gig-message-start-wrap">
-                                <h2 class="title">{{__('All Conversation')}}</h2>
-                                <div class="all-message-wrap @if($q == 'all') msg-row-reverse @endif">
-                                    @if($q == 'all' && count($all_messages) > 1)
-                                        <form action="" method="get">
-                                            <input type="hidden" value="all" name="q">
-                                            <button class="load_all_conversation" type="submit">{{__('load all message')}}</button>
-                                        </form>
-                                    @endif
-                                        @forelse($all_messages as $msg)
-                                            <div class="single-message-item @if($msg->type == 'customer') customer @endif">
-                                                <div class="top-part">
-                                                    <div class="thumb">
+        <div class="col-lg-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="gig-chat-message-heading">
+                        <div class="header-wrap d-flex justify-content-between">
+                            <h4 class="header-title">{{ __('Order Details') }}</h4>
+                            <a class="btn btn-primary btn-xs" href="{{ route('admin.support.ticket.all') }}">{{ __('All Tickets') }}</a>
+                        </div>
+
+                        <div class="gig-order-info">
+                            <ul>
+                                <li><strong>{{ __('User:') }}</strong> {{ $ticket_details->user->name ?? __('anonymous') }}</li>
+                                <li><strong>{{ __('Phone:') }}</strong> 0{{ $ticket_details->user->phone ?? __('anonymous') }}</li>
+                                <li><strong>{{ __('Order Number:') }}</strong> #{{ $ticket_details->id }}</li>
+                                <li><strong>{{ __('Product Name:') }}</strong> {{ $ticket_details->title }}</li>
+                                <li>
+                                    <strong>{{ __('Link:') }}</strong>
+                                    <a href="{{ $ticket_details->URL }}" target="_blank" rel="noopener noreferrer">{{ $ticket_details->URL }}</a>
+                                </li>
+
+                                <li><strong>{{ __('Category:') }}</strong> {{ $ticket_details->department->name ?? '' }}</li>
+                                <li>
+                                    <strong>{{ __('Status:') }}</strong>
+                                    <span class="status-{{ $ticket_details->status }}">{{ $ticket_details->status }}</span>
+                                </li>
+
+                                <li><strong>{{ __('Description:') }}</strong> {{ $ticket_details->description }}</li>
+
+                                @if($ticket_details->admin_id)
+                                    <li><strong>{{ __('Admin:') }}</strong> {{ $ticket_details->admin->name ?? __('anonymous') }}</li>
+                                @endif
+                            </ul>
+                        </div>
+
+                        <div class="gig-message-start-wrap">
+                            <h2 class="title">{{ __('All Conversation') }}</h2>
+
+                            <div class="all-message-wrap @if($q == 'all') msg-row-reverse @endif">
+                                @if($q == 'all' && count($all_messages) > 1)
+                                    <form action="" method="get">
+                                        <input type="hidden" value="all" name="q">
+                                        <button class="load_all_conversation" type="submit">{{ __('Load All Messages') }}</button>
+                                    </form>
+                                @endif
+
+                                @forelse($all_messages as $msg)
+                                    <div class="single-message-item @if($msg->type == 'customer') customer @endif">
+                                        <div class="top-part">
+                                            <div class="thumb">
                                                 <span class="title">
-                                                     @if($msg->type == 'customer')
-                                                        {{substr($ticket_details->user->name ?? 'U',0,1)}}
+                                                    @if($msg->type == 'customer')
+                                                        {{ substr($ticket_details->user->name ?? 'U', 0, 1) }}
                                                     @else
-                                                        {{substr($ticket_details->admin->name ?? 'A',0,1)}}
+                                                        {{ substr($ticket_details->admin->name ?? 'A', 0, 1) }}
                                                     @endif
                                                 </span>
-                                                        @if($msg->notify == 'on')
-                                                            <i class="fas fa-envelope mt-2"
-                                                               title="{{__('Notified by email')}}"></i>
-                                                        @endif
-                                                    </div>
-                                                    <div class="content">
-                                                        <h6 class="title">
-                                                            @if($msg->type == 'customer')
-                                                                {{$ticket_details->user->name ?? 'U'}}
-                                                            @else
-                                                                {{$ticket_details->admin->name ?? 'A'}}
-                                                            @endif
-                                                        </h6>
-                                                        <span class="time">{{date_format($msg->created_at,'d M Y H:i:s')}} | {{$msg->created_at->diffForHumans()}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="content">
-                                                    <div class="message-content">
-                                                        {!! $msg->message !!}
-                                                    </div>
-                                                    @if(file_exists('assets/uploads/ticket/'.$msg->attachment))
-                                                        <a href="{{asset('assets/uploads/ticket/'.$msg->attachment)}}"
-                                                           download class="anchor-btn">{{$msg->attachment}}</a>
-                                                    @endif
-                                                </div>
+
+                                                @if($msg->notify == 'on')
+                                                    <i class="fas fa-envelope mt-2" title="{{ __('Notified by email') }}"></i>
+                                                @endif
                                             </div>
-                                        @empty
-                                            <p class="alert alert-warning">{{__('no message found')}}</p>
-                                        @endforelse
-                                </div>
-                            </div>
-                            <div class="reply-message-wrap ">
-                                <h5 class="title">{{__('Replay To Message')}}</h5>
-                              <x-msg.success/>
-                              <x-msg.error/>
-                                <form action="{{route('admin.support.ticket.send.message')}}" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" value="{{$ticket_details->id}}" name="ticket_id">
-                                    <input type="hidden" value="admin" name="user_type">
-                                    <div class="form-group">
-                                        <label for="">{{__('Message')}}</label>
-                                        <textarea name="message" class="form-control d-none" cols="30" rows="5" ></textarea>
-                                        <div class="summernote"></div>
+
+                                            <div class="content">
+                                                <h6 class="title">
+                                                    @if($msg->type == 'customer')
+                                                        {{ $ticket_details->user->name ?? 'U' }}
+                                                    @else
+                                                        {{ $ticket_details->admin->name ?? 'A' }}
+                                                    @endif
+                                                </h6>
+                                                <span class="time">{{ date_format($msg->created_at, 'd M Y H:i:s') }} | {{ $msg->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="content">
+                                            <div class="message-content">
+                                                {!! $msg->message !!}
+                                            </div>
+
+                                            @if(file_exists('assets/uploads/ticket/'.$msg->attachment))
+                                                <a href="{{ asset('assets/uploads/ticket/'.$msg->attachment) }}" download class="anchor-btn">
+                                                    {{ $msg->attachment }}
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="file">{{__('File')}}</label>
-                                        <input type="file" name="file" accept="zip">
-                                        <small class="info-text d-block text-danger">{{__('max file size 200mb, only zip file is allowed')}}</small>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="checkbox" name="send_notify_mail" id="send_notify_mail">
-                                        <label for="send_notify_mail">{{__('Notify Via Mail')}}</label>
-                                    </div>
-                                    <button class="btn-primary btn btn-md" type="submit">{{__('Send Message')}}</button>
-                                </form>
+                                @empty
+                                    <p class="alert alert-warning">{{ __('No messages found') }}</p>
+                                @endforelse
                             </div>
                         </div>
+
+                        <div class="reply-message-wrap">
+                            <h5 class="title">{{ __('Reply To Message') }}</h5>
+                            <x-msg.success/>
+                            <x-msg.error/>
+
+                            <form action="{{ route('admin.support.ticket.send.message') }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" value="{{ $ticket_details->id }}" name="ticket_id">
+                                <input type="hidden" value="admin" name="user_type">
+
+                                <div class="form-group">
+                                    <label>{{ __('Message') }}</label>
+                                    <textarea name="message" class="form-control d-none" cols="30" rows="5"></textarea>
+                                    <div class="summernote"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="file">{{ __('File') }}</label>
+                                    <input type="file" name="file" accept="zip">
+                                    <small class="info-text d-block text-danger">{{ __('Max file size 200MB, only ZIP file is allowed') }}</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="checkbox" name="send_notify_mail" id="send_notify_mail">
+                                    <label for="send_notify_mail">{{ __('Notify Via Mail') }}</label>
+                                </div>
+
+                                <button class="btn-primary btn btn-md" type="submit">{{ __('Send Message') }}</button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
     @include('backend.partials.media-upload.media-upload-markup')
 @endsection
 @section('script')

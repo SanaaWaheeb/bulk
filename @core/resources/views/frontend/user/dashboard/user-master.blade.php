@@ -33,7 +33,7 @@
                             <!--@endif-->
                             <!--@if(!empty(get_static_option('donations_module_status')))-->
                                 <li class="nav-item">
-                                    <a class="nav-link @if(request()->routeIs('user.home.donations')) active @endif" href="{{route('user.home.donations')}}" >{{__('All')}} {{get_static_option('donation_page_name')}}</a>
+                                    <a class="nav-link @if(request()->routeIs('user.home.donations')) active @endif" href="{{route('user.home.donations')}}" >{{__('All Products')}} </a>
                                 </li>
                             @endif
 

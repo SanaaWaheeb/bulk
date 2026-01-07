@@ -1,6 +1,6 @@
 @extends('backend.admin-master')
 @section('site-title')
-    {{__(' Event Page Manage')}}
+    {{__('Event Page Manage')}}
 @endsection
 
 @section('style')
@@ -18,7 +18,7 @@
             <div class="col-lg-12 mt-t">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title">{{__(' Event page Manage')}}</h4>
+                        <h4 class="header-title">{{__('Event Page Manage')}}</h4>
                         <form action="{{route('admin.event.page.manage')}}" method="post" enctype="multipart/form-data">
                             @csrf
 

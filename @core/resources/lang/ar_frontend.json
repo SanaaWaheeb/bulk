@@ -197,7 +197,6 @@
     "User Dashboard": "لوحة تحكم المستخدم",
     "User Update Causes": "أسباب تحديث المستخدم",
     "Username": "اسم المستخدم",
-    "Verify Code": "رمز التحقق",
     "Verify Email": "التحقق من البريد الإلكتروني",
     "Verify Your Account": "التحقق من حسابك",
     "Withdraw": "سحب",
@@ -273,7 +272,7 @@
     "donation Cancel": "تم الغاء الطلب",
     "The address field is required.": "الرجاء ادخل العنوان",
     "The address field is required": "الرجاء ادخل العنوان",
-    "All Products":"الكل الطلبات","Completed Orders": "الطلبات المنتهية",
+    "All Products":"كل الطلبات","Completed Orders": "الطلبات المنتهية",
     ".The following items have expired and may not be available for order": "العناصر التالية انتهت مدّتها وقد لا تكون متاحة للطلب.",
     "Name is required": "الاسم مطلوب",
     "Name must not exceed 191 characters": "يجب ألا يزيد الاسم عن 191 حرفًا",
@@ -335,7 +334,12 @@
     "Contact":"طرق التواصل",
     "Site Policy":"سياسة الموقع",
     "Read more":"أقرأ المزيد",
-    "Read less":"أقرأ أقل"
+    "Read less":"أقرأ أقل",
+    "Mobile Number":"رقم الجوال",
+    "Verify Code":"تحقق من الرمز",
+    "Resend Verification Code":"إعادة ارسال رمز التحقق",
+    "Verifying...":"تحقق...",
+    "Recent Blog Area":"أحدث المقالات"
 
 
 }

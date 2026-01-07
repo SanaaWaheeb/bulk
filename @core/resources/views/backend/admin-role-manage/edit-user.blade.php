@@ -33,7 +33,7 @@
                                 <input type="text" class="form-control"  value="{{$admin->email}}" name="email" placeholder="{{__('Email')}}">
                             </div>
                             <div class="form-group">
-                                <label for="role">{{'Role'}}</label>
+                                <label for="role">{{__('Role')}}</label>
                                 <select name="role" class="form-control">
                                     <option value="">{{__('Select Role')}}</option>
                                     @foreach($roles as $role)

@@ -13,14 +13,14 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="header-title"> {{__('User Tax Data')}}
-                                    <a class="btn btn-info btn-xs pull-right" href="{{route('admin.all.frontend.user')}}"> {{__('All User')}}</a>
+                                    <a class="btn btn-info btn-xs pull-right" href="{{route('admin.all.frontend.user')}}"> {{__('All Users')}}</a>
                                 </h4>
 
                                 <ul>
                                     <li class="list-item my-2">{{__('ID : ')}} {{$user_tax->id}}</li>
                                     <li class="list-item my-2">{{get_static_option('monthly_income_label') ??__('Monthly Income : ')}} {{$user_tax->monthly_income}}</li>
                                     <li class="list-item my-2 mb-3">{{get_static_option('annual_icome_label') ?? __('Annual Income : ')}} {{$user_tax->annual_income}}</li>
-                                    <li class="list-item my-2 mb-3">{{get_static_option('income_source_label') ?? __(' Income Source : ')}} {{$user_tax->income_source}}</li>
+                                    <li class="list-item my-2 mb-3">{{get_static_option('income_source_label') ?? __('Income Source : ')}} {{$user_tax->income_source}}</li>
 
                                     <li class="list-item my-2">{{get_static_option('nid_image_label') ?? __('NID Image : ')}}
                                         {!! render_attachment_preview_for_admin($user_tax->nid_image) !!}

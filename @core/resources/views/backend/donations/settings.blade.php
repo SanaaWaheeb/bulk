@@ -308,7 +308,7 @@
                                 </label>
                             </div>
                             <div class="form-group">
-                                <label for="navbar_button">{{__('Show/Hide Social Share ')}}</label>
+                                <label for="navbar_button">{{__('Show/Hide Social Share')}}</label>
                                 <label class="switch">
                                     <input type="checkbox" name="donation_social_icons_show_hide"
                                            @if(!empty(get_static_option('donation_social_icons_show_hide'))) checked @endif >

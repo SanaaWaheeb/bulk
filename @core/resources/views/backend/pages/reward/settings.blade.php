@@ -17,7 +17,7 @@
                             @csrf
 
                             <div class="form-group">
-                                <label for="donation_deadline_text">{{__('Reward Point ')}}</label>
+                                <label for="donation_deadline_text">{{__('Reward Point')}}</label>
                                 <input type="number" name="reward_amount_for_point" class="form-control" id="donation_reward_amount" value="{{get_static_option('reward_amount_for_point')}}">
                                 <small class="text-primary">{{__('This point will be added for amount (1)')}}</small><br>
                                 <small class="text-success">{{__('For Example (if you input 10 points in the field that will be consider for reward ($1)')}}</small>

@@ -260,7 +260,7 @@
                         if (imageid != '') {
                             form.find('.media-upload-btn-wrapper .img-wrap').html('<div class="attachment-preview"><div class="thumbnail"><div class="centered"><img class="avatar user-thumb" src="' + image + '" > </div></div></div>');
                             form.find('.media-upload-btn-wrapper input').val(imageid);
-                            form.find('.media-upload-btn-wrapper .media_upload_form_btn').text('Change Image');
+                            form.find('.media-upload-btn-wrapper .media_upload_form_btn').text(__('Change Image'));
                         }
                     });
                 });

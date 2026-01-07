@@ -34,13 +34,13 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>{{__(' Button Text')}}</label>
+                                    <label>{{__('Button Text')}}</label>
                                     <input type="text" name="home_page_05_success_story_area_button_text" class="form-control"
                                            value="{{get_static_option('home_page_05_success_story_area_button_text')}}">
                                 </div>
 
                                 <div class="form-group">
-                                    <label>{{__(' Item Show')}}</label>
+                                    <label>{{__('Item Show')}}</label>
                                     <input type="number" name="home_page_05_success_story_area_item_show" class="form-control"
                                            value="{{get_static_option('home_page_05_success_story_area_item_show')}}">
                                 </div>

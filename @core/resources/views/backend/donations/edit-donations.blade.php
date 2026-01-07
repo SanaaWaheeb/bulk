@@ -377,7 +377,7 @@
                                             </div>
                                             <input type="hidden" name="og_meta_image" value="{{$donation->og_meta_image}}">
                                             <button type="button" class="btn btn-info media_upload_form_btn" data-btntitle="{{__('Select Donation Image')}}" data-modaltitle="{{__('Upload Donation Image')}}" data-toggle="modal" data-target="#media_upload_modal">
-                                                {{'Change Image'}}
+                                                {{__('Change Image')}}
                                             </button>
                                         </div>
 
@@ -390,7 +390,7 @@
                                            </div>
                                             <input type="hidden" name="image" value="{{$donation->image}}">
                                             <button type="button" class="btn btn-info media_upload_form_btn" data-btntitle="{{__('Select Donation Image')}}" data-modaltitle="{{__('Upload Donation Image')}}" data-toggle="modal" data-target="#media_upload_modal">
-                                                {{'Change Image'}}
+                                                {{__('Change Image')}}
                                             </button>
                                         </div>
                                         <small>{{__('Recommended image size 1920x1280')}}</small>

@@ -193,15 +193,41 @@ public function sendLoginOtp(Request $request)
     /**
      * Verify OTP and login user
      */
-    public function verifyLoginOtp(Request $request)
+
+
+public function verifyLoginOtp(Request $request)
 {
     $request->validate([
-        'phone' => 'required',
-        'otp_code' => 'required'
+        'phone'    => 'required',
+        'otp_code' => 'required',
     ]);
 
-    $sid = env('TWILIO_SID');
-    $token = env('TWILIO_TOKEN');
+    // 👈 تحديد لغة المستخدم الحالية
+    $locale = function_exists('get_user_lang')
+        ? get_user_lang()
+        : app()->getLocale();
+
+    // 👈 تعريف الرسائل باللغتين
+    $messages = [
+        'login_success' => $locale === 'en'
+            ? 'Logged in successfully.'
+            : 'تم تسجيل الدخول بنجاح!',
+
+        'no_account' => $locale === 'en'
+            ? 'No account found for this phone number.'
+            : 'لا يوجد حساب مرتبط بهذا الرقم.',
+
+        'invalid_otp' => $locale === 'en'
+            ? 'Invalid verification code.'
+            : 'رمز التحقق غير صالح.',
+
+        'verify_failed' => $locale === 'en'
+            ? 'Verification failed.'
+            : 'فشل في التحقق.',
+    ];
+
+    $sid       = env('TWILIO_SID');
+    $token     = env('TWILIO_TOKEN');
     $verifySid = env('TWILIO_VERIFY_SERVICE_SID');
 
     try {
@@ -212,11 +238,13 @@ public function sendLoginOtp(Request $request)
             ->services($verifySid)
             ->verificationChecks
             ->create([
-                "to" => $request->phone,
-                "code" => $request->otp_code
+                'to'   => $request->phone,
+                'code' => $request->otp_code,
             ]);
 
-        if ($verification_check->status === "approved") {
+        if ($verification_check->status === 'approved') {
+
+            // 👈 تأكد إن منطق القص ده يناسب فورمات رقم تليفونك
             $user = \App\User::where('username', substr($request->phone, 4))->first();
 
             if ($user) {
@@ -224,43 +252,57 @@ public function sendLoginOtp(Request $request)
                 Session::forget('login_phone');
 
                 if ($request->expectsJson()) {
-                    // إنشاء توكن باستخدام Laravel Sanctum أو Passport
                     $token = $user->createToken('MobileApp')->plainTextToken;
 
                     return response()->json([
-                        'message' => 'تم تسجيل الدخول بنجاح',
-                        'token' => $token,
+                        'message' => $messages['login_success'],
+                        'token'   => $token,
                         'user_id' => $user->id,
-                        'name' => $user->name,
-                        // أضف بيانات إضافية إذا احتجت
+                        'name'    => $user->name,
                     ]);
                 }
-                       
-                        return redirect()->route('homepage')->with('success', 'تم تسجيل الدخول بنجاح!');
 
-                        //return redirect()->route('user.home.edit.profile')->with('success', 'تم تسجيل الدخول بنجاح!');
-                        
-            } else {
-                if ($request->expectsJson()) {
-                    return response()->json(['message' => 'لا يوجد حساب بهذا الرقم'], 404);
-                }
-
-                return back()->with('error', 'لا يوجد حساب مرتبط بهذا الرقم.')->with('otp_sent', true);
+                return redirect()
+                    ->route('homepage')
+                    ->with('success', $messages['login_success']);
             }
-        } else {
+
+            // لا يوجد حساب
             if ($request->expectsJson()) {
-                return response()->json(['message' => 'رمز غير صحيح'], 422);
+                return response()->json([
+                    'message' => $messages['no_account'],
+                ], 404);
             }
 
-                return back()->with('error', 'رمز التحقق غير صالح.')->with('otp_sent', true);
-        }
-    } catch (\Exception $e) {
-        if ($request->expectsJson()) {
-            return response()->json(['message' => 'فشل في التحقق: ' . $e->getMessage()], 500);
+            return back()
+                ->with('error', $messages['no_account'])
+                ->with('otp_sent', true);
         }
 
-        return back()->with('error', 'فشل في التحقق.')->with('otp_sent', true);
+        // كود غير صحيح
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $messages['invalid_otp'],
+            ], 422);
+        }
+
+        return back()
+            ->with('error', $messages['invalid_otp'])
+            ->with('otp_sent', true);
+
+    } catch (\Exception $e) {
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => $messages['verify_failed'] . ' ' . $e->getMessage(),
+            ], 500);
+        }
+
+        return back()
+            ->with('error', $messages['verify_failed'])
+            ->with('otp_sent', true);
     }
 }
+
 
 }
